@@ -2,12 +2,13 @@ import { motion } from "framer-motion";
 import CItySlider from "./MainSlider/CItySlider";
 // import BurhanpurPage from "./LandigPage/BurhanpurPage";
 import ArchitectureLanding from "./LandigPage/ArchitectureLanding";
-import CityCategories from "./LandigPage/CityCategories";
+// import CityCategories from "./LandigPage/CityCategories";
 import Footer from "./Footer";
 import HistoricalTimeline from "./LandigPage/HistoricalTimeline";
 import ContactForm from "./LandigPage/ContactForm";
-import CultureSection from "./LandigPage/cultureItems";
+// import CultureSection from "./LandigPage/cultureItems";
 import TopAttractions from "./LandigPage/TopAttractions";
+import CategorySection from "./CatagoriesPart/CategorySection";
 
 const Home = () => {
   return (
@@ -20,35 +21,30 @@ const Home = () => {
     //   }}
     //   className="p-4"
     // >
-      <div style={{
-        margin:'10px',
-        // border:'2px solid red'
-      }}>
-        
+    <div style={{
+      margin: '10px',
+      // border:'2px solid red'
+    }}>
 
+      {/* <BurhanpurPage/> */}
+      <ArchitectureLanding />
+      <br />
+      <br />
+      <CItySlider />
+      <br />
+      <CategorySection />
 
-
-
-        
-        {/* <BurhanpurPage/> */}
-        <ArchitectureLanding/>
-        <br />
-        <br />
-        <CItySlider />
-        <br />
-        <br />
-        <CityCategories/>
-        <br />
-        <br />
-        <HistoricalTimeline/>
-        <br />
-        {/* <CultureSection/> */}
-        <TopAttractions/>
-        <br />
-<ContactForm/>
-        <br />
-        <Footer/>
-              </div>
+      <br />
+      <br />
+      <HistoricalTimeline />
+      <br />
+      {/* <CultureSection/> */}
+      <TopAttractions />
+      <br />
+      <ContactForm />
+      <br />
+      <Footer />
+    </div>
     // </motion.div>
   );
 };

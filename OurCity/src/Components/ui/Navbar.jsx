@@ -36,7 +36,7 @@ const Navbar = () => {
                             style={{ width: '44px', height: '44px', borderRadius: '50%' }}
                         />
                         <span className={`font-bold text-xl transition-colors duration-300 ${scrolled ? "text-gray-900" : "text-white"}`}>
-                            JusDial
+                            Burhanpur
                         </span>
                     </Link>
 
