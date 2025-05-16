@@ -8,22 +8,27 @@ const EditSubCategory = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`/subcategory/getSubCategoryById/${id}`)  
+        axios.get(`subcategory/getsubCategoryById/${id}`)  
             .then(res => setSubcategory(res.data.data))
             .catch(err => console.error(err));
     }, [id]);
 
     const handleUpdate = async () => {
-        try {
-            await axios.post(`/subcategory/updateSubCategory`, {
-                _id: id,
-                ...subcategory
-            });
-            navigate('/admin-category'); // or wherever you want to redirect
-        } catch (err) {
-            console.error('Show Error:', err);
-        }
-    };
+  try {
+    await axios.put('/subcategory/updatesubcategory', {
+      _id: id,
+      title: subcategory.title,
+      image: subcategory.image,
+      categoryId: subcategory.categoryId
+    });
+    navigate('/admin-category');
+  } catch (err) {
+    console.error('Update failed:', err);
+    alert("Update failed. Check console.");
+  }
+};
+
+
 
     return (
         <div className="max-w-md mx-auto p-4 space-y-4">

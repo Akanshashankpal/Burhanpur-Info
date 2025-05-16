@@ -3,7 +3,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: 'https://burhanpur-city-backend.vercel.app/api/',  
+  baseURL: 'https://burhanpur-city-backend.vercel.app/api',  
   headers: {
     'Content-Type': 'application/json',
     // Authorization: `Bearer ${token}`, 
