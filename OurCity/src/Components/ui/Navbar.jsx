@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
-import { CartIcon } from "../AllIcons/CartIcon";
+// import { CartIcon } from "../AllIcons/CartIcon";
 import { AddListing } from "../AllIcons/AddListing"; // ✅ AddListing import fix
 import UserIcon from '../AllIcons/UserIcon';
 
 import { Link } from "react-router-dom";
 import img from "../ui/Images/logo.jpg";
+import NewaIcon from "../AllIcons/NewsIcon";
 
 const Navbar = () => {
     const [scrolled, setScrolled] = useState(false);
@@ -45,7 +46,10 @@ const Navbar = () => {
                         <Link to="/Login">
                             <UserIcon fill={scrolled ? "#1f2937" : "white"} />
                         </Link>
-                        <CartIcon fill={scrolled ? "#1f2937" : "white"} />
+
+                        <NewaIcon fill={scrolled ? "#1f2937" : "white"} />
+
+
                         <AddListing fill={scrolled ? "#1f2937" : "white"} />
 
                         {/* Hamburger for mobile */}
@@ -73,4 +77,4 @@ const Navbar = () => {
     );
 };
 
-export default Navbar;
+export default Navbar;

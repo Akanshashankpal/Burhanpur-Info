@@ -25,6 +25,7 @@ import EditSubCategory from '../AdimLogin/AdminDashboard/EditSubCategory';
 import SubcategoryDetail from '../Page/CatagoriesPart/SubcategoryDetail ';
 // import RegisterPage from '../ui/RegisterPage';
 import Register from '../ui/Images/Register';
+import NewsSection from '../Page/LandigPage/NewsSection';
 const RouteShow = () => {
     return (
         <div>
@@ -33,7 +34,7 @@ const RouteShow = () => {
                 <Route path='/AdminDashboard' element={<AdminDashboard />} />
                 <Route path="/registar" element={<Register />} />
                 <Route path="/edit-subcategory/:id" element={<EditSubCategory />} />
-
+<Route  path='newssection' element={<NewsSection/>}   />
                 <Route path="/" element={<Home/>} />
                 <Route path="/category/:categoryId/subcategory/:subId" element={<SubcategoryDetail />} />
 
