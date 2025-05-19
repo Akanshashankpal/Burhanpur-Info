@@ -1,47 +1,90 @@
-import  { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { Atom } from 'react-loading-indicators';
 import axios from '../../../../axios';
 
 const SubcategoryPage = () => {
   const { categoryId } = useParams();
   const [subcategories, setSubcategories] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log("Category ID:", categoryId); 
+    setLoading(true);
     axios.get(`/subcategory/getSubCategory/${categoryId}`)
       .then(res => {
-        console.log("Subcategory Response:", res); 
-        setSubcategories(res?.data?.result); 
+        setSubcategories(res?.data?.result || []);
+        setLoading(false);
       })
-      .catch(err => console.error("Subcategory fetch failed", err));
+      .catch(err => {
+        console.error("Subcategory fetch failed", err);
+        setLoading(false);
+      });
   }, [categoryId]);
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Subcategories</h2>
-
-      {subcategories.length > 0 ? (
-  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-    {subcategories.map((sub, index) => (
-      <div key={index} className="bg-white rounded-lg shadow hover:shadow-md transition duration-200">
-        <img
-          src={sub.image}
-          alt={sub.name}
-          className="w-20 m-auto object-cover rounded-t-lg"
-        />
-        <div className="p-4">
-          <h3 className="text-lg font-semibold mb-1">{sub.name}</h3>
-          <p className="text-sm text-gray-600">{sub.description}</p>
-          <p className="text-sm font-bold text-gray-600 mt-5">{sub.address}</p>
+    <>
+      {loading && (
+        <div className="fixed inset-0 bg-white z-50 flex items-center justify-center">
+          <Atom color="#fa0606" size="medium" />
         </div>
-      </div>
-    ))}
-  </div>
-) : (
-  <p>No subcategories found.</p>
-)}
+      )}
 
-    </div>
+      {!loading && (
+        <div className="p-4 sm:p-6 bg-gray-50 min-h-screen">
+          <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Subcategories</h2>
+
+          {subcategories.length > 0 ? (
+            <div className="space-y-6">
+              {subcategories.map((sub, index) => (
+                <div
+                  key={index}
+                  className="bg-white rounded-xl shadow-md p-4 flex flex-col sm:flex-row sm:items-start gap-4"
+                >
+                  {/* 📱 Mobile: full-width image | 🖥️ Desktop: fixed size */}
+                  <img
+                    src={sub.image}
+                    alt={sub.name}
+                    className="w-full h-40 object-cover rounded-md sm:w-40 sm:h-40"
+                  />
+
+                  <div className="flex-1 space-y-2">
+                    <h3 className="text-xl font-semibold">{sub.name}</h3>
+                    <p className="text-gray-500 text-sm">{sub.description}</p>
+                    <p className="text-gray-800 text-sm font-medium">{sub.address}</p>
+
+                    <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      <button className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 shadow-md transition">
+                        📞 Call Now
+                      </button>
+                      <button className="w-full border border-blue-600 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 shadow-md transition">
+                        Send Enquiry
+                      </button>
+                      <Link to={`/subcategory/${sub._id}`} className="w-full">
+                        <button className="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 shadow-md transition">
+                          Learn More
+                        </button>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-4">
+              <h1 className="text-6xl font-bold text-red-600 mb-4">404</h1>
+              <h2 className="text-2xl font-semibold text-gray-800 mb-2">Page Not Found</h2>
+              <p className="text-gray-600 mb-6">Oops! The page you’re looking for doesn’t exist.</p>
+              <Link
+                to="/"
+                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
+              >
+                Go Home
+              </Link>
+            </div>
+          )}
+        </div>
+      )}
+    </>
   );
 };
 
