@@ -11,7 +11,7 @@ export const AdminLogin = () => {
 
     const handleLogin = async () => {
         try {
-            const res = await axios.post('https://burhanpur-city-backend.vercel.app/api/Users/adminLogin', {
+            const res = await axios.post('Users/adminLogin', {
                 phone,
                 password,
             });

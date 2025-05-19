@@ -26,7 +26,12 @@ const Home = () => {
       margin: '10px',
       // border:'2px solid red'
     }}>
-      <AdminDashboard/>
+
+
+      {/* adminDashboard */}
+
+      
+      {/* <AdminDashboard/> */}
 
       {/* <BurhanpurPage/> */}
       <ArchitectureLanding />

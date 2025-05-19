@@ -9,7 +9,7 @@ const CategorySection = () => {
 
   useEffect(() => {
     axios.get('/category/getCategory')
-     console.log(res.data)
+    //  console.log(res.data)
       .then(res => setData(res?.data?.data))
       
 
