@@ -39,10 +39,10 @@ const RouteShow = () => {
                 <Route path="/home" element={<Home />} />
                 <Route path="/subcategory/:categoryId/subcategory/:subId" element={<SubcategoryDetail/>} />
 
-                <Route path="/" element={<Login />} />
+             
                 {/* <Route path="/Login" element={<LoginPage />} /> */}
                 <Route path="/Pages" element={<Pages />} />
-                <Route path="/Home" element={<Home />} />
+               
                 <Route path="/explore" element={<Explore />} />
                 <Route path="/RailwayStaion" element={<Railway />} />
                 <Route path="/ShahiQila" element={<ShahiQila />} />

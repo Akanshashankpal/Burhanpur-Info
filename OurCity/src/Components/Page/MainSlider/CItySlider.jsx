@@ -36,7 +36,7 @@ const slides = [
   },
 ];
 
-const CItySlider = () => {
+const CitySlider = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
@@ -50,39 +50,22 @@ const CItySlider = () => {
   const currentSlide = slides[currentIndex];
 
   return (
-    <div className="w-full h-[450px] relative overflow-hidden">
-      {/* Background Image Animation */}
+    <div className="w-full h-[450px] relative overflow-hidden perspective-[1500px]">
       <AnimatePresence mode="wait">
         <motion.img
           key={currentIndex}
           src={currentSlide.image}
           alt={`Slide ${currentIndex + 1}`}
           className="absolute top-0 left-0 w-full h-full object-cover"
-          initial={{ opacity: 0, scale: 1.05 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.98 }}
+          initial={{ opacity: 0, rotateY: 90 }}
+          animate={{ opacity: 1, rotateY: 0 }}
+          exit={{ opacity: 0, rotateY: -90 }}
           transition={{ duration: 1 }}
+          style={{ backfaceVisibility: "hidden" }}
         />
-      </AnimatePresence>
-
-      {/* Only Text Box With Background */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={`text-${currentIndex}`}
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 1 }}
-          className="absolute inset-0 flex items-center justify-center "
-        >
-          <div className="px-6 py-4 rounded-xl text-center  max-w-[80%] md:max-w-[60%]">
-            <h1 className="text-white text-3xl md:text-5xl font-bold ">{currentSlide.title}</h1>
-            <p className="text-white text-lg md:text-xl mt-2">{currentSlide.subtitle}</p>
-          </div>
-        </motion.div>
       </AnimatePresence>
     </div>
   );
 };
 
-export default CItySlider;
+export default CitySlider;

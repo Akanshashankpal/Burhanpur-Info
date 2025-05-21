@@ -6,9 +6,9 @@ const Sidebar = ({ isOpen, onClose }) => {
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* BACKGROUND OVERLAY (Light Shadow) */}
+          {/* BACKGROUND OVERLAY with blur + opacity */}
           <motion.div
-            className="fixed inset-0 bg-black/10 z-40"   // 10% black transparent shadow
+            className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40"
             onClick={onClose}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -17,22 +17,50 @@ const Sidebar = ({ isOpen, onClose }) => {
 
           {/* SIDEBAR PANEL */}
           <motion.div
-            initial={{ x: "100%" }}         // Start from right side
-            animate={{ x: isOpen ? 0 : "100%" }}  // Animate based on isOpen
-            exit={{ x: "100%" }}             // Exit to right
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
             transition={{ type: "tween", duration: 0.3 }}
-            className="fixed top-0 right-0 w-60 h-full bg-white shadow-lg z-50 p-4"
+            className="fixed top-0 right-0 w-64 h-full bg-white shadow-xl z-50 p-6 flex flex-col"
           >
-            {/* Close Button */}
-            <button onClick={onClose} className="mb-6 text-right w-full text-xl font-bold">
-              X
+            {/* Close Button - better styling */}
+            <button
+              onClick={onClose}
+              aria-label="Close sidebar"
+              className="self-end mb-8 text-gray-600 hover:text-pink-600 transition-colors duration-200 text-2xl font-bold"
+            >
+              &times;
             </button>
 
             {/* Navigation Links */}
-            <ul style={{ textAlign: 'left' }} className="space-y-4">
-              <li><Link to="/Home" onClick={onClose}>Home</Link></li>
-              <li><Link to="/explore" onClick={onClose}>Explore</Link></li>
-              <li><Link to="/Pages" onClick={onClose}>Pages</Link></li>
+            <ul className="flex flex-col gap-6 text-lg font-semibold text-gray-700">
+              <li>
+                <Link
+                  to="/Home"
+                  onClick={onClose}
+                  className="hover:text-pink-600 transition-colors duration-200"
+                >
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/explore"
+                  onClick={onClose}
+                  className="hover:text-pink-600 transition-colors duration-200"
+                >
+                  Explore
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/Pages"
+                  onClick={onClose}
+                  className="hover:text-pink-600 transition-colors duration-200"
+                >
+                  Pages
+                </Link>
+              </li>
             </ul>
           </motion.div>
         </>

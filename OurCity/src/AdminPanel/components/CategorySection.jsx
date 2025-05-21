@@ -16,7 +16,7 @@ const CategorySection = () => {
  
    const fetchSubCategories = () => {
      axios
-       .get('category/getCategory')
+       .get('/category/getCategory')
        .then((res) => {
          setData(res?.data?.result || []);
        })
@@ -81,7 +81,7 @@ const CategorySection = () => {
    return (
      <div className="px-6 py-8">
        <div className="flex justify-between items-center mb-6">
-         <h1 className="text-3xl font-bold text-gray-800">All Subcategories</h1>
+         <h1 className="text-3xl font-bold text-gray-800">All categories</h1>
          <button
            onClick={handleAddCategory}
            className="px-5 py-2 bg-green-600 text-white font-medium rounded hover:bg-green-700 transition duration-200"
