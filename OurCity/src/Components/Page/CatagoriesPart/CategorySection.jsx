@@ -33,6 +33,13 @@ const CategorySection = () => {
       .get('/category/getCategory')
       .then((res) => setData(res?.data?.data))
       .catch((err) => console.error(err));
+    axios.get('/category/getCategory')
+    //  console.log(res.data)
+      .then(res => setData(res?.data?.data))
+      
+
+      .catch(err => console.error(err));
+
   }, []);
 
   return (
