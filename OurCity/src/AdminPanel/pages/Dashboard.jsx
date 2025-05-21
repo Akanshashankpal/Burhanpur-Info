@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import SubCategorySection from "../components/SubCategorySection";
 import UserSection from "../components/UserSection";
 import CategorySection from "../components/CategorySection";
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("category");
@@ -9,9 +10,11 @@ const Dashboard = () => {
   const renderSection = () => {
     switch (activeTab) {
       case "category":
-        return <CategorySection/>;
+        return <CategorySection />;
+
+
       case "subcategory":
-        return <SubCategorySection/>;
+        return <SubCategorySection />;
       case "users":
         return <UserSection />;
       default:
@@ -31,12 +34,17 @@ const Dashboard = () => {
           >
             Categories
           </button>
-          <button
-            className={`w-full text-left px-4 py-2 rounded hover:bg-purple-700 ${activeTab === "subcategory" && "bg-purple-700"}`}
-            onClick={() => setActiveTab("subcategory")}
-          >
-            Subcategories
-          </button>
+
+          {/* <Link  > */}
+            <button
+              className={`w-full text-left px-4 py-2 rounded hover:bg-purple-700 ${activeTab === "subcategory" && "bg-purple-700"}`}
+              onClick={() => setActiveTab("subcategory")}
+            >
+              Subcategories
+            </button>
+
+          {/* </Link> */}
+
           <button
             className={`w-full text-left px-4 py-2 rounded hover:bg-purple-700 ${activeTab === "users" && "bg-purple-700"}`}
             onClick={() => setActiveTab("users")}
