@@ -10,7 +10,7 @@ import ShahiQila from '../Page/ExplorePart/PlaceDetails/ShahiQila';
 import DargahHakimi from '../Page/ExplorePart/PlaceDetails/DargahHakimi';
 
 import CategorySection from '../Page/CatagoriesPart/CategorySection';
-import SubcategoryPage from '../Page/CatagoriesPart/SubcategoryPage';
+// import SubcategoryPage from '../Page/CatagoriesPart/SubcategoryPage';
 import Dashboard from '../../AdminPanel/pages/Dashboard';
 import Login from '../../AdminPanel/pages/Login'; // Assuming Login component for admin
 import SubcategoryPage from '../Page/CatagoriesPart/SubcategoryPage';
@@ -26,7 +26,7 @@ const RouteShow = () => {
         <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Login />} />
-            <Route path="/Login" element={<LoginPage />} />
+            {/* <Route path="/Login" element={<LoginPage />} /> */}
             <Route path="/Pages" element={<Pages />} />
             <Route path="/Home" element={<Home />} />
             <Route path="/explore" element={<Explore />} />
