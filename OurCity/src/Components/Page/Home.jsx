@@ -1,4 +1,7 @@
+
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+
 import CItySlider from "./MainSlider/CItySlider";
 // import BurhanpurPage from "./LandigPage/BurhanpurPage";
 import ArchitectureLanding from "./LandigPage/ArchitectureLanding";
@@ -9,8 +12,18 @@ import ContactForm from "./LandigPage/ContactForm";
 // import CultureSection from "./LandigPage/cultureItems";
 import TopAttractions from "./LandigPage/TopAttractions";
 import CategorySection from "./CatagoriesPart/CategorySection";
+// import Banner from "../Promo/banner";
+
 
 const Home = () => {
+  const [showPromo, setShowPromo] = useState(false);
+
+  useEffect(() => {
+    // Delay popup for 2 seconds after page load
+    const timer = setTimeout(() => setShowPromo(true), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     // <motion.div
     //   initial={{ opacity: 0, scale: 0.95, y: 30 }}
@@ -44,6 +57,8 @@ const Home = () => {
       <ContactForm />
       <br />
       <Footer />
+      <br />
+{/* {showPromo && <Banner onClose={() => setShowPromo(false)} />} */}
     </div>
     // </motion.div>
   );
