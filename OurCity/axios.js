@@ -2,19 +2,14 @@
 
 import axios from 'axios';
 
-const axiosInstance = axios.create({
-
-  baseURL: 'https://burhanpur-city-backend.vercel.app/api/',
-  headers: {
-    'Content-Type': 'application/json',
-
- 
-  },
-  timeout: 10000,
+const instance = axios.create({
+  baseURL: 'https://burhanpur-city-backend.vercel.app/api',
 });
 
+// export default instance;
+
 // Attach token from localStorage to every request
-axiosInstance.interceptors.request.use((config) => {
+instance.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -24,7 +19,7 @@ axiosInstance.interceptors.request.use((config) => {
   return Promise.reject(error);
 });
 
-export default axiosInstance;
+export default instance;
 
 
 

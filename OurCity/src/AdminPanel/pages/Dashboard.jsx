@@ -11,8 +11,6 @@ const Dashboard = () => {
     switch (activeTab) {
       case "category":
         return <CategorySection />;
-
-
       case "subcategory":
         return <SubCategorySection />;
       case "users":
