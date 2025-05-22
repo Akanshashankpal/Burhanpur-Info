@@ -5,7 +5,7 @@ const SubcategoryDetail  = () => {
     const { categoryId, subId } = useParams();
 
   return (
-    <div>SubcategoryDetail </div>
+    <div> </div>
   )
 }
 
