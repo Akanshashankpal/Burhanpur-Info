@@ -1,21 +1,22 @@
+.ad-card-wrapper {
+
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+
+
+}
+
 .card {
-  /* max-width: 400px;
+  max-width: 400px;
   background-color: white;
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease;
-  margin: auto; */
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 300px;
-  background-color: #1a73e8;
-  color: white;
-  padding: 20px;
-  border-radius: 10px;
-  z-index: 9999;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  margin: auto;
+  position: relative;
 }
 
 .card:hover {
@@ -74,4 +75,3 @@
 .close-btn:hover {
   color: red;
 }
-

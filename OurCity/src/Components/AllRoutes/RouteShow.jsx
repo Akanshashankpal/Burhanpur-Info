@@ -1,49 +1,67 @@
-import React from 'react'
+import React from 'react';
 import { Routes, Route } from "react-router-dom";
-;
-// import Home from "./pages/Home";
 
-
-// import { LoginPage } from "../ui/LoginPage";
 import Explore from "../Page/Explore";
 import Home from '../Page/Home';
-import LoginPage from '../ui/LoginPage';
+ 
 import Pages from '../Page/Pages';
 import Railway from '../Page/ExplorePart/PlaceDetails/Railway';
 import ShahiQila from '../Page/ExplorePart/PlaceDetails/ShahiQila';
 import DargahHakimi from '../Page/ExplorePart/PlaceDetails/DargahHakimi';
+
+import CategorySection from '../Page/CatagoriesPart/CategorySection';
+// import SubcategoryPage from '../Page/CatagoriesPart/SubcategoryPage';
+import Dashboard from '../../AdminPanel/pages/Dashboard';
+import Login from '../../AdminPanel/pages/Login'; // Assuming Login component for admin
+import SubcategoryPage from '../Page/CatagoriesPart/SubcategoryPage';
+// import { AdminLogin } from '../AdimLogin/AdminLogin';
+import AdminDashboard from '../AdimLogin/AdminDashboard/AdminCategory';
+import EditSubCategory from '../AdimLogin/AdminDashboard/EditSubCategory';
+import SubcategoryDetail from '../Page/CatagoriesPart/SubcategoryDetail ';
+// import RegisterPage from '../ui/RegisterPage';
+import Register from '../ui/Images/Register';
+
+const RouteShow = () => {
+    return (
+        <Routes>
+            {/* Public Routes */}
+            <Route path="/login" element={<Login />} /> 
+            <Route path="/Pages" element={<Pages />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/explore" element={<Explore />} />
+            <Route path="/RailwayStaion" element={<Railway />} />
+            <Route path="/ShahiQila" element={<ShahiQila />} />
+            <Route path="/DargahHakimi" element={<DargahHakimi />} />
+            <Route path="/category" element={<CategorySection />} />
+            <Route path="/subcategory/:categoryId" element={<SubcategoryPage />} />
+
+            {/* Admin Panel Routes */}
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path='/AdminDashboard' element={<AdminDashboard />} />
+            <Route path="/registar" element={<Register />} />
+            <Route path="/edit-subcategory/:id" element={<EditSubCategory />} />
+
+            <Route path="/" element={<Home/>} />
+            <Route path="/category/:categoryId/subcategory/:subId" element={<SubcategoryDetail />} />
+
+            {/* <Route path="/" element={<Home/>} /> */}
+            <Route path="/subcategory/:categoryId" element={<SubcategoryPage />} />
+            <Route path="/Pages" element={<Pages />} />
+            <Route path="/explore" element={<Explore />} />
+            <Route path='/RailwayStaion' element={<Railway />} />
+            <Route path='/ShahiQila' element={<ShahiQila />} />
+            <Route path='/DargahHakimi' element={<DargahHakimi />} />
+        </Routes>
+    );
+};
 // import PhotoPage from '../Page/CatagoriesPart/PhotoPage';
 // import HopitalPage from '../Page/CatagoriesPart/HopitalPage';
 // import EntertenmentPage from '../Page/CatagoriesPart/EntertenmentPage';
 // import FoodPage from '../Page/CatagoriesPart/FoodPage';
 // import ITPage from '../Page/CatagoriesPart/ITPage';
-import CategorySection from '../Page/CatagoriesPart/CategorySection';
-import SubcategoryPage from '../Page/CatagoriesPart/SubcategoryPage';
-const RouteShow = () => {
-    return (
-        <div>
-            {/* <Router> */}
-            <Routes>
-                <Route path="/" element={<LoginPage />} />
-                <Route path="/Home" element={<Home />} />
+// import CategorySection from '../Page/CatagoriesPart/CategorySection';
 
-                {/* <Route path="/" element={<Home/>} /> */}
-                <Route path="/subcategory/:categoryId" element={<SubcategoryPage />} />
-                <Route path="/Pages" element={<Pages />} />
-                <Route path="/explore" element={<Explore />} />
-                <Route path='/RailwayStaion' element={<Railway />} />
-                <Route path='/ShahiQila' element={<ShahiQila />} />
-                <Route path='/DargahHakimi' element={<DargahHakimi />} />
-                {/* <Route   path='/photo' element={<PhotoPage/>}   />
-                    <Route path='/hospital' element={<HopitalPage/>} />
-                    <Route path='/entertenment' element={<EntertenmentPage/>} />
-                    <Route path='/food' element={<FoodPage/>} />
-                    <Route path='/IT' element={<ITPage/>} /> */}
 
-            </Routes>
-            {/* </Router> */}
-        </div>
-    )
-}
 
-export default RouteShow
+
+export default RouteShow;

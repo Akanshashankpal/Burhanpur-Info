@@ -12,7 +12,8 @@ import ContactForm from "./LandigPage/ContactForm";
 // import CultureSection from "./LandigPage/cultureItems";
 import TopAttractions from "./LandigPage/TopAttractions";
 import CategorySection from "./CatagoriesPart/CategorySection";
-// import Banner from "../Promo/banner";
+import AdminDashboard from "../AdimLogin/AdminDashboard/AdminCategory";
+import Banner from "../Promo/banner";
 
 
 const Home = () => {
@@ -39,6 +40,12 @@ const Home = () => {
       // border:'2px solid red'
     }}>
 
+
+      {/* adminDashboard */}
+
+      
+      {/* <AdminDashboard/> */}
+
       {/* <BurhanpurPage/> */}
       <ArchitectureLanding />
       <br />
@@ -58,7 +65,7 @@ const Home = () => {
       <br />
       <Footer />
       <br />
-{/* {showPromo && <Banner onClose={() => setShowPromo(false)} />} */}
+{showPromo && <Banner onClose={() => setShowPromo(false)} />}
     </div>
     // </motion.div>
   );

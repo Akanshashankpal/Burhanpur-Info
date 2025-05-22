@@ -1,0 +1,302 @@
+/* GymEnquiryPopup.css */
+
+.popup-overlay {
+  position: fixed; /* Stays in place even when scrolling */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6); /* Semi-transparent black background */
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  z-index: 1000; /* Ensure it's above other content on the page */
+  padding: 15px; /* Add some padding for smaller screens to prevent content touching edges */
+}
+
+.popup-content {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Soft shadow */
+  position: relative; /* For absolute positioning of close button */
+  width: 90%; /* Responsive width for smaller screens */
+  max-width: 850px; /* Maximum width for larger screens (matches screenshot) */
+  display: flex; /* Use flexbox for main sections (form and ad) */
+  flex-direction: column; /* Default to column layout for small screens */
+  overflow: hidden; /* Ensures rounded corners are applied to content */
+  max-height: 90vh; /* Limit height to viewport height */
+  overflow-y: auto; /* Allow scrolling if content is too tall */
+}
+
+/* Adjust to row layout for larger screens */
+@media (min-width: 768px) {
+  .popup-content {
+    flex-direction: row;
+    overflow-y: visible; /* Prevent scrollbar if not needed on larger screens */
+  }
+}
+
+.popup-close-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #333;
+  z-index: 10; /* Ensure it's above other elements */
+  padding: 0;
+  line-height: 1; /* For better vertical alignment of 'X' */
+  transition: color 0.2s ease-in-out;
+}
+
+.popup-close-button:hover {
+  color: #000;
+}
+
+/* Flex container for the form and ad sections */
+.popup-main-section {
+    display: flex;
+    flex-direction: column; /* Default to column for small screens */
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+  .popup-main-section {
+    flex-direction: row; /* Row layout for larger screens */
+  }
+}
+
+
+/* Form Section Styling */
+.popup-form-container {
+  flex: 1; /* Allows it to grow and take available space */
+  padding: 30px;
+  box-sizing: border-box; /* Include padding in element's total width/height */
+}
+
+.popup-form-container h3 {
+  font-size: 1.6rem;
+  color: #333;
+  margin-bottom: 25px;
+  font-weight: 600;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block; /* Puts label on its own line */
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+  color: #555;
+  font-weight: 500;
+}
+
+.form-group input[type="text"],
+.form-group input[type="tel"] {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.form-group input::placeholder {
+    color: #bbb;
+}
+
+/* Radio button group styling */
+.form-group-radio .radio-question {
+  margin-bottom: 15px;
+  font-size: 0.95rem;
+  color: #555;
+  font-weight: 500;
+}
+
+.form-group-radio .radio-options {
+  display: flex;
+  gap: 25px; /* Space between radio buttons */
+}
+
+.form-group-radio label {
+  display: flex;
+  align-items: center; /* Vertically align input and text */
+  font-size: 1rem;
+  color: #333;
+  cursor: pointer;
+}
+
+.form-group-radio input[type="radio"] {
+  margin-right: 8px;
+  transform: scale(1.1); /* Slightly larger radio button */
+}
+
+.form-error {
+  color: #dc3545; /* Red color for error messages */
+  font-size: 0.85rem;
+  margin-top: -10px; /* Pull it closer to the field it relates to */
+  margin-bottom: 10px;
+  padding: 5px;
+  border: 1px solid #dc3545;
+  background-color: #f8d7da;
+  border-radius: 4px;
+}
+
+.send-enquiry-button {
+  width: 100%;
+  padding: 15px;
+  background-color: #007bff; /* Justdial-like blue */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.send-enquiry-button:hover:not(:disabled) {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+.send-enquiry-button:disabled {
+  background-color: #cccccc; /* Grey when disabled */
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.popup-benefits {
+  margin-top: 25px;
+  font-size: 0.85rem;
+  color: #666;
+  line-height: 1.5;
+}
+
+.popup-benefits p {
+  margin-bottom: 5px;
+}
+
+/* Ad Section Styling */
+.popup-ad-section {
+  background-color: #f8f9fa; /* Light grey background for the ad */
+  padding: 20px;
+  /* Rounded corners might need to be overridden for specific sides on desktop */
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%; /* Full width on small screens */
+  min-height: 200px; /* Minimum height for ad section on small screens */
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .popup-ad-section {
+    width: 280px; /* Fixed width for ad section on larger screens */
+    min-height: auto; /* Remove min-height when fixed width */
+    border-top-left-radius: 0; /* Remove left radius for desktop layout */
+    border-bottom-left-radius: 0;
+  }
+}
+
+.popup-ad-section .ad-close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.8rem;
+  cursor: pointer;
+  color: #666;
+  line-height: 1;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: background-color 0.2s ease;
+}
+
+.popup-ad-section .ad-close-button:hover {
+  background-color: #eee;
+}
+
+.popup-ad-section .ad-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+.popup-ad-section .ad-company {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.popup-ad-section .ad-description {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+.popup-ad-section .ad-button {
+  background-color: #28a745; /* Green button for ad */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.popup-ad-section .ad-button:hover {
+  background-color: #218838;
+}
+
+.popup-ad-section .ad-small-text {
+  font-size: 0.75rem;
+  color: #999;
+  margin-top: 10px;
+}
+
+.popup-ad-section .ad-small-text span {
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  padding: 0px 5px;
+  margin-right: 3px;
+  display: inline-block;
+  line-height: 1.2;
+}
+
+/* Optional: Animations for smoother appearance */
+.popup-overlay {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.popup-content {
+  animation: slideIn 0.3s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-50px) scale(0.95); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}

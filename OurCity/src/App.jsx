@@ -4,6 +4,7 @@ import './App.css'
 // import Navbar from './Components/ui/Navbar'
  
 import RouteShow from './Components/AllRoutes/RouteShow'
+import AdminDashboard from './Components/AdimLogin/AdminDashboard/AdminCategory'
 // import RouteShow from './Components/AllRoutes/RouteShow'
  
 
@@ -12,7 +13,7 @@ function App() {
 
   return (
     <>
-       
+       {/* <AdminDashboard/> */}
        {/* <Navbar/> */}
        {/* <RouteShow/> */}
        <RouteShow/>

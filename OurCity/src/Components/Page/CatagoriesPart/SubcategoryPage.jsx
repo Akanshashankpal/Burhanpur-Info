@@ -57,11 +57,11 @@ const SubcategoryPage = () => {
                         📞 Call Now
                       </button>
                       <button className="w-full border border-blue-600 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 shadow-md transition">
-                         Send Enquiry
+                        Send Enquiry
                       </button>
                       <Link to={`/subcategory/${sub._id}`} className="w-full">
                         <button className="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 shadow-md transition">
-                           Learn More
+                          Learn More
                         </button>
                       </Link>
                     </div>
