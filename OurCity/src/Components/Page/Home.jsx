@@ -10,6 +10,7 @@ import ContactForm from "./LandigPage/ContactForm";
 import TopAttractions from "./LandigPage/TopAttractions";
 import CategorySection from "./CatagoriesPart/CategorySection";
 import AdminDashboard from "../AdimLogin/AdminDashboard/AdminCategory";
+// import NewsSection from "./LandigPage/NewsSection";
 
 const Home = () => {
   return (
@@ -30,7 +31,7 @@ const Home = () => {
 
       {/* adminDashboard */}
 
-      
+
       {/* <AdminDashboard/> */}
 
       {/* <BurhanpurPage/> */}
@@ -39,6 +40,8 @@ const Home = () => {
       <br />
       <CItySlider />
       <br />
+
+      
       <CategorySection />
 
       <br />

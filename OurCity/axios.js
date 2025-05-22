@@ -1,26 +1,19 @@
-// src/axios.js
+import axios from "axios";
 
-import axios from 'axios';
-
-const axiosInstance = axios.create({
-  baseURL: 'https://burhanpur-city-backend.vercel.app/api',  
+const instance = axios.create({
+  baseURL: "https://burhanpur-city-backend.vercel.app/api",
   headers: {
-    'Content-Type': 'application/json',
-    // Authorization: `Bearer ${token}`, 
-    
+    "Content-Type": "application/json",
   },
-  timeout: 10000,
 });
 
-// Attach token from localStorage to every request
-axiosInstance.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
+// Add interceptor to attach token only when available
+instance.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token"); // or from Redux/context
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
-}, (error) => {
-  return Promise.reject(error);
 });
 
-export default axiosInstance;
+export default instance;

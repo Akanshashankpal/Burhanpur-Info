@@ -17,10 +17,10 @@ const containerVariants = {
 const itemVariants = {
   hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0 },
-  hover: { 
-    scale: 1.05, 
-    boxShadow: "0 8px 20px rgba(0, 0, 0, 0.15)", 
-    transition: { duration: 0.3 }
+  hover: {
+    scale: 1.05,
+    boxShadow: '0 8px 20px rgba(0, 0, 0, 0.15)',
+    transition: { duration: 0.3 },
   },
 };
 
@@ -30,16 +30,14 @@ const CategorySection = () => {
 
   useEffect(() => {
     axios
-      .get('/category/getCategory')
-      .then((res) => setData(res?.data?.data))
-      .catch((err) => console.error(err));
-    axios.get('/category/getCategory')
-    //  console.log(res.data)
-      .then(res => setData(res?.data?.data))
-      
-
-      .catch(err => console.error(err));
-
+      .get(`/category/getCategory?ts=${Date.now()}`) // avoid cached response
+      .then((res) => {
+        console.log("Fetched categories:", res?.data?.data); // Debug
+        setData(res?.data?.data || []);
+      })
+      .catch((err) => {
+        console.error("Error fetching categories:", err);
+      });
   }, []);
 
   return (
@@ -67,7 +65,9 @@ const CategorySection = () => {
                 alt={category.title || 'category'}
                 className="w-12 h-12 object-contain mb-2"
               />
-              <p className="text-sm font-semibold text-gray-800">{category.title || category.name}</p>
+              <p className="text-sm font-semibold text-gray-800">
+                {category.title || category.name}
+              </p>
             </motion.div>
           ))}
         </motion.div>
