@@ -1,25 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import axios from "./../../../axios";
+import axios from "./../../../axios"; // uses token-enabled axios
 
 const CategorySection = () => {
   const [categories, setCategories] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [currentCategoryId, setCurrentCategoryId] = useState(null);
-  const [formData, setFormData] = useState({
-    name: "",
-    description: "",
-    image: "",
-  });
+  const [formData, setFormData] = useState({ name: "", description: "", image: "" });
   const [loading, setLoading] = useState(false);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null); // ✅ Added state
 
   const fetchCategories = async () => {
     try {
       const res = await axios.get("/category/getCategory");
       setCategories(res.data?.data || []);
     } catch (error) {
-      console.error("Error fetching categories:", error);
+      console.error("Error fetching categories:", error.response?.data || error.message);
     }
   };
 
@@ -44,58 +41,63 @@ const CategorySection = () => {
     setModalOpen(true);
   };
 
+  const handleAddSubcategory = (categoryId) => {
+    setSelectedCategoryId(categoryId);
+    console.log("Selected Category ID for Subcategory:", categoryId);
+    // Optionally: open a subcategory modal here
+  };
+
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this category?")) return;
-
     try {
       await axios.delete(`/category/deleteCategory/${id}`);
       fetchCategories();
     } catch (error) {
-      console.error("Delete failed:", error);
+      console.error("Delete failed:", error.response?.data || error.message);
       alert("Error deleting category");
     }
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const { name, description, image } = formData;
+    const { name, description, image } = formData;
 
-  if (!name.trim() || !image.trim()) {
-    alert("Please fill in required fields: Name and Image URL");
-    return;
-  }
-
-  setLoading(true);
-
-  const payload = {
-    name: name.trim(),
-    description: description.trim() || "No description",
-    image: image.trim(),
-    isActive: true,
-  };
-
-  try {
-    if (isEditMode) {
-      await axios.put(`/category/updateCategory/${currentCategoryId}`, payload);
-      alert("Category updated successfully!");
-    } else {
-      await axios.post("/category/createCategory", payload);
-      alert("Category added successfully!");
+    if (!name.trim() || !image.trim()) {
+      alert("Please fill in required fields: Name and Image URL");
+      return;
     }
-    fetchCategories();
-    setModalOpen(false);
-  } catch (err) {
-    console.error("Error saving category:", err.response?.data || err.message);
-    alert(
-      err.response?.data?.message ||
-      err.response?.data?.error ||
-      "Server error while saving category."
-    );
-  } finally {
-    setLoading(false);
-  }
-};
+
+    setLoading(true);
+
+    const payload = {
+      name: name.trim(),
+      description: description.trim() || "No description",
+      image: image.trim(),
+      isActive: true,
+    };
+
+    try {
+      if (isEditMode) {
+        await axios.put(`/category/updateCategory/${currentCategoryId}`, payload);
+        alert("Category updated successfully!");
+      } else {
+        await axios.post("/category/createCategory", payload);
+        alert("Category added successfully!");
+      }
+      fetchCategories();
+      setModalOpen(false);
+    } catch (err) {
+      console.error("Error saving category:", err.response?.data || err.message);
+      alert(
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        "Server error while saving category."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
@@ -109,7 +111,6 @@ const CategorySection = () => {
         </button>
       </div>
 
-      {/* Table */}
       <div className="overflow-x-auto">
         <table className="w-full border-collapse shadow-md">
           <thead className="bg-gray-100 text-left">
@@ -124,18 +125,14 @@ const CategorySection = () => {
             {categories.map((cat) => (
               <tr key={cat._id} className="border-b hover:bg-gray-50">
                 <td className="p-3 border">
-                  <img
-                    src={cat.image}
-                    alt={cat.name}
-                    className="w-12 h-12 object-contain"
-                  />
+                  <img src={cat.image} alt={cat.name} className="w-12 h-12 object-contain" />
                 </td>
                 <td className="p-3 border font-medium">{cat.name}</td>
                 <td className="p-3 border text-gray-600">{cat.description}</td>
-                <td className="p-3 border text-center">
+                <td className="p-3 border text-center space-x-3">
                   <button
                     onClick={() => openEditModal(cat)}
-                    className="text-blue-600 hover:underline mr-3"
+                    className="text-blue-600 hover:underline"
                   >
                     Edit
                   </button>
@@ -144,6 +141,12 @@ const CategorySection = () => {
                     className="text-red-600 hover:underline"
                   >
                     Delete
+                  </button>
+                  <button
+                    onClick={() => handleAddSubcategory(cat._id)}
+                    className="text-green-600 hover:underline"
+                  >
+                    + Subcategory
                   </button>
                 </td>
               </tr>
@@ -159,7 +162,6 @@ const CategorySection = () => {
         </table>
       </div>
 
-      {/* Modal */}
       {modalOpen && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
           <motion.div
@@ -175,28 +177,23 @@ const CategorySection = () => {
                 type="text"
                 placeholder="Category Name"
                 value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 className="border w-full px-3 py-2 rounded"
                 required
               />
+              
               <input
                 type="text"
                 placeholder="Description"
                 value={formData.description}
-                onChange={(e) =>
-                  setFormData({ ...formData, description: e.target.value })
-                }
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 className="border w-full px-3 py-2 rounded"
               />
               <input
                 type="text"
                 placeholder="Image URL"
                 value={formData.image}
-                onChange={(e) =>
-                  setFormData({ ...formData, image: e.target.value })
-                }
+                onChange={(e) => setFormData({ ...formData, image: e.target.value })}
                 className="border w-full px-3 py-2 rounded"
                 required
               />

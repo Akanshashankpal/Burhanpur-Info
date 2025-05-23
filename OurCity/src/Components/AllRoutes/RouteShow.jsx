@@ -38,7 +38,9 @@ const RouteShow = () => {
                 {/* <Route path="/edit-subcategory/:id" element={<EditSubCategory />} /> */}
                 <Route path='newssection' element={<NewsSection />} />
                 <Route path="/home" element={<Home />} />
-                <Route path="/subcategory/:categoryId/subcategory/:subId" element={<SubcategoryDetail/>} />
+                <Route   path='/subdetails' element={<SubcategoryDetail/>}   />
+
+                {/* <Route path="/subcategory/:categoryId/subcategory/:subId" element={<SubcategoryDetail/>} /> */}
 
              
                 {/* <Route path="/Login" element={<LoginPage />} /> */}
