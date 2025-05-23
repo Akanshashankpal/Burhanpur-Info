@@ -45,20 +45,30 @@ function ArchitectureLanding() {
 
   return (
     <>
-      {/* Add this CSS inside the component or in your global CSS */}
       <style>{`
-        /* Background slow pan animation */
         @keyframes panBackground {
           0% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
           100% { background-position: 0% 50%; }
         }
 
-        .animate-panBackground {
+        .background-animated {
           animation: panBackground 30s linear infinite;
-          background-size: cover;
+          background-size: 200% auto; /* Yahan change kiya hai */
           background-repeat: no-repeat;
           background-position: 0% 50%;
+          position: relative;
+          width: 100%;
+          height: 100vh;
+        }
+
+        /* Black overlay using ::after */
+        .background-animated::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background-color: rgba(0, 0, 0, 0.4);
+          z-index: 1;
         }
 
         /* Flip in X animation */
@@ -97,17 +107,16 @@ function ArchitectureLanding() {
       <div className="relative w-full min-h-screen">
         <Navbar />
 
-        {/* Background with pan animation */}
+        {/* Background with animation */}
         <div
-          className="h-screen w-full relative bg-black/40 animate-panBackground"
+          className="background-animated"
           style={{ backgroundImage: `url(${bgImage})` }}
         >
-          {/* Overlay content */}
+          {/* Content overlay */}
           <div
             ref={headingRef}
-            className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center text-white px-6"
+            className="relative z-10 flex flex-col items-center justify-center text-center text-white px-6 h-full"
           >
-            {/* Flip In Heading */}
             <h1
               className={`text-4xl md:text-5xl font-bold mb-4 max-w-2xl ${
                 showFlipText ? "animate-flipInX" : "opacity-0"
@@ -116,18 +125,15 @@ function ArchitectureLanding() {
               Welcome to <br /> The Historical City of Heritage & Glory
             </h1>
 
-            {/* Fade In Paragraph */}
             <p
-              className={`text-lg max-w-xl mb-10 text-white transition-opacity duration-700 ${
+              className={`text-lg max-w-xl mb-10 transition-opacity duration-700 ${
                 showFadeText ? "opacity-100" : "opacity-0"
               }`}
             >
-              Explore the hidden gems of Mughal brilliance, grand forts, and
-              sacred shrines that have stood the test of time in the heart of
-              Madhya Pradesh. Let history unfold around every corner.
+              Discover the hidden gems of Mughal brilliance, majestic forts, and sacred shrines that have gracefully stood the test of time in the heart of Madhya Pradesh.  
+              Immerse yourself in a journey where history whispers from every stone, unveiling stories of valor, culture, and timeless heritage that await your exploration around every corner.
             </p>
 
-            {/* Zoom In Search Box */}
             {showSearchBox && (
               <div className="w-full max-w-md bg-white rounded-3xl p-6 space-y-5 text-black shadow-2xl border border-white transform hover:scale-[1.02] transition-transform duration-700 animate-zoomIn">
                 <input

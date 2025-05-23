@@ -10,6 +10,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false); // Loading state add kiya
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,6 +18,8 @@ const LoginPage = () => {
   }, []);
 
   const handleLogin = async () => {
+    setLoading(true);        // Login start hote hi loading true karo
+    setError('');
     try {
       const res = await axios.post(
         'https://burhanpur-city-backend.vercel.app/api/Users/adminLogin',
@@ -24,11 +27,12 @@ const LoginPage = () => {
       );
       const token = res.data.token;
       localStorage.setItem('authToken', token);
-      setError('');
       navigate('/home');
     } catch (err) {
       console.error(err);
       setError('Invalid credentials');
+    } finally {
+      setLoading(false);     // Login process complete hone ke baad loading false karo
     }
   };
 
@@ -54,6 +58,7 @@ const LoginPage = () => {
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             required
+            disabled={loading}  // Loading me inputs disable kar do
           />
 
           {/* Password Input with Icons */}
@@ -68,6 +73,7 @@ const LoginPage = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              disabled={loading}  // Loading me inputs disable kar do
             />
             <span
               onClick={() => setShowPassword((prev) => !prev)}
@@ -80,9 +86,37 @@ const LoginPage = () => {
           {/* Login Button */}
           <button
             onClick={handleLogin}
-            className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition duration-300"
+            className={`w-full py-2 rounded-lg transition duration-300
+              ${loading ? 'bg-indigo-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700 text-white'}`}
+            disabled={loading}
           >
-            Login
+            {loading ? (
+              <div className="flex items-center justify-center space-x-2">
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 010 16v-4l-3 3 3 3v-4a8 8 0 01-8-8z"
+                  ></path>
+                </svg>
+                <span>Loading...</span>
+              </div>
+            ) : (
+              'Login'
+            )}
           </button>
 
           {/* Error Message */}

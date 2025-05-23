@@ -1,49 +1,58 @@
-import React from 'react'
+import React from "react";
 import { Routes, Route } from "react-router-dom";
-;
-// import Home from "./pages/Home";
 
-
-// import { LoginPage } from "../ui/LoginPage";
+// Pages
+import Home from "../Page/Home";
 import Explore from "../Page/Explore";
-import Home from '../Page/Home';
-import LoginPage from '../ui/LoginPage';
-import Pages from '../Page/Pages';
-import Railway from '../Page/ExplorePart/PlaceDetails/Railway';
-import ShahiQila from '../Page/ExplorePart/PlaceDetails/ShahiQila';
-import DargahHakimi from '../Page/ExplorePart/PlaceDetails/DargahHakimi';
-// import PhotoPage from '../Page/CatagoriesPart/PhotoPage';
-// import HopitalPage from '../Page/CatagoriesPart/HopitalPage';
-// import EntertenmentPage from '../Page/CatagoriesPart/EntertenmentPage';
-// import FoodPage from '../Page/CatagoriesPart/FoodPage';
-// import ITPage from '../Page/CatagoriesPart/ITPage';
-import CategorySection from '../Page/CatagoriesPart/CategorySection';
-import SubcategoryPage from '../Page/CatagoriesPart/SubcategoryPage';
+import Pages from "../Page/Pages";
+import AboutUs from "../ui/AboutUs";
+import LoginPage from "../ui/LoginPage";
+
+// Explore Details
+import Railway from "../Page/ExplorePart/PlaceDetails/Railway";
+import ShahiQila from "../Page/ExplorePart/PlaceDetails/ShahiQila";
+import DargahHakimi from "../Page/ExplorePart/PlaceDetails/DargahHakimi";
+
+// Categories
+import CategorySection from "../Page/CatagoriesPart/CategorySection";
+import SubcategoryPage from "../Page/CatagoriesPart/SubcategoryPage";
+
 const RouteShow = () => {
-    return (
-        <div>
-            {/* <Router> */}
-            <Routes>
-                <Route path="/" element={<LoginPage />} />
-                <Route path="/Home" element={<Home />} />
+  return (
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <div className="bg-gray-50 text-gray-800">
+            <Home />
+          </div>
+        }
+      />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/pages" element={<Pages />} />
+      <Route path="/about" element={<AboutUs />} />
 
-                {/* <Route path="/" element={<Home/>} /> */}
-                <Route path="/subcategory/:categoryId" element={<SubcategoryPage />} />
-                <Route path="/Pages" element={<Pages />} />
-                <Route path="/explore" element={<Explore />} />
-                <Route path='/RailwayStaion' element={<Railway />} />
-                <Route path='/ShahiQila' element={<ShahiQila />} />
-                <Route path='/DargahHakimi' element={<DargahHakimi />} />
-                {/* <Route   path='/photo' element={<PhotoPage/>}   />
-                    <Route path='/hospital' element={<HopitalPage/>} />
-                    <Route path='/entertenment' element={<EntertenmentPage/>} />
-                    <Route path='/food' element={<FoodPage/>} />
-                    <Route path='/IT' element={<ITPage/>} /> */}
+      {/* Explore */}
+      <Route path="/explore" element={<Explore />} />
+      <Route path="/railway-station" element={<Railway />} />
+      <Route path="/shahi-qila" element={<ShahiQila />} />
+      <Route path="/dargah-hakimi" element={<DargahHakimi />} />
 
-            </Routes>
-            {/* </Router> */}
-        </div>
-    )
-}
+      {/* Categories */}
+      <Route path="/explore/categories" element={<CategorySection />} />
+      <Route path="/subcategory/:categoryId" element={<SubcategoryPage />} />
 
-export default RouteShow
+      {/* 404 Fallback */}
+      <Route
+        path="*"
+        element={
+          <div className="flex items-center justify-center min-h-screen text-2xl font-semibold">
+            404 - Page Not Found
+          </div>
+        }
+      />
+    </Routes>
+  );
+};
+
+export default RouteShow;
