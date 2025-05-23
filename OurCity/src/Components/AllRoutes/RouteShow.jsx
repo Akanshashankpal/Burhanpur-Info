@@ -1,4 +1,3 @@
-import React from 'react';
 import { Routes, Route } from "react-router-dom";
 
 import Explore from "../Page/Explore";
@@ -23,6 +22,9 @@ import Register from '../ui/Images/Register';
 
 import NewsSection from '../Page/LandigPage/NewsSection';
 import SubcategoryDetail from '../Page/CatagoriesPart/SubcategoryDetail ';
+import AboutUs from "../ui/About";
+import ContactUs from "../ui/ContactUs";
+import ExploreBurhanpur from "../ui/ExploreBurhanpur";
 
 
 const RouteShow = () => {
@@ -32,19 +34,19 @@ const RouteShow = () => {
         <div>
             {/* <Router> */}
             <Routes>
-                <Route path='/' element={<Login/>}/>
+                <Route path='/login' element={<Login/>}/>
                 <Route path='/dashboard' element={<Dashboard />} />
                 <Route path="/registar" element={<Register />} />
                 {/* <Route path="/edit-subcategory/:id" element={<EditSubCategory />} /> */}
                 <Route path='newssection' element={<NewsSection />} />
-                <Route path="/home" element={<Home />} />
+                <Route path="/" element={<Home />} />
                 <Route   path='/subdetails' element={<SubcategoryDetail/>}   />
 
                 {/* <Route path="/subcategory/:categoryId/subcategory/:subId" element={<SubcategoryDetail/>} /> */}
 
              
                 {/* <Route path="/Login" element={<LoginPage />} /> */}
-                <Route path="/Pages" element={<Pages />} />
+                {/* <Route path="/Pages" element={<Pages />} /> */}
                
                 <Route path="/explore" element={<Explore />} />
                 <Route path="/RailwayStaion" element={<Railway />} />
@@ -67,7 +69,19 @@ const RouteShow = () => {
                 <Route path="/subcategory/:categoryId" element={<SubcategoryPage />} />
                 <Route path="/Pages" element={<Pages />} />
                 {/* <Route path="/explore" element={<Explore />} /> */}
-             
+                <Route path="/about" element={<AboutUs/>}/>
+                <Route path="/contact" element={<ContactUs/>}/>
+                <Route path="/explore-more" element={<ExploreBurhanpur/>}/>
+              <Route
+        path="*"
+        element={
+          <div className="flex items-center justify-center min-h-screen text-2xl font-semibold">
+            404 - Page Not Found
+          </div>
+        }
+      />
+    
+
             </Routes>
             </div>
             );
@@ -75,3 +89,9 @@ const RouteShow = () => {
             
 };  
  export default RouteShow;
+
+
+
+   
+     
+     

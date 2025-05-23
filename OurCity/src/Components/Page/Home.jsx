@@ -1,61 +1,34 @@
-import { motion } from "framer-motion";
-import CItySlider from "./MainSlider/CItySlider";
-// import BurhanpurPage from "./LandigPage/BurhanpurPage";
-import ArchitectureLanding from "./LandigPage/ArchitectureLanding";
-// import CityCategories from "./LandigPage/CityCategories";
 import Footer from "./Footer";
+// import CategorySection from "./CategoriesPart/CategorySection";
+import ArchitectureLanding from "./LandigPage/ArchitectureLanding";
 import HistoricalTimeline from "./LandigPage/HistoricalTimeline";
 import ContactForm from "./LandigPage/ContactForm";
-// import CultureSection from "./LandigPage/cultureItems";
-import TopAttractions from "./LandigPage/TopAttractions";
+import TopAttractions from "./LandigPage/TopAttractions"
 import CategorySection from "./CatagoriesPart/CategorySection";
-import AdminDashboard from "../AdimLogin/AdminDashboard/AdminCategory";
-// import NewsSection from "./LandigPage/NewsSection";
+import CitySlider from "./MainSlider/CItySlider";
+// import AdminDashboard from "../AdminLogin/AdminDashboard/AdminCategory";
+// import NewsSection from "./LandingPage/NewsSection";
 
 const Home = () => {
   return (
-    // <motion.div
-    //   initial={{ opacity: 0, scale: 0.95, y: 30 }}
-    //   animate={{ opacity: 1, scale: 1, y: 0 }}
-    //   transition={{
-    //     duration: 0.7,
-    //     ease: [0.25, 0.8, 0.25, 1], // smooth cubic-bezier easing
-    //   }}
-    //   className="p-4"
-    // >
-    <div style={{
-      margin: '10px',
-      // border:'2px solid red'
-    }}>
+    <div style={{ margin: "10px" }}>
+      {/* Optional: Uncomment for admin panel */}
+      {/* <AdminDashboard /> */}
 
-
-      {/* adminDashboard */}
-
-
-      {/* <AdminDashboard/> */}
-
-      {/* <BurhanpurPage/> */}
       <ArchitectureLanding />
       <br />
+      <CitySlider/>
       <br />
-      <CItySlider />
+      <CategorySection/>
       <br />
-
-      
-      <CategorySection />
-
+      <HistoricalTimeline/>
       <br />
+      <TopAttractions/>
       <br />
-      <HistoricalTimeline />
-      <br />
-      {/* <CultureSection/> */}
-      <TopAttractions />
-      <br />
-      <ContactForm />
+      <ContactForm/>
       <br />
       <Footer />
     </div>
-    // </motion.div>
   );
 };
 
