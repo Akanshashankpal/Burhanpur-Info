@@ -42,7 +42,7 @@ const Sidebar = ({ isOpen, onClose }) => {
 
             {/* NAV LINKS */}
             <ul className="flex flex-col gap-5 text-lg font-semibold text-gray-700">
-              {/* HOME - now a NavLink with Explore-like hover */}
+              {/* HOME */}
               <li>
                 <NavLink
                   to="/"
@@ -96,7 +96,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                       </li>
                       <li>
                         <NavLink
-                          to="/explore/categories"
+                          to="/category"
                           onClick={onClose}
                           className={({ isActive }) =>
                             isActive ? activeClass : inactiveClass
@@ -171,7 +171,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                       </li>
                       <li>
                         <NavLink
-                          to="/pages"
+                          to="/about"
                           onClick={onClose}
                           className={({ isActive }) =>
                             isActive ? activeClass : inactiveClass

@@ -1,57 +1,37 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
-
-// Pages
-import Home from "../Page/Home";
+import { Routes, Route, useLocation } from "react-router-dom";
+import Navbar from "../ui/Navbar";
+import About from "../ui/AboutUs";
 import Explore from "../Page/Explore";
+import Home from "../Page/Home";
 import Pages from "../Page/Pages";
-import AboutUs from "../ui/AboutUs";
-import LoginPage from "../ui/LoginPage";
-
-// Explore Details
 import Railway from "../Page/ExplorePart/PlaceDetails/Railway";
 import ShahiQila from "../Page/ExplorePart/PlaceDetails/ShahiQila";
 import DargahHakimi from "../Page/ExplorePart/PlaceDetails/DargahHakimi";
-
-// Categories
 import CategorySection from "../Page/CatagoriesPart/CategorySection";
 import SubcategoryPage from "../Page/CatagoriesPart/SubcategoryPage";
 
 const RouteShow = () => {
+  const location = useLocation();
+
+  const showNavbar = true;
+
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={
-          <div className="bg-gray-50 text-gray-800">
-            <Home />
-          </div>
-        }
-      />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/pages" element={<Pages />} />
-      <Route path="/about" element={<AboutUs />} />
-
-      {/* Explore */}
-      <Route path="/explore" element={<Explore />} />
-      <Route path="/railway-station" element={<Railway />} />
-      <Route path="/shahi-qila" element={<ShahiQila />} />
-      <Route path="/dargah-hakimi" element={<DargahHakimi />} />
-
-      {/* Categories */}
-      <Route path="/explore/categories" element={<CategorySection />} />
-      <Route path="/subcategory/:categoryId" element={<SubcategoryPage />} />
-
-      {/* 404 Fallback */}
-      <Route
-        path="*"
-        element={
-          <div className="flex items-center justify-center min-h-screen text-2xl font-semibold">
-            404 - Page Not Found
-          </div>
-        }
-      />
-    </Routes>
+    <div>
+      {showNavbar && <Navbar />}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
+         <Route path="/about" element={<About />} /> 
+        <Route path="/subcategory/:categoryId" element={<SubcategoryPage />} />
+        <Route path="/pages" element={<Pages />} />
+        <Route path="/explore" element={<Explore />} />
+        <Route path="/railway-station" element={<Railway />} /> {/* fixed spelling & case */}
+        <Route path="/shahi-qila" element={<ShahiQila />} /> {/* better kebab-case */}
+        <Route path="/dargah-hakimi" element={<DargahHakimi />} /> {/* better kebab-case */}
+        <Route path="/category" element={<CategorySection />} /> {/* added this route */}
+      </Routes>
+    </div>
   );
 };
 

@@ -54,7 +54,7 @@ function ArchitectureLanding() {
 
         .background-animated {
           animation: panBackground 30s linear infinite;
-          background-size: 200% auto; /* Yahan change kiya hai */
+          background-size: 200% auto;
           background-repeat: no-repeat;
           background-position: 0% 50%;
           position: relative;
@@ -62,7 +62,6 @@ function ArchitectureLanding() {
           height: 100vh;
         }
 
-        /* Black overlay using ::after */
         .background-animated::after {
           content: "";
           position: absolute;
@@ -71,7 +70,6 @@ function ArchitectureLanding() {
           z-index: 1;
         }
 
-        /* Flip in X animation */
         @keyframes flipInX {
           0% {
             transform: perspective(400px) rotateX(90deg);
@@ -88,7 +86,6 @@ function ArchitectureLanding() {
           transform-style: preserve-3d;
         }
 
-        /* Zoom In animation */
         @keyframes zoomIn {
           0% {
             transform: scale(0.8);
@@ -162,6 +159,9 @@ function ArchitectureLanding() {
             )}
           </div>
         </div>
+
+        {/* Gap between Hero and next section */}
+        <div className="h-20 md:h-32"></div>
       </div>
     </>
   );

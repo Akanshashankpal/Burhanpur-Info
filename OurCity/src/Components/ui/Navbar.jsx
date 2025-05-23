@@ -1,5 +1,3 @@
-// Navbar.jsx
-
 import { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
 import { CartIcon } from "../AllIcons/CartIcon";
@@ -23,6 +21,9 @@ const Navbar = () => {
   }, []);
 
   const navLinks = [{ name: "Home", path: "/" }];
+
+  // Helper to check if screen is desktop
+  const isDesktop = () => window.innerWidth > 768;
 
   return (
     <>
@@ -72,14 +73,15 @@ const Navbar = () => {
 
             {/* Explore submenu */}
             <div
-              onMouseEnter={() => setExploreOpen(true)}
-              onMouseLeave={() => setExploreOpen(false)}
               className="relative"
+              onMouseEnter={() => isDesktop() && setExploreOpen(true)}
+              onMouseLeave={() => isDesktop() && setExploreOpen(false)}
             >
               <span
                 className={`px-2 py-1 flex items-center gap-1 cursor-pointer transition-colors duration-300 ${
                   scrolled ? "text-gray-700 hover:text-pink-600" : "text-white hover:text-pink-300"
                 }`}
+                onClick={() => setExploreOpen((prev) => !prev)}
               >
                 Explore <span className="text-xs select-none">▼</span>
               </span>
@@ -87,16 +89,18 @@ const Navbar = () => {
                 <ul className="absolute top-full left-0 mt-1 bg-white rounded-md shadow-lg py-2 w-48 z-50">
                   <li>
                     <NavLink
-                      to="/more-explore"
+                      to="/explore"
                       className="block px-4 py-2 text-gray-700 hover:bg-pink-100"
+                      onClick={() => setExploreOpen(false)}
                     >
                       More Explore
                     </NavLink>
                   </li>
                   <li>
                     <NavLink
-                      to="/categories"
+                      to="/category"
                       className="block px-4 py-2 text-gray-700 hover:bg-pink-100"
+                      onClick={() => setExploreOpen(false)}
                     >
                       Categories
                     </NavLink>
@@ -107,14 +111,15 @@ const Navbar = () => {
 
             {/* Page submenu */}
             <div
-              onMouseEnter={() => setPageOpen(true)}
-              onMouseLeave={() => setPageOpen(false)}
               className="relative"
+              onMouseEnter={() => isDesktop() && setPageOpen(true)}
+              onMouseLeave={() => isDesktop() && setPageOpen(false)}
             >
               <span
                 className={`px-2 py-1 flex items-center gap-1 cursor-pointer transition-colors duration-300 ${
                   scrolled ? "text-gray-700 hover:text-pink-600" : "text-white hover:text-pink-300"
                 }`}
+                onClick={() => setPageOpen((prev) => !prev)}
               >
                 Page <span className="text-xs select-none">▼</span>
               </span>
@@ -124,14 +129,16 @@ const Navbar = () => {
                     <NavLink
                       to="/contact"
                       className="block px-4 py-2 text-gray-700 hover:bg-pink-100"
+                      onClick={() => setPageOpen(false)}
                     >
                       Contact Us
                     </NavLink>
                   </li>
                   <li>
                     <NavLink
-                      to="/about"
+                      to="/Pages"
                       className="block px-4 py-2 text-gray-700 hover:bg-pink-100"
+                      onClick={() => setPageOpen(false)}
                     >
                       About Us
                     </NavLink>
