@@ -6,6 +6,8 @@ import HistoricalTimeline from "./LandigPage/HistoricalTimeline";
 import ContactForm from "./LandigPage/ContactForm";
 import TopAttractions from "./LandigPage/TopAttractions";
 import CategorySection from "./CatagoriesPart/CategorySection";
+import AdminDashboard from "../AdimLogin/AdminDashboard/AdminCategory";
+// import NewsSection from "./LandigPage/NewsSection";
 // import AdminDashboard from "../AdimLogin/AdminDashboard/AdminCategory";
 
 const Home = () => {
@@ -28,8 +30,17 @@ const Home = () => {
 
       <ArchitectureLanding/>
 
+
+      {/* <AdminDashboard/> */}
+
+      {/* <BurhanpurPage/> */}
+      <ArchitectureLanding />
+      <br />
+      <br />
       <CItySlider />
       <br />
+
+      
       <CategorySection />
       <br />
       <HistoricalTimeline />

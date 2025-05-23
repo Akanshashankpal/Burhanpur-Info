@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
-import { CartIcon } from "../AllIcons/CartIcon";
+// import { CartIcon } from "../AllIcons/CartIcon";
 import { AddListing } from "../AllIcons/AddListing";
 import UserIcon from "../AllIcons/UserIcon";
 import { NavLink } from "react-router-dom";
 import img from "../ui/Images/logo.jpg";
+// import NewaIcon from "../AllIcons/NewsIcon";
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -153,7 +154,7 @@ const Navbar = () => {
             <NavLink to="/login" aria-label="User Login">
               <UserIcon fill={scrolled ? "#1f2937" : "white"} className="transition-colors duration-300" />
             </NavLink>
-            <CartIcon fill={scrolled ? "#1f2937" : "white"} className="transition-colors duration-300" />
+            {/* <CartIcon fill={scrolled ? "#1f2937" : "white"} className="transition-colors duration-300" /> */}
             <AddListing fill={scrolled ? "#1f2937" : "white"} className="transition-colors duration-300" />
 
             {/* Mobile Hamburger */}

@@ -3,6 +3,12 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
+
+  baseURL: 'https://burhanpur-city-backend.vercel.app/api/',
+  headers: {
+    'Content-Type': 'application/json',
+
+ 
   baseURL: 'https://burhanpur-city-backend.vercel.app/api',  
   headers: {
     'Content-Type': 'application/json',
@@ -24,3 +30,6 @@ axiosInstance.interceptors.request.use((config) => {
 });
 
 export default axiosInstance;
+
+
+
