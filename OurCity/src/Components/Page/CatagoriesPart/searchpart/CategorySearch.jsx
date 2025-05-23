@@ -17,7 +17,7 @@ const CategorySearch = () => {
 
       console.log("Searching for:", trimmedSearch.toLowerCase()); // Debug log
 
-      const response = await axios.post(
+      const response = await axios.get(
         'https://burhanpur-city-backend.vercel.app/api/category/searchCategory',
         { search: trimmedSearch.toLowerCase() } // you can remove `.toLowerCase()` if backend is already handling it
       );

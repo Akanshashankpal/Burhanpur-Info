@@ -1,30 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import axios from '../../../axios';
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import axios from "./../../../axios"; // uses token-enabled axios
 
 const CategorySection = () => {
   const [categories, setCategories] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [currentCategoryId, setCurrentCategoryId] = useState(null);
-  const [formData, setFormData] = useState({ name: '', description: '', image: '' });
+  const [formData, setFormData] = useState({ name: "", description: "", image: "" });
   const [loading, setLoading] = useState(false);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null); // ✅ Added state
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get('/category/getCategory');
+      const res = await axios.get("/category/getCategory");
       setCategories(res.data?.data || []);
     } catch (error) {
-      console.error('Error fetching categories:', error);
+      console.error("Error fetching categories:", error.response?.data || error.message);
     }
-  };
-
-  const createCategory = async (payload) => {
-    return await axios.post('/category/createCategory', payload);
-  };
-
-  const updateCategory = async (id, payload) => {
-    return await axios.put(`/category/updateCategory/${id}`, payload);
   };
 
   useEffect(() => {
@@ -33,7 +26,7 @@ const CategorySection = () => {
 
   const openAddModal = () => {
     setIsEditMode(false);
-    setFormData({ name: '', description: '', image: '' });
+    setFormData({ name: "", description: "", image: "" });
     setModalOpen(true);
   };
 
@@ -48,51 +41,58 @@ const CategorySection = () => {
     setModalOpen(true);
   };
 
+  const handleAddSubcategory = (categoryId) => {
+    setSelectedCategoryId(categoryId);
+    console.log("Selected Category ID for Subcategory:", categoryId);
+    // Optionally: open a subcategory modal here
+  };
+
   const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this category?')) return;
+    if (!window.confirm("Are you sure you want to delete this category?")) return;
     try {
       await axios.delete(`/category/deleteCategory/${id}`);
       fetchCategories();
     } catch (error) {
-      console.error('Delete failed:', error);
-      alert('Error deleting category');
+      console.error("Delete failed:", error.response?.data || error.message);
+      alert("Error deleting category");
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const { name, description, image } = formData;
 
     if (!name.trim() || !image.trim()) {
-      alert('Name and Image URL are required.');
+      alert("Please fill in required fields: Name and Image URL");
       return;
     }
 
+    setLoading(true);
+
     const payload = {
       name: name.trim(),
-      description: description.trim() || 'No description',
+      description: description.trim() || "No description",
       image: image.trim(),
-      isActive: true
+      isActive: true,
     };
-
-    setLoading(true);
 
     try {
       if (isEditMode) {
-        await updateCategory(currentCategoryId, payload);
-        alert('Category updated successfully!');
+        await axios.put(`/category/updateCategory/${currentCategoryId}`, payload);
+        alert("Category updated successfully!");
       } else {
-        await createCategory(payload);
-        alert('Category added successfully!');
+        await axios.post("/category/createCategory", payload);
+        alert("Category added successfully!");
       }
-      setModalOpen(false);
       fetchCategories();
+      setModalOpen(false);
     } catch (err) {
-      console.error('Error saving category:', err.response?.data || err.message);
+      console.error("Error saving category:", err.response?.data || err.message);
       alert(
         err.response?.data?.message ||
         err.response?.data?.error ||
-        'Something went wrong.'
+        "Server error while saving category."
       );
     } finally {
       setLoading(false);
@@ -129,10 +129,10 @@ const CategorySection = () => {
                 </td>
                 <td className="p-3 border font-medium">{cat.name}</td>
                 <td className="p-3 border text-gray-600">{cat.description}</td>
-                <td className="p-3 border text-center">
+                <td className="p-3 border text-center space-x-3">
                   <button
                     onClick={() => openEditModal(cat)}
-                    className="text-blue-600 hover:underline mr-3"
+                    className="text-blue-600 hover:underline"
                   >
                     Edit
                   </button>
@@ -141,6 +141,12 @@ const CategorySection = () => {
                     className="text-red-600 hover:underline"
                   >
                     Delete
+                  </button>
+                  <button
+                    onClick={() => handleAddSubcategory(cat._id)}
+                    className="text-green-600 hover:underline"
+                  >
+                    + Subcategory
                   </button>
                 </td>
               </tr>
@@ -156,7 +162,6 @@ const CategorySection = () => {
         </table>
       </div>
 
-      {/* Modal */}
       {modalOpen && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
           <motion.div
@@ -165,7 +170,7 @@ const CategorySection = () => {
             className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg"
           >
             <h2 className="text-xl font-semibold mb-4">
-              {isEditMode ? 'Edit Category' : 'Add Category'}
+              {isEditMode ? "Edit Category" : "Add Category"}
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
@@ -176,6 +181,7 @@ const CategorySection = () => {
                 className="border w-full px-3 py-2 rounded"
                 required
               />
+              
               <input
                 type="text"
                 placeholder="Description"
@@ -203,10 +209,16 @@ const CategorySection = () => {
                   type="submit"
                   disabled={loading}
                   className={`px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 ${
-                    loading ? 'opacity-60 cursor-not-allowed' : ''
+                    loading ? "opacity-60 cursor-not-allowed" : ""
                   }`}
                 >
-                  {loading ? (isEditMode ? 'Updating...' : 'Adding...') : isEditMode ? 'Update' : 'Add'}
+                  {loading
+                    ? isEditMode
+                      ? "Updating..."
+                      : "Adding..."
+                    : isEditMode
+                    ? "Update"
+                    : "Add"}
                 </button>
               </div>
             </form>
