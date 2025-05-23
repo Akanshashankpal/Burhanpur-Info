@@ -1,195 +1,217 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from '../../../axios'; // Make sure baseURL is configured properly
+import { motion } from 'framer-motion';
+import axios from '../../../axios';
 
 const CategorySection = () => {
-  const [data, setData] = useState([]);
-  const [newCategory, setNewCategory] = useState({ title: '', image: '', description: '' });
-  const [showForm, setShowForm] = useState(false);
-  const navigate = useNavigate();
+  const [categories, setCategories] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [currentCategoryId, setCurrentCategoryId] = useState(null);
+  const [formData, setFormData] = useState({ name: '', description: '', image: '' });
+  const [loading, setLoading] = useState(false);
+
+  const fetchCategories = async () => {
+    try {
+      const res = await axios.get('/category/getCategory');
+      setCategories(res.data?.data || []);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
+
+  const createCategory = async (payload) => {
+    return await axios.post('/category/createCategory', payload);
+  };
+
+  const updateCategory = async (id, payload) => {
+    return await axios.put(`/category/updateCategory/${id}`, payload);
+  };
 
   useEffect(() => {
     fetchCategories();
   }, []);
 
-  const fetchCategories = async () => {
-    try {
-      const res = await axios.get('/category/getCategory');
-      console.log('Fetched categories:', res.data);
-      setData(res?.data?.data || []);
-    } catch (err) {
-      console.error('API Error:', err);
-    }
+  const openAddModal = () => {
+    setIsEditMode(false);
+    setFormData({ name: '', description: '', image: '' });
+    setModalOpen(true);
+  };
+
+  const openEditModal = (category) => {
+    setIsEditMode(true);
+    setCurrentCategoryId(category._id);
+    setFormData({
+      name: category.name,
+      description: category.description,
+      image: category.image,
+    });
+    setModalOpen(true);
   };
 
   const handleDelete = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this category?')) return;
     try {
-      const res = await fetch(
-        'https://burhanpur-city-backend.vercel.app/api/category/deleteSubCategory',
-        {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ _id: id }),
-        }
-      );
-
-      if (!res.ok) throw new Error('Failed to delete category');
-
-      setData((prev) => prev.filter((item) => item._id !== id));
-      alert('Category deleted successfully!');
-    } catch (err) {
-      console.error('Delete failed:', err);
+      await axios.delete(`/category/deleteCategory/${id}`);
+      fetchCategories();
+    } catch (error) {
+      console.error('Delete failed:', error);
+      alert('Error deleting category');
     }
   };
 
-  const handleAddCategory = () => {
-    setShowForm(true);
-  };
-
-  const handleFormChange = (e) => {
-    const { name, value } = e.target;
-    setNewCategory((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleFormSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const { name, description, image } = formData;
+
+    if (!name.trim() || !image.trim()) {
+      alert('Name and Image URL are required.');
+      return;
+    }
+
+    const payload = {
+      name: name.trim(),
+      description: description.trim() || 'No description',
+      image: image.trim(),
+      isActive: true
+    };
+
+    setLoading(true);
 
     try {
-      const res = await fetch(
-        'https://burhanpur-city-backend.app/api/category/createCategory',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(newCategory),
-        }
-      );
-
-      if (!res.ok) throw new Error('Failed to create category');
-
-      const result = await res.json();
-      setData((prev) => [...prev, result.data]);
-      setShowForm(false);
-      setNewCategory({ title: '', image: '', description: '' });
-      alert('Category added successfully!');
-      navigate('/dashboard');
+      if (isEditMode) {
+        await updateCategory(currentCategoryId, payload);
+        alert('Category updated successfully!');
+      } else {
+        await createCategory(payload);
+        alert('Category added successfully!');
+      }
+      setModalOpen(false);
+      fetchCategories();
     } catch (err) {
-      console.error('Add failed:', err);
+      console.error('Error saving category:', err.response?.data || err.message);
+      alert(
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        'Something went wrong.'
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="px-6 py-8">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">All Categories</h1>
+    <div className="p-6 max-w-6xl mx-auto">
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-2xl font-bold">Category Manager</h1>
         <button
-          onClick={handleAddCategory}
-          className="px-5 py-2 bg-green-600 text-white font-medium rounded hover:bg-green-700 transition duration-200"
+          onClick={openAddModal}
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
         >
           + Add Category
         </button>
       </div>
 
-      {showForm && (
-        <form
-          onSubmit={handleFormSubmit}
-          className="mb-6 p-4 border rounded shadow-md bg-gray-50 max-w-md"
-        >
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">Title</label>
-            <input
-              type="text"
-              name="title"
-              value={newCategory.title}
-              onChange={handleFormChange}
-              required
-              className="mt-1 block w-full border rounded px-3 py-2"
-              placeholder="Enter category title"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">Image URL</label>
-            <input
-              type="text"
-              name="image"
-              value={newCategory.image}
-              onChange={handleFormChange}
-              required
-              className="mt-1 block w-full border rounded px-3 py-2"
-              placeholder="Enter image URL"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">Description</label>
-            <textarea
-              name="description"
-              value={newCategory.description}
-              onChange={handleFormChange}
-              required
-              rows="4"
-              className="mt-1 block w-full border rounded px-3 py-2"
-              placeholder="Enter category description"
-            ></textarea>
-          </div>
-
-          <button
-            type="submit"
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
-            Submit
-          </button>
-        </form>
-      )}
-
-      {Array.isArray(data) && data.length > 0 ? (
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white border border-gray-200 shadow-sm rounded">
-            <thead>
-              <tr className="bg-gray-100 text-gray-700">
-                <th className="text-left p-4 border-b">Image</th>
-                <th className="text-left p-4 border-b">Title</th>
-                <th className="text-left p-4 border-b">Description</th>
-                <th className="text-center p-4 border-b">Actions</th>
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse shadow-md">
+          <thead className="bg-gray-100 text-left">
+            <tr>
+              <th className="p-3 border">Image</th>
+              <th className="p-3 border">Name</th>
+              <th className="p-3 border">Description</th>
+              <th className="p-3 border text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {categories.map((cat) => (
+              <tr key={cat._id} className="border-b hover:bg-gray-50">
+                <td className="p-3 border">
+                  <img src={cat.image} alt={cat.name} className="w-12 h-12 object-contain" />
+                </td>
+                <td className="p-3 border font-medium">{cat.name}</td>
+                <td className="p-3 border text-gray-600">{cat.description}</td>
+                <td className="p-3 border text-center">
+                  <button
+                    onClick={() => openEditModal(cat)}
+                    className="text-blue-600 hover:underline mr-3"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(cat._id)}
+                    className="text-red-600 hover:underline"
+                  >
+                    Delete
+                  </button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {data.map((category) => (
-                <tr key={category._id} className="hover:bg-gray-50 transition">
-                  <td className="p-4 border-b">
-                    <img
-                      src={category.image || 'https://via.placeholder.com/50'}
-                      alt={category.title || 'No title'}
-                      className="w-12 h-12 object-contain rounded"
-                    />
-                  </td>
-                  <td className="p-4 border-b">{category.title || 'Untitled'}</td>
-                  <td className="p-4 border-b max-w-xs">{category.description || 'No description'}</td>
-                  <td className="p-4 border-b text-center space-x-3">
-                    <button
-                      onClick={() => navigate(`/edit-category/${category._id}`)}
-                      className="px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(category._id)}
-                      className="px-4 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+            ))}
+            {categories.length === 0 && (
+              <tr>
+                <td colSpan="4" className="text-center py-6 text-gray-500">
+                  No categories found.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Modal */}
+      {modalOpen && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg"
+          >
+            <h2 className="text-xl font-semibold mb-4">
+              {isEditMode ? 'Edit Category' : 'Add Category'}
+            </h2>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <input
+                type="text"
+                placeholder="Category Name"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                className="border w-full px-3 py-2 rounded"
+                required
+              />
+              <input
+                type="text"
+                placeholder="Description"
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                className="border w-full px-3 py-2 rounded"
+              />
+              <input
+                type="text"
+                placeholder="Image URL"
+                value={formData.image}
+                onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                className="border w-full px-3 py-2 rounded"
+                required
+              />
+              <div className="flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setModalOpen(false)}
+                  className="px-4 py-2 border rounded hover:bg-gray-100"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className={`px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 ${
+                    loading ? 'opacity-60 cursor-not-allowed' : ''
+                  }`}
+                >
+                  {loading ? (isEditMode ? 'Updating...' : 'Adding...') : isEditMode ? 'Update' : 'Add'}
+                </button>
+              </div>
+            </form>
+          </motion.div>
         </div>
-      ) : (
-        <p className="text-center text-gray-500 mt-10">Loading or No Categories Found</p>
       )}
     </div>
   );

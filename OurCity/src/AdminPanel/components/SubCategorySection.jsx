@@ -33,8 +33,8 @@ const SubCategorySection = () => {
     axios
       .get('/category/getCategory')
       .then((res) => {
-        const cats = res.data?.result || [];
-        setCategories(cats);
+        setCategories(res.data?.result || []);
+        setData(res?.data?.data || []);
       })
       .catch((err) => {
         console.error('Category Fetch Error:', err);
@@ -58,26 +58,25 @@ const SubCategorySection = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!formState.title || !formState.image || !formState.categoryId) {
+    const { id, title, image, categoryId } = formState;
+    if (!title || !image || !categoryId) {
       alert('Please fill all fields');
       return;
     }
 
-    if (formState.id) {
-      axios
-        .put('/subcategory/updateSubCategory', {
-          _id: formState.id,
-          title: formState.title,
-          image: formState.image,
-          category: formState.categoryId,
-        })
-        .then(() => {
-          alert('Subcategory updated successfully');
-          resetForm();
-          fetchSubCategories();
-        })
-        .catch((err) => alert('Update failed: ' + err.message));
-    }
+    axios
+      .put('/subcategory/updateSubCategory', {
+        _id: id,
+        title,
+        image,
+        category: categoryId,
+      })
+      .then(() => {
+        alert('Subcategory updated successfully');
+        resetForm();
+        fetchSubCategories();
+      })
+      .catch((err) => alert('Update failed: ' + err.message));
   };
 
   const handleEdit = (subcategory) => {
@@ -85,7 +84,11 @@ const SubCategorySection = () => {
       id: subcategory._id,
       title: subcategory.title || subcategory.name || '',
       image: subcategory.image || '',
-      categoryId: subcategory.category?._id || '',
+      // Agar category object hai toh uska _id lo, warna jo id hai use lo
+      categoryId:
+        typeof subcategory.category === 'object' && subcategory.category !== null
+          ? subcategory.category._id
+          : subcategory.category || '',
     });
   };
 
@@ -105,7 +108,7 @@ const SubCategorySection = () => {
     <div className="px-6 py-8 max-w-5xl mx-auto">
       <h1 className="text-3xl font-bold text-gray-800 mb-6">All Subcategories</h1>
 
-      {/* Show form only in edit mode */}
+      {/* Show edit form only in edit mode */}
       {formState.id && (
         <form onSubmit={handleSubmit} className="mb-8 p-4 border border-gray-300 rounded shadow">
           <h2 className="text-xl font-semibold mb-4">Edit Subcategory</h2>
@@ -186,35 +189,47 @@ const SubCategorySection = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((subcategory) => (
-                <tr key={subcategory._id} className="hover:bg-gray-50 transition">
-                  <td className="p-4 border-b">
-                    <img
-                      src={subcategory.image}
-                      alt={subcategory.title || 'subcategory'}
-                      className="w-12 h-12 object-contain rounded"
-                    />
-                  </td>
-                  <td className="p-4 border-b">{subcategory.title || subcategory.name}</td>
-                  <td className="p-4 border-b">
-                    {subcategory.category?.title || subcategory.category?.name || 'N/A'}
-                  </td>
-                  <td className="p-4 border-b flex gap-2">
-                    <button
-                      onClick={() => handleEdit(subcategory)}
-                      className="bg-yellow-400 px-3 py-1 rounded hover:bg-yellow-500 transition"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(subcategory._id)}
-                      className="bg-red-500 px-3 py-1 rounded text-white hover:bg-red-600 transition"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {data.map((subcategory) => {
+  // Get category ID (either direct ID or from object)
+  const categoryId =
+    typeof subcategory.category === 'object'
+      ? subcategory.category?._id
+      : subcategory.category;
+
+  // Find category from categories array
+  const matchedCategory = categories.find((cat) => cat._id === categoryId);
+  const categoryTitle = matchedCategory?.title || matchedCategory?.name || 'ni milegyi';
+
+  return (
+    <tr key={subcategory._id} className="hover:bg-gray-50 transition">
+      <td className="p-4 border-b">
+        <img
+          src={subcategory.image}
+          alt={subcategory.title || 'subcategory'}
+          className="w-12 h-12 object-contain rounded"
+          onError={(e) => (e.target.src = 'https://via.placeholder.com/50')}
+        />
+      </td>
+      <td className="p-4 border-b">{subcategory.title || subcategory.name}</td>
+      <td className="p-4 border-b">{categoryTitle}</td>
+      <td className="p-4 border-b flex gap-2">
+        <button
+          onClick={() => handleEdit(subcategory)}
+          className="bg-yellow-400 px-3 py-1 rounded hover:bg-yellow-500 transition"
+        >
+          Edit
+        </button>
+        <button
+          onClick={() => handleDelete(subcategory._id)}
+          className="bg-red-500 px-3 py-1 rounded text-white hover:bg-red-600 transition"
+        >
+          Delete
+        </button>
+      </td>
+    </tr>
+  );
+})}
+
             </tbody>
           </table>
         </div>

@@ -3,7 +3,6 @@ import { Atom } from 'react-loading-indicators';
 import ImageSlider from './PlaceImg/Slider/ImageSlider';
 import { motion } from 'framer-motion';
 
-// Scroll-based animation variant
 const itemVariants = {
   hidden: { opacity: 0, y: 50 },
   visible: {
