@@ -9,10 +9,7 @@ const axiosInstance = axios.create({
     'Content-Type': 'application/json',
 
  
-  baseURL: 'https://burhanpur-city-backend.vercel.app/api',  
-  headers: {
-    'Content-Type': 'application/json',
-    // Authorization: `Bearer ${token}`, 
+  
     
   },
   timeout: 10000,
