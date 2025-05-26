@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from '../../../../axios';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import CategorySearch from './searchpart/CategorySearch';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -29,6 +30,7 @@ const MAX_VISIBLE = 10;
 const CategorySection = () => {
   const [data, setData] = useState([]);
   const [showMore, setShowMore] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -44,6 +46,12 @@ const CategorySection = () => {
 
   const visibleCategories = data.slice(0, MAX_VISIBLE);
   const hiddenCategories = data.slice(MAX_VISIBLE);
+
+  const filteredCategories = hiddenCategories.filter((category) =>
+    (category.title || category.name || "")
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="px-4 py-6 relative">
@@ -93,42 +101,54 @@ const CategorySection = () => {
 
       {/* Modal for hidden categories */}
       {showMore && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-semibold">More Categories</h2>
-              <button
-                onClick={() => setShowMore(false)}
-                className="text-gray-600 hover:text-red-500 text-xl"
-              >
-                &times;
-              </button>
+        <div className="fixed inset-0 backdrop-blur-sm bg-transparent z-5 flex items-center justify-end pr-6">
+          <div className="bg-white rounded-lg p-6 w-full max-w-5xl max-h-[95vh] shadow-lg overflow-y-auto">
+            <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-3">
+              <h2 className="text-xl font-semibold">More Categories</h2>
+              <div className="flex items-center gap-2 w-full sm:w-auto">
+                <CategorySearch />
+                <button
+                  onClick={() => {
+                    setShowMore(false);
+                    setSearchTerm("");
+                  }}
+                  className="text-gray-600 hover:text-red-500 text-2xl"
+                >
+                  &times;
+                </button>
+              </div>
             </div>
 
-            <div className="grid grid-cols-3 sm:grid-cols-4 gap-4">
-              {hiddenCategories.map((category, index) => (
-                <div
-                  key={category._id || index}
-                  className="flex flex-col items-center justify-center text-center p-3 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200"
-                  onClick={() => {
-                    navigate(`/subcategory/${category._id}`);
-                    setShowMore(false);
-                  }}
-                >
-                  <img
-                    src={category.image}
-                    alt={category.title || 'category'}
-                    className="w-10 h-10 object-contain mb-2"
-                  />
-                  <p className="text-xs font-semibold text-gray-800">
-                    {category.title || category.name}
-                  </p>
-                </div>
-              ))}
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
+              {filteredCategories.length > 0 ? (
+                filteredCategories.map((category, index) => (
+                  <div
+                    key={category._id || index}
+                    className="flex flex-col items-center justify-center text-center p-3 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200"
+                    onClick={() => {
+                      navigate(`/subcategory/${category._id}`);
+                      setShowMore(false);
+                      setSearchTerm("");
+                    }}
+                  >
+                    <img
+                      src={category.image}
+                      alt={category.title || 'category'}
+                      className="w-12 h-12 object-contain mb-2"
+                    />
+                    <p className="text-xs font-semibold text-gray-800">
+                      {category.title || category.name}
+                    </p>
+                  </div>
+                ))
+              ) : (
+                <p className="col-span-full text-center text-gray-500">No categories found</p>
+              )}
             </div>
           </div>
         </div>
       )}
+
     </div>
   );
 };

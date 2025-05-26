@@ -1,18 +1,23 @@
-import { useState } from "react";
-import CItySlider from "./MainSlider/CItySlider";
-import ArchitectureLanding from "./LandigPage/ArchitectureLanding";
 import Footer from "./Footer";
+// import CategorySection from "./CategoriesPart/CategorySection";
+import ArchitectureLanding from "./LandigPage/ArchitectureLanding";
 import HistoricalTimeline from "./LandigPage/HistoricalTimeline";
 import ContactForm from "./LandigPage/ContactForm";
-import TopAttractions from "./LandigPage/TopAttractions";
+import TopAttractions from "./LandigPage/TopAttractions"
 import CategorySection from "./CatagoriesPart/CategorySection";
-import AdminDashboard from "../AdimLogin/AdminDashboard/AdminCategory";
-import CategorySearch from "./CatagoriesPart/searchpart/CategorySearch";
+ 
+// import AdminDashboard from "../AdimLogin/AdminDashboard/AdminCategory";
+ 
 // import NewsSection from "./LandigPage/NewsSection";
+ 
+import CitySlider from "./MainSlider/CItySlider";
+// import AdminDashboard from "../AdminLogin/AdminDashboard/AdminCategory";
+// import NewsSection from "./LandingPage/NewsSection";
+ 
 
 const Home = () => {
-  // Removed showModal state because modal is also removed
   return (
+ 
     
     <div style={{
       margin: '10px',
@@ -26,23 +31,22 @@ const Home = () => {
       {/* <AdminDashboard/> */}
 
       {/* <BurhanpurPage/> */}
+ 
       <ArchitectureLanding />
       <br />
-
-      {/* Removed Did You Know teaser */}
-
-      <CItySlider />
+      <CitySlider/>
       <br />
-      <CategorySearch/>
-
-      
-      <CategorySection />
+ 
+     
+<br/>
+      <CategorySection/>
+ 
       <br />
-      <HistoricalTimeline />
+      <HistoricalTimeline/>
       <br />
-      <TopAttractions />
+      <TopAttractions/>
       <br />
-      <ContactForm />
+      <ContactForm/>
       <br />
       <Footer />
     </div>

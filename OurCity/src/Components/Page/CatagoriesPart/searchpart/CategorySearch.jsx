@@ -1,11 +1,12 @@
 import { useState } from "react";
-import axios from "../../../../../axios"; // ya axios from 'axios' if you're not using a custom instance
+import axios from "../../../../../axios"; // or 'axios' if not using custom instance
 
 const CategorySearch = () => {
   const [searchText, setSearchText] = useState('');
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [hasSearched, setHasSearched] = useState(false); // to control "no result" message
+  const [hasSearched, setHasSearched] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSearch = async () => {
     const trimmedSearch = searchText.trim();
@@ -14,57 +15,64 @@ const CategorySearch = () => {
     try {
       setLoading(true);
       setHasSearched(true);
+      setError('');
 
-      console.log("Searching for:", trimmedSearch.toLowerCase()); // Debug log
+      const response = await axios.get('/category/searchCategory', {
+        params: { search: trimmedSearch.toLowerCase() },
+      });
 
-      const response = await axios.get(
-        'https://burhanpur-city-backend.vercel.app/api/category/searchCategory',
-        { search: trimmedSearch.toLowerCase() } // you can remove `.toLowerCase()` if backend is already handling it
-      );
-
-      console.log("API Response:", response.data); // Debug log
+      console.log("API Response:", response.data);
 
       setCategories(response.data?.data || []);
     } catch (error) {
       console.error("Search failed:", error);
       setCategories([]);
+      setError('Failed to fetch categories. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="p-4 max-w-md mx-auto">
-      <h2 className="text-xl font-semibold mb-4">Search Category</h2>
-      <div className="flex gap-2 mb-4">
+    <div className="p-6 max-w-2xl mx-auto bg-white ">
+     
+      
+      <div className="flex gap-2 mb-6">
         <input
           type="text"
-          className="border p-2 flex-1"
+          className="flex-1 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
           placeholder="Enter category name"
         />
         <button
           onClick={handleSearch}
-          className="bg-blue-600 text-white px-4 py-2 rounded"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow"
         >
           Search
         </button>
       </div>
 
-      {loading && <p>Loading...</p>}
-
-      <ul className="list-disc pl-5 space-y-2">
-        {categories.map((cat) => (
-          <li key={cat._id}>{cat.categoryName}</li>
-        ))}
-      </ul>
+      {loading && <p className="text-blue-500 text-center">Searching...</p>}
+      {error && <p className="text-red-500 text-center">{error}</p>}
 
       {!loading && hasSearched && categories.length === 0 && (
-        <p>No categories found for "{searchText}"</p>
+        <p className="text-center text-gray-500">No categories found for "{searchText}"</p>
       )}
+
+      <ul className="space-y-3">
+        {categories.map((cat) => (
+          <li
+            key={cat._id}
+            className="p-4 bg-gray-100 rounded shadow hover:bg-gray-200 transition"
+          >
+            <p className="font-medium text-gray-800">{cat.categoryName || 'Unnamed Category'}</p>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
 
 export default CategorySearch;
+9
