@@ -14,6 +14,7 @@ import TopAttractions from "./LandigPage/TopAttractions";
 import CategorySection from "./CatagoriesPart/CategorySection";
 import AdminDashboard from "../AdimLogin/AdminDashboard/AdminCategory";
 import Banner from "../Promo/banner";
+import PromoSlider from "../Promo/PromoSlider";
 
 
 const Home = () => {
@@ -48,8 +49,9 @@ const Home = () => {
 
       {/* <BurhanpurPage/> */}
       <ArchitectureLanding />
-      <br />
-      <br />
+     
+      <PromoSlider />
+      
       <CItySlider />
       <br />
       <CategorySection />

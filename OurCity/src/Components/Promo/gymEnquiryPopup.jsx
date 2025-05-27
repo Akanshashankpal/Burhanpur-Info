@@ -1,25 +1,70 @@
-// GymEnquiryPopup.jsx
 import React, { useState } from 'react';
-import './GymEnquiryPopup.css'; // Make sure this path is correct for your project structure
+import './GymEnquiryPopup.css'; // Adjust the path if needed
 
-/**
- * Renders a popup for gym enquiry.
- * @param {object} props - The component props.
- * @param {function} props.onClose - Function to call when the popup needs to be closed.
- * @param {function} [props.onEnquirySent] - Optional function to call on successful enquiry submission.
- */
-const GymEnquiryPopup = ({ onClose, onEnquirySent }) => {
+// Category-specific content configuration
+const CATEGORY_CONTENT = {
+  gym: {
+    title: 'Get the List of Top Gyms',
+    focusQuestion: 'What is your primary fitness goal?',
+    focusOptions: ['Weight loss', 'Muscle building'],
+    image: 'https://via.placeholder.com/250x300?text=Gym+Ad', // replace with real image URL
+    benefits: [
+      'Your requirement is sent to relevant gyms',
+      'Get best deals and choose what suits you best',
+      'Contact info sent to you by SMS/email',
+    ],
+  },
+  restaurant: {
+    title: 'Find the Best Restaurants Near You',
+    focusQuestion: 'What type of cuisine are you looking for?',
+    focusOptions: ['Indian', 'Chinese', 'Italian', 'Fast Food'],
+    image: 'https://via.placeholder.com/250x300?text=Restaurant+Ad',
+    benefits: [
+      'Explore top-rated restaurants nearby',
+      'Get menus, prices, and deals quickly',
+      'Reserve your table instantly',
+    ],
+  },
+  beauty: {
+    title: 'Discover Top Beauty Salons',
+    focusQuestion: 'What service do you need?',
+    focusOptions: ['Haircut', 'Facial', 'Spa', 'Makeup'],
+    image: 'https://via.placeholder.com/250x300?text=Beauty+Ad',
+    benefits: [
+      'Find top salons with great reviews',
+      'Book appointments with ease',
+      'Get personalized beauty tips',
+    ],
+  },
+  realestate: {
+    title: 'Top Real Estate Listings Near You',
+    focusQuestion: 'What are you looking for?',
+    focusOptions: ['Buy', 'Rent', 'PG/Hostel'],
+    image: 'https://via.placeholder.com/250x300?text=RealEstate+Ad',
+    benefits: [
+      'Get connected to trusted real estate agents',
+      'View verified property listings',
+      'Negotiate best deals directly',
+    ],
+  },
+};
+
+const GymEnquiryPopup = ({ category = 'gym', onClose, onEnquirySent }) => {
+  // Get content based on category, fallback to gym if category not found
+  const content = CATEGORY_CONTENT[category] || CATEGORY_CONTENT['gym'];
+
+  // Form states
   const [name, setName] = useState('');
   const [mobile, setMobile] = useState('');
-  const [fitnessFocus, setFitnessFocus] = useState('');
+  const [selectedOption, setSelectedOption] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent default browser form submission
-    setError(''); // Clear any previous errors
+    e.preventDefault();
+    setError('');
 
-    // --- Client-side validation ---
+    // Basic validation
     if (!name.trim()) {
       setError('Name is required.');
       return;
@@ -28,174 +73,125 @@ const GymEnquiryPopup = ({ onClose, onEnquirySent }) => {
       setError('Mobile Number is required.');
       return;
     }
-    if (!/^\d{10}$/.test(mobile.trim())) { // Simple 10-digit mobile number validation
+    if (!/^\d{10}$/.test(mobile.trim())) {
       setError('Please enter a valid 10-digit mobile number.');
       return;
     }
-    if (!fitnessFocus) {
-      setError('Please select your primary fitness focus.');
+    if (!selectedOption) {
+      setError('Please select an option.');
       return;
     }
-    // --- End Client-side validation ---
 
-    setIsSubmitting(true); // Disable button and show loading state
+    setIsSubmitting(true);
 
     try {
-      // *** IMPORTANT: Replace this with your actual backend API endpoint ***
-      // This is where the form data will be sent for processing (e.g., saving to DB, sending emails)
-      const response = await fetch('/api/gym-enquiry', { // Example API endpoint
+      // Replace this with your actual backend API endpoint
+      const response = await fetch('/api/gym-enquiry', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          // If your API requires authentication (e.g., Bearer Token), add it here:
-          // 'Authorization': `Bearer ${yourAuthToken}`,
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: name.trim(),
           mobile: mobile.trim(),
-          fitnessFocus: fitnessFocus,
+          category,
+          selectedOption,
         }),
       });
 
       if (response.ok) {
-        // Assuming your API returns a JSON response on success
         const result = await response.json();
-        console.log('Enquiry sent successfully:', result);
-
-        // Inform the user
         alert('Your enquiry has been sent successfully! Relevant businesses will contact you shortly.');
 
-        // Call optional callback for parent component
-        if (onEnquirySent) {
-          onEnquirySent();
-        }
-
-        // Close the popup
+        if (onEnquirySent) onEnquirySent();
         onClose();
 
-        // Optionally clear form fields after successful submission
+        // Clear form
         setName('');
         setMobile('');
-        setFitnessFocus('');
+        setSelectedOption('');
       } else {
-        // Handle API errors (e.g., server returned 4xx or 5xx status)
-        const errorData = await response.json(); // Try to parse error message from response body
-        const errorMessage = errorData.message || 'Failed to send enquiry. Please try again.';
-        setError(errorMessage);
-        console.error('API Error:', response.status, errorData);
+        const errorData = await response.json();
+        setError(errorData.message || 'Failed to send enquiry. Please try again.');
       }
-    } catch (apiError) {
-      // Handle network errors (e.g., no internet connection, server unreachable)
-      console.error('Network or API call error:', apiError);
-      setError('An error occurred. Please check your internet connection and try again later.');
+    } catch (err) {
+      setError('Network error. Please try again later.');
     } finally {
-      setIsSubmitting(false); // Re-enable button
+      setIsSubmitting(false);
     }
   };
 
   return (
-    // The overlay covers the entire screen, dimming the background
-    <div className="popup-overlay" onClick={onClose}> {/* Clicking overlay can also close popup */}
-      {/* The actual popup content container */}
+    <div className="popup-overlay" onClick={onClose}>
       <div className="popup-content" onClick={(e) => e.stopPropagation()}>
-        {/* Stop propagation so clicking inside popup doesn't close it */}
-
-        {/* Close button */}
         <button className="popup-close-button" onClick={onClose} aria-label="Close popup">X</button>
 
-        {/* Main section containing form and ad */}
         <div className="popup-main-section">
-
-          {/* Form container */}
           <div className="popup-form-container">
-            <h3>Get the List of Top Gyms</h3>
+            <h3>{content.title}</h3>
             <form onSubmit={handleSubmit}>
               <div className="form-group">
                 <label htmlFor="name">Name*</label>
                 <input
-                  type="text"
                   id="name"
+                  type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Enter your name"
-                  required // HTML5 built-in validation
-                  aria-required="true" // ARIA attribute for accessibility
+                  required
+                  aria-required="true"
                 />
               </div>
 
               <div className="form-group">
                 <label htmlFor="mobile">Mobile Number*</label>
                 <input
-                  type="tel" // Semantic type for telephone numbers
                   id="mobile"
+                  type="tel"
                   value={mobile}
                   onChange={(e) => setMobile(e.target.value)}
                   placeholder="Enter your 10 digit mobile number"
                   required
-                  pattern="[0-9]{10}" // HTML5 pattern for exactly 10 digits
-                  title="Please enter a 10 digit mobile number" // Tooltip for pattern
+                  pattern="\d{10}"
+                  title="Please enter a 10 digit mobile number"
                   aria-required="true"
                 />
               </div>
 
               <div className="form-group-radio">
-                <p className="radio-question">What is your primary focus in fitness?</p>
+                <p className="radio-question">{content.focusQuestion}</p>
                 <div className="radio-options">
-                  <label>
-                    <input
-                      type="radio"
-                      name="fitnessFocus" // Same name groups radio buttons
-                      value="Weight loss"
-                      checked={fitnessFocus === 'Weight loss'}
-                      onChange={(e) => setFitnessFocus(e.target.value)}
-                      required
-                    /> Weight loss
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="fitnessFocus"
-                      value="Muscle building"
-                      checked={fitnessFocus === 'Muscle building'}
-                      onChange={(e) => setFitnessFocus(e.target.value)}
-                      required
-                    /> Muscle building
-                  </label>
+                  {content.focusOptions.map((option) => (
+                    <label key={option}>
+                      <input
+                        type="radio"
+                        name="focusOption"
+                        value={option}
+                        checked={selectedOption === option}
+                        onChange={(e) => setSelectedOption(e.target.value)}
+                        required
+                      />
+                      {option}
+                    </label>
+                  ))}
                 </div>
               </div>
 
-              {/* Display error message if any */}
               {error && <p className="form-error" role="alert">{error}</p>}
 
-              <button
-                type="submit"
-                className="send-enquiry-button"
-                disabled={isSubmitting} // Disable button while submitting
-              >
+              <button type="submit" disabled={isSubmitting} className="send-enquiry-button">
                 {isSubmitting ? 'Sending...' : 'SEND ENQUIRY'}
               </button>
             </form>
 
-            {/* Benefits/Information Section */}
             <div className="popup-benefits">
-              <p>• Your requirement is sent to the selected relevant businesses</p>
-              <p>• Businesses compete with each other to get you the Best Deal</p>
-              <p>• You choose whichever suits you best</p>
-              <p>• Contact info sent to you by SMS/email</p>
+              {content.benefits.map((point, i) => (
+                <p key={i}>• {point}</p>
+              ))}
             </div>
           </div>
 
-          {/* Ad Section - This would typically be dynamic or part of an ad service */}
           <div className="popup-ad-section">
-            {/* You'd replace this with an actual image URL from your assets or CDN */}
-            <img src="https://via.placeholder.com/250x300?text=Your+Ad+Here" alt="Sponsored Ad" className="ad-image" />
-            <div className="ad-text">
-              <p className="ad-company">Indeed</p>
-              <p className="ad-description">Sponsored Jobs deliver 80% more applicants on average than non-sponsored jobs</p>
-              <button className="ad-button">Sponsor your job</button>
-              <p className="ad-small-text"><span>i</span> Sponsored Jobs (Details A-Z)</p>
-            </div>
-            <button className="ad-close-button" aria-label="Close Ad">X</button>
+            <img src={content.image} alt={`${category} Ad`} className="ad-image" />
+            {/* Add more ad content here if needed */}
           </div>
         </div>
       </div>

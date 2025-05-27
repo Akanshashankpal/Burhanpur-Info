@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
-import { CartIcon } from "../AllIcons/CartIcon";
-import { AddListing } from "../AllIcons/AddListing";
-import UserIcon from '../AllIcons/UserIcon';
+ 
+ 
 import { NavLink } from "react-router-dom";
 import img from "../ui/Images/logo.jpg";
 
@@ -77,10 +76,9 @@ const Navbar = () => {
           {/* Right Icons */}
           <div className="flex items-center gap-6">
             <NavLink to="/login" aria-label="User Login">
-              <UserIcon fill={scrolled ? "#1f2937" : "white"} className="transition-colors duration-300" />
+              
             </NavLink>
-            <CartIcon fill={scrolled ? "#1f2937" : "white"} className="transition-colors duration-300" />
-            <AddListing fill={scrolled ? "#1f2937" : "white"} className="transition-colors duration-300" />
+             
 
             {/* Hamburger (mobile) */}
             <button

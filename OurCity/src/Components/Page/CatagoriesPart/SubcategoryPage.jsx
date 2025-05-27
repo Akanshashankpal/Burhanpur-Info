@@ -2,24 +2,62 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Atom } from 'react-loading-indicators';
 import axios from '../../../../axios';
+import GymEnquiryPopup from '../../Promo/gymEnquiryPopup';
 
 const SubcategoryPage = () => {
   const { categoryId } = useParams();
   const [subcategories, setSubcategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showEnquiryPopup,setShowEnquiryPopup] = useState(false);
+  // const [selectedSubcategory, setSelectedSubcategory] = useState(null);
+  
+  const categoryMap ={
+    '681f0c8c8adb93da7515b0a9': 'gym',
+  '681f0c8c8adb93da7515b0b0': 'restaurant',
+  '681f0c8c8adb93da7515b0b1': 'beauty',
+  '681f0c8c8adb93da7515b0b2': 'realestate',
+  }
+  const mappedCategory = categoryMap[categoryId] || "gym";
 
   useEffect(() => {
+    console.log('current Category ID :', categoryId)
     setLoading(true);
     axios.get(`/subcategory/getSubCategory/${categoryId}`)
       .then(res => {
         setSubcategories(res?.data?.result || []);
         setLoading(false);
+
+        
+         const timer = setTimeout(() => {
+          setShowEnquiryPopup(true);
+        }, 3000); 
+        return () => clearTimeout(timer)
+
+        
       })
       .catch(err => {
         console.error("Subcategory fetch failed", err);
         setLoading(false);
+        const timer = setTimeout(() => {
+          setShowEnquiryPopup(true);
+        }, 3000); // 
+        return () => clearTimeout(timer);
+        
       });
   }, [categoryId]);
+
+
+  // const handleEnquiryClick = (subcategory) => {
+  //   setSelectedSubcategory(subcategory);
+  //   setShowEnquiryPopup(true);
+  // };
+
+  const handleCloseEnquiryPopup = () => {
+    setShowEnquiryPopup(false);
+    // setSelectedSubcategory(null);
+  };
+
+
 
   return (
     <>
@@ -84,6 +122,16 @@ const SubcategoryPage = () => {
           )}
         </div>
       )}
+
+
+ {showEnquiryPopup && (
+        <GymEnquiryPopup
+          category={mappedCategory}
+          onClose={handleCloseEnquiryPopup}
+        />
+      )}
+      
+
     </>
   );
 };

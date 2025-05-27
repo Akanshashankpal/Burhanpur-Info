@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import PlaceCard from './ExplorePart/PlaceCard';
-import { Atom } from 'react-loading-indicators';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from "react";
+import PlaceCard from "./ExplorePart/PlaceCard";
+import { Atom } from "react-loading-indicators";
+import { motion } from "framer-motion";
+import ExplorePopup from "../Promo/ExplorePopup";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -20,17 +21,21 @@ const itemVariants = {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.5, ease: 'easeOut' },
+    transition: { duration: 0.5, ease: "easeOut" },
   },
 };
 
 const Explore = () => {
+  
   const [loading, setLoading] = useState(true);
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [showPopup, setshowPopup] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 1000);
+      setPopupOpen(true);
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -49,7 +54,14 @@ const Explore = () => {
           {/* Agar PlaceCard me multiple cards hai, toh andar motion.div me wrap karna hoga */}
           {/* Agar PlaceCard ek single component hai, toh is tarah wrap kar sakte ho: */}
           <motion.div variants={itemVariants}>
-            <PlaceCard />
+            <PlaceCard onCategoryClick={() => setPopupOpen(true)} />
+
+            <ExplorePopup
+              isOpen={popupOpen}
+              onClose={() => setPopupOpen(false)}
+            />
+
+            {/* {showPopup && <ExplorePopup />} */}
           </motion.div>
         </motion.div>
       )}
