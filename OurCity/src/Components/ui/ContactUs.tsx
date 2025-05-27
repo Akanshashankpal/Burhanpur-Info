@@ -1,5 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import Navbar from './Navbar';
+import Footer from '../Page/Footer';
 
 const fadeIn = {
   hidden: { opacity: 0, y: 50 },
@@ -12,6 +14,8 @@ const fadeIn = {
 
 const ContactUs = () => {
   return (
+    <>
+    <Navbar/>
     <div className="min-h-screen bg-gray-50 py-12 px-6 md:px-16">
       {/* Heading */}
       <motion.div
@@ -100,6 +104,8 @@ const ContactUs = () => {
         </motion.form>
       </div>
     </div>
+    <Footer/>
+    </>
   );
 };
 

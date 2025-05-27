@@ -1,5 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import Navbar from './Navbar';
+import Footer from '../Page/Footer';
 
 const sectionVariants = {
   hidden: { opacity: 0, y: 50 },
@@ -59,6 +61,8 @@ const AboutUs = () => {
   ];
 
   return (
+    <>
+    <Navbar/>
     <div className="max-w-5xl mx-auto px-4 py-10 space-y-10">
       {sections.map((section, index) => (
         <motion.div
@@ -94,6 +98,8 @@ const AboutUs = () => {
         </motion.div>
       ))}
     </div>
+    <Footer/>
+    </>
   );
 };
 

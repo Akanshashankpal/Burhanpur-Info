@@ -1,5 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import Navbar from './Navbar';
+import Footer from '../Page/Footer';
 
 const places = [
   {
@@ -41,6 +43,8 @@ const places = [
 
 const ExploreBurhanpur = () => {
   return (
+    <>
+    <Navbar/>
     <div className="bg-gray-50 min-h-screen py-12 px-4 md:px-16">
       <motion.h1
         className="text-4xl font-bold text-center text-blue-700 mb-10"
@@ -78,6 +82,8 @@ const ExploreBurhanpur = () => {
         ))}
       </div>
     </div>
+    <Footer/>
+    </>
   );
 };
 
