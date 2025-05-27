@@ -67,7 +67,7 @@ const Navbar = () => {
           <NavLink to="/" className="flex items-center gap-3">
             <img src={logo} alt="logo" className="w-15 h-15 rounded-full border-2 border-blue-500 hover:scale-110 transition" />
             <span className={`font-bold text-xl ${scrolled ? "text-gray-900" : "text-white drop-shadow-lg"}`}>
-              Burhanpur - The Historical City
+              Burhanpur 
             </span>
           </NavLink>
 
@@ -102,61 +102,30 @@ const Navbar = () => {
           {/* Right Icons */}
           <div className="flex items-center gap-6">
             {/* User / Avatar */}
-           {user ? (
-  <div className="relative" ref={dropdownRef}>
-    <button
-      onClick={() => setShowProfileDropdown((prev) => !prev)}
-      className="rounded-full w-10 h-10 flex items-center justify-center bg-indigo-100 border-2 border-indigo-500 hover:scale-105 transition"
-    >
-      {user.imageUrl ? (
-        <img
-          src={user.imageUrl}
-          alt="User"
-          className="w-full h-full object-cover rounded-full"
-        />
-      ) : (
-        <span className="text-indigo-600 font-bold text-lg">
-          {user.name?.charAt(0).toUpperCase()}
-        </span>
-      )}
-    </button>
+            {user ? (
+              <div className="relative" ref={dropdownRef}>
+                <button onClick={() => setShowProfileDropdown(prev => !prev)} className="rounded-full border-2 border-indigo-500 p-1 w-10 h-10 flex items-center justify-center bg-indigo-100">
+                  <span className="text-indigo-600 font-bold text-lg">
+                    {user.name?.charAt(0).toUpperCase()}
+                  </span>
+                </button>
 
-    {showProfileDropdown && (
-      <div className="absolute right-0 mt-3 w-64 bg-white border rounded-xl shadow-lg p-4 z-50 space-y-2 text-sm">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-lg">
-            {user.name?.charAt(0).toUpperCase()}
-          </div>
-          <div>
-            <p className="font-semibold text-gray-800">{user.name}</p>
-            <p className="text-gray-500 text-xs">{user.email}</p>
-          </div>
-        </div>
-
-        <hr />
-
-        <NavLink
-          to="/profile"
-          className="block text-blue-600 hover:underline font-medium"
-        >
-          View Profile
-        </NavLink>
-
-        <button
-          onClick={handleLogout}
-          className="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-md"
-        >
-          Logout
-        </button>
-      </div>
-    )}
-  </div>
-) : (
-  <button onClick={() => setShowRegisterModal(true)} aria-label="User Register">
-    <UserIcon fill={scrolled ? "#1f2937" : "white"} />
-  </button>
-)}
-
+                {showProfileDropdown && (
+                  <div className="absolute right-0 mt-2 bg-white shadow-lg rounded-md p-4 z-50 w-60">
+                    <p className="text-sm font-semibold">👤 {user.name}</p>
+                    <p className="text-sm text-gray-600">📧 {user.email}</p>
+                    <p className="text-sm text-gray-600">📱 {user.phone}</p>
+                    <button onClick={handleLogout} className="mt-4 w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-md text-sm">
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <button onClick={() => setShowRegisterModal(true)} aria-label="User Register">
+                <UserIcon fill={scrolled ? "#1f2937" : "white"} />
+              </button>
+            )}
 
             {/* Add Listing */}
             <AddListing fill={scrolled ? "#1f2937" : "white"} />
@@ -181,29 +150,23 @@ const Navbar = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
           <div className="bg-white rounded-2xl p-8 w-full max-w-md shadow-xl relative">
             <Register
-
-
- onClose={() => setShowRegisterModal(false)}
-  onLoginSuccess={(user) => {
-    setUser(user);
-    setShowRegisterModal(false);
-              // onClose={() => {
-              //   setShowRegisterModal(false);
-              //   // Fetch user again after modal close
-              //   const fetchUser = async () => {
-              //     const token = localStorage.getItem("token");
-              //     if (token) {
-              //       try {
-              //         const res = await axios.get("/Users/adminLogin", {
-              //           headers: { Authorization: `Bearer ${token}` }
-              //         });
-              //         if (res.data.success) setUser(res.data.user);
-              //       } catch (err) {
-              //         console.error("Error fetching user after modal close", err);
-              //       }
-              //     }
-              //   };
-              //   fetchUser();
+              onClose={() => {
+                setShowRegisterModal(false);
+                // Fetch user again after modal close
+                const fetchUser = async () => {
+                  const token = localStorage.getItem("token");
+                  if (token) {
+                    try {
+                      const res = await axios.get("/Users/adminLogin", {
+                        headers: { Authorization: `Bearer ${token}` }
+                      });
+                      if (res.data.success) setUser(res.data.user);
+                    } catch (err) {
+                      console.error("Error fetching user after modal close", err);
+                    }
+                  }
+                };
+                fetchUser();
               }}
             />
           </div>
