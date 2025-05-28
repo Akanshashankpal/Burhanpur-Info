@@ -1,328 +1,177 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import Sidebar from "./Sidebar";
+import { AddListing } from "../AllIcons/AddListing";
+import UserIcon from "../AllIcons/UserIcon";
 import { NavLink } from "react-router-dom";
-import img from "../ui/Images/logo.jpg";
-import { FiMenu, FiX } from "react-icons/fi";
-import { FaUserCircle, FaPlusCircle } from "react-icons/fa";
+import axios from "./../../../axios";
+import Register from "./Images/Register";
+import logo from '../ui/Images/logo.jpg';
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [exploreOpen, setExploreOpen] = useState(false);
-  const [pageOpen, setPageOpen] = useState(false);
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
+  const [user, setUser] = useState(null);
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
 
+  const dropdownRef = useRef();
+
+  // Navbar scroll detection
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
+    const handleScroll = () => setScrolled(window.scrollY > 0);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Click outside dropdown to close
   useEffect(() => {
-    document.body.style.overflow = mobileMenuOpen ? "hidden" : "auto";
-  }, [mobileMenuOpen]);
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowProfileDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
-  const isDesktop = () => window.innerWidth > 768;
+  // Fetch user on mount if token exists
+  useEffect(() => {
+    const fetchUser = async () => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        try {
+          const res = await axios.get("/Users/userDetails", {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          if (res.data.success) setUser(res.data.user);
+        } catch (err) {
+          localStorage.removeItem("token");
+          setUser(null);
+        }
+      }
+    };
+    fetchUser();
+  }, []);
 
-  const toggleExplore = () => {
-    setExploreOpen((prev) => !prev);
-    if (pageOpen) setPageOpen(false);
-  };
-  const togglePage = () => {
-    setPageOpen((prev) => !prev);
-    if (exploreOpen) setExploreOpen(false);
-  };
-
-  const handleLinkClick = () => {
-    setMobileMenuOpen(false);
-    setExploreOpen(false);
-    setPageOpen(false);
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setUser(null);
+    setShowProfileDropdown(false);
   };
 
   return (
     <>
-      <header
-        className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
-          scrolled
-            ? "bg-white/95 backdrop-blur-md shadow-md border-b border-gray-300"
-            : "bg-gradient-to-r from-pink-600 via-red-600 to-yellow-500"
-        }`}
-      >
+      <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ease-in-out ${scrolled ? "bg-white shadow-md" : "bg-transparent"}`}>
         <div className="max-w-screen-xl mx-auto px-4 md:px-8 h-20 flex items-center justify-between">
           {/* Logo */}
-          <NavLink
-            to="/"
-            className="flex items-center gap-3"
-            onClick={handleLinkClick}
-          >
-            <img
-              src={img}
-              alt="logo"
-              className="w-12 h-12 rounded-full border-2 border-pink-500 transition-transform duration-300 hover:scale-110"
-            />
-            <span
-              className={`font-extrabold tracking-wide transition-colors duration-300 ${
-                scrolled ? "text-gray-900" : "text-white drop-shadow-lg"
-              } text-xl md:text-2xl`}
-              style={{ fontWeight: 700 }}
-            >
-              Burhanpur - The Historical City
+          <NavLink to="/" className="flex items-center gap-3">
+            <img src={logo} alt="logo" className="w-15 h-15 rounded-full border-2 border-blue-500 hover:scale-110 transition" />
+            <span className={`font-bold text-xl ${scrolled ? "text-gray-900" : "text-white drop-shadow-lg"}`}>
+              Burhanpur 
             </span>
           </NavLink>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-10 font-semibold text-lg select-none">
-            <NavLink
-              to="/"
-              className={({ isActive }) =>
-                `relative px-3 py-1 rounded-md transition-colors duration-300 ${
-                  isActive
-                    ? "text-pink-600 after:absolute after:-bottom-1 after:left-0 after:w-full after:h-0.5 after:bg-pink-600"
-                    : scrolled
-                    ? "text-gray-700 hover:text-pink-600"
-                    : "text-white hover:text-pink-300"
-                }`
-              }
-            >
+          {/* Nav Links */}
+          <nav className="hidden md:flex items-center gap-8 relative">
+            <NavLink to="/" className={({ isActive }) =>
+              `text-xl font-semibold hover:text-blue-600 transition ${isActive ? "text-blue-600" : scrolled ? "text-gray-700" : "text-white"}`}>
               Home
             </NavLink>
 
-            {/* Explore Dropdown */}
-            <div
-              className="relative"
-              onMouseEnter={() => isDesktop() && setExploreOpen(true)}
-              onMouseLeave={() => isDesktop() && setExploreOpen(false)}
-            >
-              <button
-                onClick={() => setExploreOpen(!exploreOpen)}
-                className={`flex items-center gap-1 px-3 py-1 rounded-md transition-colors duration-300 ${
-                  scrolled ? "text-gray-700 hover:text-pink-600" : "text-white hover:text-pink-300"
-                } focus:outline-none select-none`}
-                aria-expanded={exploreOpen}
-              >
-                Explore <span className="text-sm">▼</span>
+            <div className="relative group">
+              <button className={`text-xl font-semibold transition ${scrolled ? "text-gray-700" : "text-white"} group-hover:text-blue-600`}>
+                Explore
               </button>
-              {exploreOpen && (
-                <ul className="absolute top-full left-0 mt-2 bg-white rounded-md shadow-lg w-48 z-50">
-                  <li>
-                    <NavLink
-                      to="/explore"
-                      className="block px-4 py-2 hover:bg-pink-100 text-gray-700"
-                      onClick={handleLinkClick}
-                    >
-                      More Explore
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink
-                      to="/category"
-                      className="block px-4 py-2 hover:bg-pink-100 text-gray-700"
-                      onClick={handleLinkClick}
-                    >
-                      Categories
-                    </NavLink>
-                  </li>
-                </ul>
-              )}
+              <div className="absolute top-full left-0 mt-2 hidden group-hover:block bg-white shadow-md rounded-md py-2 w-40 z-50">
+                <NavLink to="/explore-more" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">More Explore</NavLink>
+                <NavLink to="/category" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Category</NavLink>
+              </div>
             </div>
 
-            {/* Page Dropdown */}
-            <div
-              className="relative"
-              onMouseEnter={() => isDesktop() && setPageOpen(true)}
-              onMouseLeave={() => isDesktop() && setPageOpen(false)}
-            >
-              <button
-                onClick={() => setPageOpen(!pageOpen)}
-                className={`flex items-center gap-1 px-3 py-1 rounded-md transition-colors duration-300 ${
-                  scrolled ? "text-gray-700 hover:text-pink-600" : "text-white hover:text-pink-300"
-                } focus:outline-none select-none`}
-                aria-expanded={pageOpen}
-              >
-                Page <span className="text-sm">▼</span>
+            <div className="relative group">
+              <button className={`text-xl font-semibold transition ${scrolled ? "text-gray-700" : "text-white"} group-hover:text-blue-600`}>
+                Pages
               </button>
-              {pageOpen && (
-                <ul className="absolute top-full left-0 mt-2 bg-white rounded-md shadow-lg w-48 z-50">
-                  <li>
-                    <NavLink
-                      to="/contact"
-                      className="block px-4 py-2 hover:bg-pink-100 text-gray-700"
-                      onClick={handleLinkClick}
-                    >
-                      Contact Us
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink
-                      to="/pages"
-                      className="block px-4 py-2 hover:bg-pink-100 text-gray-700"
-                      onClick={handleLinkClick}
-                    >
-                      About Us
-                    </NavLink>
-                  </li>
-                </ul>
-              )}
+              <div className="absolute top-full left-0 mt-2 hidden group-hover:block bg-white shadow-md rounded-md py-2 w-40 z-50">
+                <NavLink to="/about" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">About Us</NavLink>
+                <NavLink to="/contact" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Contact Us</NavLink>
+              </div>
             </div>
           </nav>
 
-          {/* Right Side */}
-          <div className="flex items-center gap-5">
-            <NavLink
-              to="/login"
-              className={({ isActive }) =>
-                `flex items-center gap-2 px-4 py-2 rounded-md font-semibold transition-colors duration-200 ${
-                  isActive
-                    ? "bg-pink-600 text-white"
-                    : scrolled
-                    ? "text-gray-800 hover:bg-pink-100 hover:text-pink-600"
-                    : "text-white hover:bg-pink-600 hover:text-white"
-                }`
-              }
-              onClick={handleLinkClick}
-            >
-              <FaUserCircle size={22} />
-              <span className="hidden md:inline text-base font-normal">Login</span>
-            </NavLink>
+          {/* Right Icons */}
+          <div className="flex items-center gap-6">
+            {/* User / Avatar */}
+            {user ? (
+              <div className="relative" ref={dropdownRef}>
+                <button onClick={() => setShowProfileDropdown(prev => !prev)} className="rounded-full border-2 border-indigo-500 p-1 w-10 h-10 flex items-center justify-center bg-indigo-100">
+                  <span className="text-indigo-600 font-bold text-lg">
+                    {user.name?.charAt(0).toUpperCase()}
+                  </span>
+                </button>
 
-            <NavLink
-              to="/register"
-              className={({ isActive }) =>
-                `px-5 py-2 rounded-md font-semibold transition-colors duration-200 ${
-                  isActive
-                    ? "bg-green-600 text-white"
-                    : scrolled
-                    ? "bg-green-100 text-green-700 hover:bg-green-200"
-                    : "bg-green-500 text-white hover:bg-green-600"
-                }`
-              }
-              onClick={handleLinkClick}
-            >
-              <span className="hidden md:inline text-base font-normal">Register</span>
-            </NavLink>
-
-            <FaPlusCircle
-              size={26}
-              className={scrolled ? "text-gray-800" : "text-white"}
-            />
-
-            {/* Mobile Menu Toggle */}
-            <button
-              onClick={() => {
-                setMobileMenuOpen((prev) => !prev);
-                if (exploreOpen) setExploreOpen(false);
-                if (pageOpen) setPageOpen(false);
-              }}
-              className={`md:hidden focus:outline-none ${
-                scrolled ? "text-gray-800" : "text-white"
-              }`}
-              aria-label="Toggle Menu"
-            >
-              {mobileMenuOpen ? <FiX size={28} /> : <FiMenu size={28} />}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Menu */}
-        <div
-          className={`md:hidden bg-white shadow-lg border-t border-gray-300 px-6 py-5 transition-max-height duration-300 ease-in-out overflow-hidden z-50 ${
-            mobileMenuOpen ? "max-h-screen" : "max-h-0"
-          }`}
-        >
-          <NavLink
-            to="/"
-            onClick={handleLinkClick}
-            className="block py-3 text-gray-800 font-semibold hover:text-pink-600 border-b border-gray-200 text-base"
-          >
-            Home
-          </NavLink>
-
-          {/* Mobile Explore Dropdown */}
-          <div className="border-b border-gray-200">
-            <button
-              onClick={toggleExplore}
-              className="w-full flex justify-between items-center py-3 text-gray-800 font-semibold hover:text-pink-600 focus:outline-none text-base"
-              aria-expanded={exploreOpen}
-            >
-              <span>Explore</span>
-              <span
-                className={`transform transition-transform duration-300 ${
-                  exploreOpen ? "rotate-180" : "rotate-0"
-                }`}
-              >
-                ▼
-              </span>
-            </button>
-            {exploreOpen && (
-              <div className="pl-5 pb-3 flex flex-col space-y-2 text-base">
-                <NavLink
-                  to="/explore"
-                  onClick={handleLinkClick}
-                  className="text-gray-700 hover:text-pink-500"
-                >
-                  More Explore
-                </NavLink>
-                <NavLink
-                  to="/category"
-                  onClick={handleLinkClick}
-                  className="text-gray-700 hover:text-pink-500"
-                >
-                  Categories
-                </NavLink>
+                {showProfileDropdown && (
+                  <div className="absolute right-0 mt-2 bg-white shadow-lg rounded-md p-4 z-50 w-60">
+                    <p className="text-sm font-semibold">👤 {user.name}</p>
+                    <p className="text-sm text-gray-600">📧 {user.email}</p>
+                    <p className="text-sm text-gray-600">📱 {user.phone}</p>
+                    <button onClick={handleLogout} className="mt-4 w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-md text-sm">
+                      Logout
+                    </button>
+                  </div>
+                )}
               </div>
+            ) : (
+              <button onClick={() => setShowRegisterModal(true)} aria-label="User Register">
+                <UserIcon fill={scrolled ? "#1f2937" : "white"} />
+              </button>
             )}
-          </div>
 
-          {/* Mobile Page Dropdown */}
-          <div className="border-b border-gray-200">
-            <button
-              onClick={togglePage}
-              className="w-full flex justify-between items-center py-3 text-gray-800 font-semibold hover:text-pink-600 focus:outline-none text-base"
-              aria-expanded={pageOpen}
-            >
-              <span>Page</span>
-              <span
-                className={`transform transition-transform duration-300 ${
-                  pageOpen ? "rotate-180" : "rotate-0"
-                }`}
-              >
-                ▼
-              </span>
+            {/* Add Listing */}
+            <AddListing fill={scrolled ? "#1f2937" : "white"} />
+
+            {/* Hamburger for Mobile */}
+            <button onClick={() => setSidebarOpen(true)} className="block md:hidden">
+              <img
+                src="https://img.icons8.com/ios-filled/50/000000/menu--v1.png"
+                alt="menu"
+                className="w-10 h-5 md:w-8 md:h-8 lg:w-8 lg:h-8 bg-white"
+              />
             </button>
-            {pageOpen && (
-              <div className="pl-5 pb-3 flex flex-col space-y-2 text-base">
-                <NavLink
-                  to="/contact"
-                  onClick={handleLinkClick}
-                  className="text-gray-700 hover:text-pink-500"
-                >
-                  Contact Us
-                </NavLink>
-                <NavLink
-                  to="/pages"
-                  onClick={handleLinkClick}
-                  className="text-gray-700 hover:text-pink-500"
-                >
-                  About Us
-                </NavLink>
-              </div>
-            )}
           </div>
-
-          <NavLink
-            to="/login"
-            onClick={handleLinkClick}
-            className="block py-3 text-pink-600 font-semibold border-b border-gray-200 text-base hover:text-pink-800"
-          >
-            Login
-          </NavLink>
-          <NavLink
-            to="/register"
-            onClick={handleLinkClick}
-            className="block py-3 bg-green-500 text-white rounded-md text-center font-semibold mt-3 hover:bg-green-600"
-          >
-            Register
-          </NavLink>
         </div>
       </header>
+
+      <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="h-20" />
+
+      {/* Register Modal */}
+      {showRegisterModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl p-8 w-full max-w-md shadow-xl relative">
+            <Register
+              onClose={() => {
+                setShowRegisterModal(false);
+                // Fetch user again after modal close
+                const fetchUser = async () => {
+                  const token = localStorage.getItem("token");
+                  if (token) {
+                    try {
+                      const res = await axios.get("/Users/adminLogin", {
+                        headers: { Authorization:`Bearer ${token}` }
+                      });
+                      if (res.data.success) setUser(res.data.user);
+                    } catch (err) {
+                      console.error("Error fetching user after modal close", err);
+                    }
+                  }
+                };
+                fetchUser();
+              }}
+            />
+          </div>
+        </div>
+      )}
     </>
   );
 };

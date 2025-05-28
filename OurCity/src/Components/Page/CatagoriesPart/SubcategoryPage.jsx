@@ -14,6 +14,8 @@ const SubcategoryPage = () => {
       .get(`/subcategory/getSubCategory/${categoryId}`)
       .then((res) => {
         setSubcategories(res?.data?.result || []);
+        console.log(res);
+        
         setLoading(false);
       })
       .catch((err) => {

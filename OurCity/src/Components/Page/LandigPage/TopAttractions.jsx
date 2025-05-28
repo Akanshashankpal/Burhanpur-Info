@@ -20,7 +20,7 @@ const TopAttractions = () => {
     {
       title: 'Shahi Qila',
       description: 'An imposing royal fortress echoing tales of valor and history.',
-      img: 'https://scontent.fidr4-3.fna.fbcdn.net/v/t39.30808-6/480215800_619279140843534_6878152360554222937_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=833d8c&_nc_ohc=hNyZBayxxkEQ7kNvwFCfklM&_nc_oc=Adk6ofmMHqPGT7D9XL2FI47chcAN-fb0AYU7Anm6BfwYm8Fy8CDKBz_3MUG2RJp2ggc_bg9fSE_ZS2CEYAh6g1a7&_nc_zt=23&_nc_ht=scontent.fidr4-3.fna&_nc_gid=nHrXD0iTxP4T-uYD7jv38g&oh=00_AfLLedSy_uEUKFME-WKfBpPyabvqyXmqkEB-G5Wq4Udz0A&oe=682E39EC',
+      img: "https://www.trawell.in/admin/images/upload/166078311Shahi_Qila.jpg",
       alt: 'Shahi Qila, historic fort',
     },
     {

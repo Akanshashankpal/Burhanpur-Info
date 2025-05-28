@@ -6,7 +6,7 @@ import gurudwara from "./mainslideImg/gurudwara.jpg";
 import rajakichatri from "./mainslideImg/rajakichatri.jpg";
 import shanwara from "./mainslideImg/shanwaraMain.jpg";
 import shahiqila from "./mainslideImg/shahiqila.jpg";
-import railway from "./mainslideImg/railwayimg2.jpeg";
+import railway from "./mainslideImg/detailrailway1.png";
 
 const slides = [
   {

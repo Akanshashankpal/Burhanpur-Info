@@ -31,7 +31,7 @@ const PlaceCard = () => {
         "Connecting Burhanpur to major cities, the station reflects colonial-era architecture and plays a vital role in the city's cultural and historical significance.",
       image: railway,
       button: (
-        <Link to="/RailwayStaion" key="btn1">
+        <Link to="/railway-station" key="btn1">
           <Buttons />
         </Link>
       ),

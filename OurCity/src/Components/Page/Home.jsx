@@ -1,23 +1,54 @@
-import CItySlider from "./MainSlider/CItySlider";
+ import Footer from "./Footer";
+// import CategorySection from "./CategoriesPart/CategorySection";
 import ArchitectureLanding from "./LandigPage/ArchitectureLanding";
-import Footer from "./Footer";
 import HistoricalTimeline from "./LandigPage/HistoricalTimeline";
 import ContactForm from "./LandigPage/ContactForm";
-import TopAttractions from "./LandigPage/TopAttractions";
+import TopAttractions from "./LandigPage/TopAttractions"
 import CategorySection from "./CatagoriesPart/CategorySection";
-import BurhanpurBlog from "../Page/Blog"; // adjust the path if needed
+ 
+// import AdminDashboard from "../AdimLogin/AdminDashboard/AdminCategory";
+ 
+// import NewsSection from "./LandigPage/NewsSection";
+ 
+import CitySlider from "./MainSlider/CItySlider";
+// import AdminDashboard from "../AdminLogin/AdminDashboard/AdminCategory";
+// import NewsSection from "./LandingPage/NewsSection";
+ 
 
 const Home = () => {
   return (
-    <div className="pt-20 m-4 space-y-10"> {/* 👈 This line is important */}
+ 
+    
+    <div style={{
+      margin: '10px',
+      // border:'2px solid red'
+    }}>
+
+
+      {/* adminDashboard */}
+
+
+      {/* <AdminDashboard/> */}
+
+      {/* <BurhanpurPage/> */}
+ 
       <ArchitectureLanding />
-      <CItySlider />
-      <CategorySection />
-      <HistoricalTimeline />
-      <TopAttractions />
-      <BurhanpurBlog />
-      <ContactForm />
-      {/* <Footer /> */}
+      <br />
+      <CitySlider/>
+      <br />
+ 
+     
+<br/>
+      <CategorySection/>
+ 
+      <br />
+      <HistoricalTimeline/>
+      <br />
+      <TopAttractions/>
+      <br />
+      <ContactForm/>
+      <br />
+      <Footer />
     </div>
   );
 };

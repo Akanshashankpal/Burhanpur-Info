@@ -1,222 +1,267 @@
-import React, { useEffect, useState } from 'react';
-import axios from '../../../axios';
+import React, { useEffect, useState } from "react";
+import axios from "../../../axios";
+import { motion } from "framer-motion";
 
 const SubCategorySection = () => {
   const [data, setData] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [currentId, setCurrentId] = useState(null);
 
   const [formState, setFormState] = useState({
-    id: null,
-    title: '',
-    image: '',
-    categoryId: '',
+    name: "",
+    image: "",
+    category: "",
+    description: "",
+    speciality: "",
+    rating: "",
+    address: "",
+    timing: "",
+    calling: "",
   });
-
-  const fetchSubCategories = () => {
-    setLoading(true);
-    axios
-      .get('/subcategory/getSubCategory')
-      .then((res) => {
-        setData(res?.data?.result || []);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error('Subcategory Fetch Error:', err);
-        setError('Failed to fetch subcategories');
-        setLoading(false);
-      });
-  };
-
-  const fetchCategories = () => {
-    axios
-      .get('/category/getCategory')
-      .then((res) => {
-        const cats = res.data?.result || [];
-        setCategories(cats);
-      })
-      .catch((err) => {
-        console.error('Category Fetch Error:', err);
-      });
-  };
 
   useEffect(() => {
     fetchSubCategories();
     fetchCategories();
   }, []);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormState((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const resetForm = () => {
-    setFormState({ id: null, title: '', image: '', categoryId: '' });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (!formState.title || !formState.image || !formState.categoryId) {
-      alert('Please fill all fields');
-      return;
-    }
-
-    if (formState.id) {
-      axios
-        .put('/subcategory/updateSubCategory', {
-          _id: formState.id,
-          title: formState.title,
-          image: formState.image,
-          category: formState.categoryId,
-        })
-        .then(() => {
-          alert('Subcategory updated successfully');
-          resetForm();
-          fetchSubCategories();
-        })
-        .catch((err) => alert('Update failed: ' + err.message));
+  const fetchSubCategories = async () => {
+    try {
+      const res = await axios.get("/subcategory/getSubCategory");
+      setData(res.data?.result || []);
+    } catch {
+      console.error("Failed to fetch subcategories");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleEdit = (subcategory) => {
+  const fetchCategories = async () => {
+    try {
+      const res = await axios.get("/category/getCategory");
+      setCategories(res?.data?.data || []);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const openAddModal = () => {
+    setIsEditMode(false);
     setFormState({
-      id: subcategory._id,
-      title: subcategory.title || subcategory.name || '',
-      image: subcategory.image || '',
-      categoryId: subcategory.category?._id || '',
+      name: "",
+      image: "",
+      category: "",
+      description: "",
+      speciality: "",
+      rating: "",
+      address: "",
+      timing: "",
+      calling: "",
     });
+    setShowModal(true);
   };
 
-  const handleDelete = (id) => {
-    if (!window.confirm('Are you sure you want to delete this subcategory?')) return;
+  const openEditModal = (item) => {
+    setIsEditMode(true);
+    setCurrentId(item._id);
+    setFormState({
+      name: item.name,
+      image: item.image,
+      category: item.category,
+      description: item.description,
+      speciality: item.speciality,
+      rating: item.rating,
+      address: item.address,
+      timing: item.timing,
+      calling: item.calling,
+    });
+    setShowModal(true);
+  };
 
-    axios
-      .delete(`/subcategory/deleteSubCategory/${id}`)
-      .then(() => {
-        alert('Subcategory deleted successfully');
-        fetchSubCategories();
-      })
-      .catch((err) => alert('Delete failed: ' + err.message));
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this subcategory?")) return;
+    try {
+      await axios.delete(`/subcategory/deleteSubCategory/${id}`);
+      fetchSubCategories();
+    } catch (err) {
+      alert("Error deleting subcategory");
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (isEditMode) {
+        await axios.put(`/subcategory/updateSubCategory/${currentId}`, formState);
+        alert("Subcategory updated successfully");
+      } else {
+        await axios.post("/subcategory/createSubCategory", formState);
+        alert("Subcategory added successfully");
+      }
+      fetchSubCategories();
+      setShowModal(false);
+    } catch (err) {
+      alert("Error saving subcategory");
+    }
   };
 
   return (
-    <div className="px-6 py-8 max-w-5xl mx-auto">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">All Subcategories</h1>
+    <div className="w-full mx-0">
+      <div className="flex justify-between items-center mb-6 px-2 sm:px-0">
+        <h1 className="text-3xl font-extrabold tracking-wide text-gray-800">
+          SubCategory Manager
+        </h1>
+        <button
+          onClick={openAddModal}
+          className="bg-blue-600 text-white px-5 py-2 rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-200"
+        >
+          + Add SubCategory
+        </button>
+      </div>
 
-      {/* Show form only in edit mode */}
-      {formState.id && (
-        <form onSubmit={handleSubmit} className="mb-8 p-4 border border-gray-300 rounded shadow">
-          <h2 className="text-xl font-semibold mb-4">Edit Subcategory</h2>
-
-          <div className="mb-4">
-            <label className="block mb-1 font-medium">Title</label>
-            <input
-              type="text"
-              name="title"
-              value={formState.title}
-              onChange={handleInputChange}
-              className="w-full border p-2 rounded"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block mb-1 font-medium">Image URL</label>
-            <input
-              type="text"
-              name="image"
-              value={formState.image}
-              onChange={handleInputChange}
-              className="w-full border p-2 rounded"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block mb-1 font-medium">Category</label>
-            <select
-              name="categoryId"
-              value={formState.categoryId}
-              onChange={handleInputChange}
-              className="w-full border p-2 rounded"
-            >
-              <option value="">Select Category</option>
-              {categories.map((cat) => (
-                <option key={cat._id} value={cat._id}>
-                  {cat.title || cat.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="flex gap-4">
-            <button
-              type="submit"
-              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-            >
-              Update
-            </button>
-            <button
-              type="button"
-              onClick={resetForm}
-              className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 transition"
-            >
-              Cancel
-            </button>
-          </div>
-        </form>
-      )}
-
-      {/* Subcategories Table */}
-      {loading ? (
-        <p className="text-center text-gray-500 mt-10">Loading...</p>
-      ) : error ? (
-        <p className="text-center text-red-500 mt-10">{error}</p>
-      ) : data.length === 0 ? (
-        <p className="text-center text-gray-500 mt-10">No Subcategories Found</p>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white border border-gray-200 shadow-sm rounded">
-            <thead>
-              <tr className="bg-gray-100 text-gray-700">
-                <th className="text-left p-4 border-b">Image</th>
-                <th className="text-left p-4 border-b">Title</th>
-                <th className="text-left p-4 border-b">Category</th>
-                <th className="text-left p-4 border-b">Actions</th>
+      <div className="w-full mx-0 overflow-x-auto">
+        <table className="w-full border-collapse border border-gray-200">
+          <thead className="bg-purple-600 text-white uppercase text-sm tracking-wider">
+            <tr>
+              <th className="px-2 py-2">Image</th>
+              <th className="px-2 py-2 text-left">Name</th>
+              <th className="px-2 py-2 text-left">Category</th>
+              <th className="px-2 py-2 text-left">Speciality</th>
+              <th className="px-2 py-2 text-left">Address</th>
+              <th className="px-2 py-2 text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {loading ? (
+              <tr>
+                <td colSpan="6" className="text-center py-10 text-gray-500 italic">
+                  Loading...
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {data.map((subcategory) => (
-                <tr key={subcategory._id} className="hover:bg-gray-50 transition">
-                  <td className="p-4 border-b">
+            ) : (
+              data.map((item, idx) => (
+                <tr
+                  key={item._id}
+                  className={`${
+                    idx % 2 === 0 ? "bg-white" : "bg-gray-50"
+                  } hover:bg-purple-100 transition-colors duration-150`}
+                >
+                  <td className="p-2">
                     <img
-                      src={subcategory.image}
-                      alt={subcategory.title || 'subcategory'}
-                      className="w-12 h-12 object-contain rounded"
+                      src={item.image}
+                      alt={item.name}
+                      className="w-14 h-14 rounded-lg object-contain shadow-sm"
                     />
                   </td>
-                  <td className="p-4 border-b">{subcategory.title || subcategory.name}</td>
-                  <td className="p-4 border-b">
-                    {subcategory.category?.title || subcategory.category?.name || 'N/A'}
+                  <td className="p-2 font-semibold text-gray-800">{item.name}</td>
+                  <td className="p-2 text-gray-600">
+                    {
+                      categories.find((cat) => cat._id === item.category)?.name ||
+                      "Unknown"
+                    }
                   </td>
-                  <td className="p-4 border-b flex gap-2">
+                  <td className="p-2 text-gray-600">{item.speciality}</td>
+                  <td className="p-2 text-gray-600">{item.address}</td>
+                  <td className="p-2 text-center space-x-3">
                     <button
-                      onClick={() => handleEdit(subcategory)}
-                      className="bg-yellow-400 px-3 py-1 rounded hover:bg-yellow-500 transition"
+                      onClick={() => openEditModal(item)}
+                      className="text-blue-600 hover:text-blue-800 font-semibold transition"
                     >
                       Edit
                     </button>
                     <button
-                      onClick={() => handleDelete(subcategory._id)}
-                      className="bg-red-500 px-3 py-1 rounded text-white hover:bg-red-600 transition"
+                      onClick={() => handleDelete(item._id)}
+                      className="text-red-600 hover:text-red-800 font-semibold transition"
                     >
                       Delete
                     </button>
                   </td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {showModal && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg"
+          >
+            <h2 className="text-xl font-semibold mb-4">
+              {isEditMode ? "Edit SubCategory" : "Add SubCategory"}
+            </h2>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <input
+                type="text"
+                name="name"
+                value={formState.name}
+                onChange={(e) => setFormState({ ...formState, name: e.target.value })}
+                placeholder="Name"
+                className="border border-gray-300 w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+              />
+              <input
+                type="text"
+                name="image"
+                value={formState.image}
+                onChange={(e) => setFormState({ ...formState, image: e.target.value })}
+                placeholder="Image URL"
+                className="border border-gray-300 w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+              />
+              <select
+                name="category"
+                value={formState.category}
+                onChange={(e) => setFormState({ ...formState, category: e.target.value })}
+                className="border border-gray-300 w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+              >
+                <option value="">Select Category</option>
+                {categories.map((cat) => (
+                  <option key={cat._id} value={cat._id}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+              <input
+                type="text"
+                name="speciality"
+                value={formState.speciality}
+                onChange={(e) =>
+                  setFormState({ ...formState, speciality: e.target.value })
+                }
+                placeholder="Speciality"
+                className="border border-gray-300 w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+              />
+              <input
+                type="text"
+                name="address"
+                value={formState.address}
+                onChange={(e) =>
+                  setFormState({ ...formState, address: e.target.value })
+                }
+                placeholder="Address"
+                className="border border-gray-300 w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+              />
+              <div className="flex justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={() => setShowModal(false)}
+                  className="px-5 py-2 border rounded-md hover:bg-gray-100 transition"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition"
+                >
+                  {isEditMode ? "Update" : "Add"}
+                </button>
+              </div>
+            </form>
+          </motion.div>
         </div>
       )}
     </div>

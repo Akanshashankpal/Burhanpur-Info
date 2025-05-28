@@ -46,56 +46,34 @@ function ArchitectureLanding() {
   return (
     <>
       <style>{`
-        html, body, #root {
-          height: 100%;
-          margin: 0;
-          padding: 0;
-          overflow-x: hidden;
-          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
         @keyframes panBackground {
           0% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
           100% { background-position: 0% 50%; }
         }
 
-        .background-animated {
-          animation: panBackground 30s linear infinite;
-          background-size: cover;
-          background-repeat: no-repeat;
-          background-position: center center;
-          position: relative;
-          width: 100vw;
-          height: 100vh; /* Full viewport height */
-          overflow: hidden;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          text-align: center;
-          color: white;
-          padding-left: 1rem;
-          padding-right: 1rem;
-        }
+.background-animated {
+animation: panBackground 30s linear infinite;
+background-size: cover; /* ✅ Changed from 200% auto to cover */
+background-repeat: no-repeat;
+background-position: center center;
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 90%;
+}
 
+        /* Black overlay using ::after */
         .background-animated::after {
           content: "";
           position: absolute;
           inset: 0;
-          background-color: rgba(0, 0, 0, 0.55);
+          // background-color: rgba(0, 0, 0, 0.4);
           z-index: 1;
         }
 
-        .content-wrapper {
-          position: relative;
-          z-index: 2;
-          max-width: 900px;
-          width: 100%;
-          padding: 0 1rem;
-          box-sizing: border-box;
-        }
-
+        /* Flip in X animation */
         @keyframes flipInX {
           0% {
             transform: perspective(400px) rotateX(90deg);
@@ -112,6 +90,7 @@ function ArchitectureLanding() {
           transform-style: preserve-3d;
         }
 
+        /* Zoom In animation */
         @keyframes zoomIn {
           0% {
             transform: scale(0.8);
@@ -126,103 +105,96 @@ function ArchitectureLanding() {
           animation: zoomIn 0.7s ease forwards;
         }
 
-        h1 {
-          font-weight: 800;
-          margin-bottom: 1.5rem;
-          line-height: 1.1;
-          color: #facc15;
-          text-shadow: 1px 1px 6px rgba(0,0,0,0.8);
-          font-size: 3rem;
-        }
-
-        p {
-          margin-bottom: 2rem;
-          font-weight: 500;
-          text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
-          font-size: 1.25rem;
-        }
-
         .search-box {
-          background-color: white;
-          border-radius: 1.5rem;
-          padding: 1.5rem;
-          box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-          border: 1px solid white;
-          transition: transform 0.7s ease;
+          background: rgba(255 255 255 / 0.9);
+          border-radius: 2rem;
+          box-shadow: 0 8px 24px rgb(0 0 0 / 0.25);
+          padding: 1rem 1.5rem;
           max-width: 100%;
+          width: 70%;
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          justify-content: center;
+          user-select: none;
+          transition: box-shadow 0.3s ease;
+          margin-left: auto;
+          margin-right: auto;
         }
 
         .search-box:hover {
-          transform: scale(1.02);
+          box-shadow: 0 12px 36px rgb(0 0 0 / 0.4);
         }
 
         .search-box input,
         .search-box select {
-          width: 100%;
-          padding: 0.75rem 1rem;
-          margin-bottom: 1rem;
-          border-radius: 1rem;
+          flex: 1;
           border: none;
-          background-color: #f3f4f6;
-          color: black;
+          border-radius: 1.25rem;
+          padding: 0.75rem 1rem;
           font-size: 1rem;
           outline: none;
-          transition: box-shadow 0.3s ease;
+          color: #111827;
+          background-color: #f9fafb;
+          transition: box-shadow 0.2s ease;
+          user-select: text;
+          min-width: 0;
         }
 
         .search-box input::placeholder {
-          color: #4b5563;
+          color: #6b7280;
         }
 
         .search-box input:focus,
         .search-box select:focus {
-          box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.5);
+          box-shadow: 0 0 0 3px rgb(236 72 153 / 0.5);
           background-color: white;
         }
 
+        .search-box select {
+          max-width: 130px;
+          cursor: pointer;
+        }
+
         .search-box button {
-          width: 100%;
-          padding: 0.75rem;
-          border-radius: 1rem;
           background: linear-gradient(to right, #ec4899, #f97316, #eab308);
+          border-radius: 1.5rem;
+          border: none;
+          padding: 0.75rem 1.75rem;
+          font-weight: 700;
           color: white;
-          font-weight: 600;
+          font-size: 1rem;
+          cursor: pointer;
+          box-shadow: 0 8px 20px rgb(236 72 153 / 0.7);
           display: flex;
           align-items: center;
-          justify-content: center;
           gap: 0.5rem;
-          border: none;
-          cursor: pointer;
-          box-shadow: 0 6px 15px rgba(236, 72, 153, 0.6);
-          transition: background 0.3s ease;
+          user-select: none;
+          white-space: nowrap;
         }
 
         .search-box button:hover {
           background: linear-gradient(to right, #db2777, #ea580c, #ca8a04);
         }
 
-        .search-box .icon-location {
-          position: absolute;
-          right: 1rem;
-          top: 50%;
-          transform: translateY(-50%);
-          color: #6b7280;
-          pointer-events: none;
-        }
-
-        /* Responsive */
         @media (max-width: 768px) {
           h1 {
-            font-size: 2.25rem;
+            font-size: 2.5rem;
           }
-
           p {
             font-size: 1rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
           }
-
           .search-box {
-            padding: 1rem;
+            flex-direction: column;
+            gap: 0.75rem;
+            padding: 1rem 1.25rem;
+            align-items: stretch;
+          }
+          .search-box select,
+          .search-box input,
+          .search-box button {
+            width: 100%;
           }
         }
 
@@ -230,71 +202,70 @@ function ArchitectureLanding() {
           h1 {
             font-size: 1.75rem;
           }
-
-          .search-box input,
-          .search-box select {
-            font-size: 0.9rem;
-          }
         }
       `}</style>
 
-      <div className="flex flex-col min-h-screen">
+      <div className="relative w-full h-screen overflow-hidden">
+
         <Navbar />
 
-        <main className="flex-grow relative w-full">
+        {/* Background with animation */}
+        <div
+          className="background-animated "
+          style={{ backgroundImage: `url(${bgImage}) `
+        }}
+        >
+          {/* Content overlay */}
           <div
-            className="background-animated"
-            style={{ backgroundImage: `url(${bgImage})` }}
             ref={headingRef}
+            className="relative z-10 flex flex-col items-center justify-center text-center text-white px-6 mt-10 h-full"
           >
-            <div className="content-wrapper">
-              <h1 className={`${showFlipText ? "animate-flipInX" : "opacity-0"}`}>
-                Welcome to <br /> The Historical City of Heritage & Glory
-              </h1>
+            <h1
+              className={`text-2xl md:text-5xl font-bold mb-2 max-w-2xl ${showFlipText ? "animate-flipInX" : "opacity-0"
+                } text-yellow-400`}
+            >
+              Welcome to <br /> The Historical City of Heritage & Glory
+            </h1>
 
-              <p
-                className={`${
-                  showFadeText ? "opacity-100" : "opacity-0"
-                } transition-opacity duration-700`}
-              >
-                Discover the hidden gems of Mughal brilliance, majestic forts,
-                and sacred shrines that have gracefully stood the test of time
-                in the heart of Madhya Pradesh. Immerse yourself in a journey
-                where history whispers from every stone, unveiling stories of
-                valor, culture, and timeless heritage that await your
-                exploration around every corner.
-              </p>
+            <p
+              className={`text-md max-w-xl mb-5 mt-5 transition-opacity duration-700 ${showFadeText ? "opacity-100" : "opacity-0"
+                }`}
+            >
+              Discover the hidden gems of Mughal brilliance, majestic forts, and sacred shrines that have gracefully stood the test of time in the heart of Madhya Pradesh.
+              Immerse yourself in a journey where history whispers from every stone, unveiling stories of valor, culture, and timeless heritage that await your exploration around every corner.
+            </p>
 
-              {showSearchBox && (
-                <div className="search-box animate-zoomIn relative">
+            {showSearchBox && (
+                <form
+                  className="search-box"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    alert("Search submitted!");
+                  }}
+                >
                   <input
                     type="text"
-                    placeholder="🔍 What are you looking for?"
+                    placeholder="What are you looking for?"
                     spellCheck={false}
+                    required
+                    aria-label="Search query"
                   />
-                  <select>
-                    <option>🏰 Places</option>
-                    <option>🏨 Hotels</option>
-                    <option>🍽️ Restaurants</option>
+
+                  <select aria-label="Select category" defaultValue="Places">
+                    <option value="Places">🏰 Places</option>
+                    <option value="Hotels">🏨 Hotels</option>
+                    <option value="Restaurants">🍽 Restaurants</option>
+                    <option value="Events">🎉 Events</option>
+                    <option value="Shops">🛍 Shops</option>
                   </select>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      placeholder="📍 Location"
-                      className="pr-10"
-                      spellCheck={false}
-                    />
-                    <FaMapMarkerAlt className="icon-location" />
-                  </div>
-                  <button>
-                    <FaSearch />
-                    Search
+
+                  <button type="submit">
+                    Search <FaSearch />
                   </button>
-                </div>
+                </form>
               )}
             </div>
           </div>
-        </main>
       </div>
     </>
   );
