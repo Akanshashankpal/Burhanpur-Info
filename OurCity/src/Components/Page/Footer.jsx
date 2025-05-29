@@ -10,6 +10,7 @@ import img from "../ui/Images/logo.jpg";
 // import { LinkedinIcon } from "../AllIcons/SocialMedia/LinkedinIcon";
 // import { TwitterIcon } from "../AllIcons/SocialMedia/TwitterIcon";
 import { motion } from "framer-motion";
+console.log(motion)
 
 
 
@@ -194,4 +195,4 @@ const Footer = () => {
   );
 };
 
-export default Footer;
+export default Footer;

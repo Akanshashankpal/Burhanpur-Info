@@ -12,8 +12,8 @@ import DargahHakimi from '../Page/ExplorePart/PlaceDetails/DargahHakimi';
 import CategorySection from '../Page/CatagoriesPart/CategorySection';
 import SubcategoryPage from '../Page/CatagoriesPart/SubcategoryPage';
 import Dashboard from '../../AdminPanel/pages/Dashboard';
-import Login from '../../AdminPanel/pages/Login'; // Assuming Login component for admin
-import SubcategoryPage from '../Page/CatagoriesPart/SubcategoryPage';
+// Assuming Login component for admin
+
 import { AdminLogin } from '../AdimLogin/AdminLogin';
 import AdminDashboard from '../AdimLogin/AdminDashboard/AdminCategory';
 import EditSubCategory from '../AdimLogin/AdminDashboard/EditSubCategory';
@@ -25,8 +25,8 @@ const RouteShow = () => {
     return (
         <Routes>
             {/* Public Routes */}
-            <Route path="/" element={<Login />} />
-            <Route path="/Login" element={<LoginPage />} />
+      
+   
             <Route path="/Pages" element={<Pages />} />
             <Route path="/Home" element={<Home />} />
             <Route path="/explore" element={<Explore />} />
@@ -45,8 +45,7 @@ const RouteShow = () => {
             <Route path="/" element={<Home/>} />
             <Route path="/category/:categoryId/subcategory/:subId" element={<SubcategoryDetail />} />
 
-            {/* <Route path="/" element={<Home/>} /> */}
-            <Route path="/subcategory/:categoryId" element={<SubcategoryPage />} />
+          
             <Route path="/Pages" element={<Pages />} />
             <Route path="/explore" element={<Explore />} />
             <Route path='/RailwayStaion' element={<Railway />} />
