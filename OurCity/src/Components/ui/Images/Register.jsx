@@ -1,10 +1,7 @@
-// import axios from 'axios';
 import React, { useState } from 'react';
-// import axios from '../../../../axios';
+import axios from '../../../../axios';
 import toast from 'react-hot-toast';
 import { useNavigate } from "react-router-dom";
-// const navigate = useNavigate();
-import axios from '../../../../axios';
 
 const Register = ({ onClose , onLoginSuccess }) => {
   const [isLogin, setIsLogin] = useState(false);
@@ -29,7 +26,8 @@ const Register = ({ onClose , onLoginSuccess }) => {
       const res = await axios.post('/users/createUser', formData);
       if (res.data.success) {
         toast.success('🎉 Account created successfully!');
-        setIsLogin(true); // Go to login mode
+        setFormData({ name: '', phone: '', password: '', email: '', role: '', address: '' });
+        setIsLogin(true); // Switch to login mode
       } else {
         toast.error('Registration failed: ' + res.data.message);
       }
@@ -39,7 +37,7 @@ const Register = ({ onClose , onLoginSuccess }) => {
     }
   };
 
-const handleLogin = async (e) => {
+  const handleLogin = async (e) => {
   e.preventDefault();
   try {
     const res = await axios.post('/users/adminlogin', {
@@ -50,8 +48,7 @@ const handleLogin = async (e) => {
     console.log('Login response:', res.data);
 
     if (res.data.success) {
-      const token = res.data.result;  // token string
-      
+      const token = res.data.result;
       if (!token) {
         toast.error("Token missing in response.");
         return;
@@ -61,14 +58,11 @@ const handleLogin = async (e) => {
 
       localStorage.setItem('token', token);
 
-      // Backend is not sending user details, so:
-      // If hardcoded admin, create user object manually:
       let user = null;
       if (formData.phone === '9981443156' && formData.password === 'gayu123') {
         user = { role: 'admin', phone: formData.phone };
       } else {
-        // For other users, you may want to decode token to get user info or call another API
-        user = { role: 'user', phone: formData.phone }; 
+        user = { role: 'user', phone: formData.phone };
       }
 
       localStorage.setItem('user', JSON.stringify(user));
@@ -77,9 +71,34 @@ const handleLogin = async (e) => {
       onClose?.();
 
       setTimeout(() => {
-        const target = user.role === 'admin' ? '/dash' : '/';
-        console.log("Redirecting to:", target);
-        window.location.href = target;  // full page reload redirect
+        if (user.role === 'admin') {
+          // Admin dashboard redirect
+          window.location.href = '/dash';
+        } else {
+          // User login:
+          // Redirect to home '/'
+          window.location.href = '/';
+
+          // Then, user icon ko update karne ke liye
+          // Aapke app me ek global state ho sakti hai (context, redux, or parent component state)
+          // Jahan se user icon change hota hai.
+          // Yahan sirf user redirect ho raha hai home pe, 
+          // par aapko apne Navbar me user loggedIn state set karni hogi 
+          // jisse user icon "profile" icon me change ho jaye.
+          
+          // Example: Agar aapke parent component me function hai:
+          // setUserLoggedIn(true)
+          // to is function ko yahan call kar do.
+          
+          // Aap React context ya Redux use kar sakte ho for global state management.
+          
+          // Also, agar chaho to user ko profile page pe redirect bhi kar sakte ho:
+          // window.location.href = '/profile';
+          
+          // Par aapne bola home pe jana hai + profile icon change hona hai,
+          // to home pe redirect rakhna sahi hai, 
+          // aur Navbar me user state se icon change karna.
+        }
       }, 100);
     } else {
       toast.error('Login failed: ' + (res.data.message || 'Invalid credentials'));
@@ -89,17 +108,6 @@ const handleLogin = async (e) => {
     toast.error('An error occurred during login.');
   }
 };
-
-
-
-
-
-
-
-
-
-
-;
 
 
   return (
@@ -132,8 +140,9 @@ const handleLogin = async (e) => {
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
+
               <input
-                type="number"
+                type="text"
                 name="phone"
                 placeholder="Phone Number"
                 value={formData.phone}
@@ -141,15 +150,19 @@ const handleLogin = async (e) => {
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
-              <input
-                type="text"
+
+              <select
                 name="role"
-                placeholder="Role"
                 value={formData.role}
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              />
+              >
+                <option value="">Select Role</option>
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+              </select>
+
               <input
                 type="text"
                 name="address"
@@ -159,6 +172,7 @@ const handleLogin = async (e) => {
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
+
               <input
                 type="email"
                 name="email"
@@ -172,7 +186,7 @@ const handleLogin = async (e) => {
 
           {isLogin && (
             <input
-              type="number"
+              type="text"
               name="phone"
               placeholder="Phone Number"
               value={formData.phone}
@@ -215,104 +229,3 @@ const handleLogin = async (e) => {
 };
 
 export default Register;
-
-
-
-// import React, { useState } from 'react';
-// import axios from '../../../../axios';
-// import toast from 'react-hot-toast';
-// import { useNavigate } from 'react-router-dom';
-
-// const Register = ({ onClose }) => {
-//   const [isLogin, setIsLogin] = useState(false);
-//   const [formData, setFormData] = useState({
-//     name: '',
-//     phone: '',
-//     password: '',
-//     email: '',
-//     role: '',
-//     address: '',
-//   });
-
-//   const navigate = useNavigate();
-
-//   const handleChange = (e) => {
-//     setFormData({ ...formData, [e.target.name]: e.target.value });
-//   };
-
-//   const handleRegister = async (e) => {
-//     e.preventDefault();
-//     try {
-//       const res = await axios.post('/users/createUser', formData);
-//       if (res.data.success) {
-//         toast.success('🎉 Account created successfully!');
-//         setIsLogin(true);
-//       } else {
-//         toast.error('Registration failed: ' + res.data.message);
-//       }
-//     } catch (err) {
-//       toast.error('An error occurred during registration.');
-//     }
-//   };
-
-//   const handleLogin = async (e) => {
-//     e.preventDefault();
-//     try {
-//       const res = await axios.post('/Users/adminlogin', {
-//         phone: formData.phone,
-//         password: formData.password,
-//       });
-
-//       if (res.data.success) {
-//         toast.success('✅ Login successful!');
-//         localStorage.setItem('token', res.data.token);
-//         window.dispatchEvent(new Event("user-login")); // 💥 Notify Navbar
-//         onClose();
-//         navigate('/');
-//       } else {
-//         toast.error('Login failed: ' + res.data.message);
-//       }
-//     } catch (err) {
-//       toast.error('An error occurred during login.');
-//     }
-//   };
-
-//   return (
-//     <div className="relative">
-//       <button onClick={onClose} className="absolute top-2 right-3 text-gray-500 hover:text-gray-700 text-2xl font-bold">
-//         &times;
-//       </button>
-//       <form onSubmit={isLogin ? handleLogin : handleRegister} className="bg-white p-7 rounded-3xl shadow-xl max-w-md w-full space-y-2">
-//         <h2 className="text-3xl font-bold text-center text-indigo-700">
-//           {isLogin ? 'Login to your Account' : 'Create an Account'}
-//         </h2>
-//         <div className="space-y-4">
-//           {!isLogin && (
-//             <>
-//               <input name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} required className="input" />
-//               <input name="phone" type="number" placeholder="Phone Number" value={formData.phone} onChange={handleChange} required className="input" />
-//               <input name="role" placeholder="Role" value={formData.role} onChange={handleChange} required className="input" />
-//               <input name="address" placeholder="Address" value={formData.address} onChange={handleChange} required className="input" />
-//               <input name="email" type="email" placeholder="Email Address" value={formData.email} onChange={handleChange} className="input" />
-//             </>
-//           )}
-//           {isLogin && (
-//             <input name="phone" type="number" placeholder="Phone Number" value={formData.phone} onChange={handleChange} required className="input" />
-//           )}
-//           <input name="password" type="password" placeholder="Password" value={formData.password} onChange={handleChange} required className="input" />
-//         </div>
-//         <button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-lg transition">
-//           {isLogin ? 'Login' : 'Register'}
-//         </button>
-//         <p className="text-sm text-center text-gray-500 mt-4">
-//           {isLogin ? "Don't have an account?" : 'Already have an account?'}{' '}
-//           <span onClick={() => setIsLogin(!isLogin)} className="text-indigo-600 font-medium cursor-pointer">
-//             {isLogin ? 'Register' : 'Login'}
-//           </span>
-//         </p>
-//       </form>
-//     </div>
-//   );
-// };
-
-// export default Register;

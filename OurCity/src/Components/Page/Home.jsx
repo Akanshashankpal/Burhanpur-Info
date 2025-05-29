@@ -33,12 +33,9 @@ const Home = () => {
       {/* <BurhanpurPage/> */}
  
       <ArchitectureLanding />
-      <br />
-      <CitySlider/>
-      <br />
- 
-     
-<br/>
+      
+      {/* <CitySlider/> */}
+      
       <CategorySection/>
  
       <br />

@@ -59,7 +59,7 @@ const CategorySection = () => {
 
       {data.length > 0 ? (
         <motion.div
-          className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 gap-6 justify-items-center"
+          className="grid grid-cols-5 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-6 gap-6 justify-items-center"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
