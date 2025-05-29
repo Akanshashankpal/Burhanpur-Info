@@ -5,6 +5,7 @@ import './App.css'
  
 import RouteShow from './Components/AllRoutes/RouteShow'
 import AdminDashboard from './Components/AdimLogin/AdminDashboard/AdminCategory'
+import { Toaster } from 'react-hot-toast'
 // import RouteShow from './Components/AllRoutes/RouteShow'
  
 
@@ -16,6 +17,7 @@ function App() {
        {/* <AdminDashboard/> */}
        {/* <Navbar/> */}
        {/* <RouteShow/> */}
+       <Toaster position="top-right" />
        <RouteShow/>
        
 

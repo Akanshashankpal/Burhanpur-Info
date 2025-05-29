@@ -46,6 +46,9 @@ function ArchitectureLanding() {
   return (
     <>
       <style>{`
+
+      
+     
         @keyframes panBackground {
           0% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
@@ -59,6 +62,9 @@ background-repeat: no-repeat;
 background-position: center center;
 position: absolute;
 top: 0;
+
+width: 100%;
+height: 100%;
 left: 0;
 width: 100%;
 height: 90%;
@@ -205,6 +211,7 @@ height: 90%;
         }
       `}</style>
 
+     
       <div className="relative w-full h-screen overflow-hidden">
 
         <Navbar />
@@ -221,7 +228,8 @@ height: 90%;
           >
             <h1
               className={`text-2xl md:text-5xl font-bold mb-2 max-w-2xl ${showFlipText ? "animate-flipInX" : "opacity-0"
-                } text-yellow-400`}
+                } text-yellow-500`}
+
             >
               Welcome to <br /> The Historical City of Heritage & Glory
             </h1>

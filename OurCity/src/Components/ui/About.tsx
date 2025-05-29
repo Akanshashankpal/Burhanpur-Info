@@ -8,7 +8,7 @@ const sectionVariants = {
   visible: { opacity: 1, y: 0 },
 };
 
-const AboutUs = () => {
+const About = () => {
   const sections = [
     {
       title: "About Burhanpur City",
@@ -103,4 +103,4 @@ const AboutUs = () => {
   );
 };
 
-export default AboutUs;
+export default About;

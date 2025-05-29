@@ -1,11 +1,8 @@
-// import axios from 'axios';
 import React, { useState } from 'react';
-// import axios from '../../../../axios';
-import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
 import axios from '../../../../axios';
+import toast from 'react-hot-toast';
 
-const Register = ({ onClose }) => {
+const Register = ({ onClose, onLoginSuccess }) => {
   const [isLogin, setIsLogin] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -16,19 +13,25 @@ const Register = ({ onClose }) => {
     address: '',
   });
 
-  const navigate = useNavigate();
-
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('/Users/createUser', formData);
+      const res = await axios.post('/users/createUser', formData);
       if (res.data.success) {
         toast.success('🎉 Account created successfully!');
-        setIsLogin(true); // Go to login mode
+        setFormData({
+          name: '',
+          phone: '',
+          password: '',
+          email: '',
+          role: '',
+          address: '',
+        });
+        setIsLogin(true);
       } else {
         toast.error('Registration failed: ' + res.data.message);
       }
@@ -39,26 +42,46 @@ const Register = ({ onClose }) => {
   };
 
   const handleLogin = async (e) => {
-  e.preventDefault();
-  try {
-    const res = await axios.post('/Users/adminLogin', {
-      phone: formData.phone,
-      password: formData.password,
-    });
-    if (res.data.token) {
-      toast.success('✅ Login successful!');
-      localStorage.setItem('token', res.data.token);
-      onClose(); // ✅ close modal
-      navigate('/'); // ✅ redirect to homepage
-    } else {
-      toast.error('Login failed: ' + res.data.message);
-    }
-  } catch (err) {
-    console.error('Login error:', err);
-    toast.error('An error occurred during login.');
-  }
-};
+    e.preventDefault();
+    try {
+      const res = await axios.post('/users/adminlogin', {
+        phone: formData.phone,
+        password: formData.password,
+      });
 
+      if (res.data.success) {
+        const token = res.data.result;
+        if (!token) {
+          toast.error("Token missing in response.");
+          return;
+        }
+
+        toast.success('✅ Login successful!');
+        localStorage.setItem('token', token);
+
+        // Simplified user role detection (you can adjust logic)
+        const role = (formData.phone === '9981443156' && formData.password === 'gayu123') ? 'admin' : 'user';
+        const user = { role, phone: formData.phone, name: formData.name || '' };
+
+        localStorage.setItem('user', JSON.stringify(user));
+        onLoginSuccess(user);
+        onClose();
+
+        setTimeout(() => {
+          if (role === 'admin') {
+            window.location.href = '/dash';
+          } else {
+            window.location.href = '/';
+          }
+        }, 100);
+      } else {
+        toast.error('Login failed: ' + (res.data.message || 'Invalid credentials'));
+      }
+    } catch (err) {
+      console.error('Login error:', err);
+      toast.error('An error occurred during login.');
+    }
+  };
 
   return (
     <div className="relative">
@@ -72,65 +95,25 @@ const Register = ({ onClose }) => {
 
       <form
         onSubmit={isLogin ? handleLogin : handleRegister}
-        className="bg-white p-7 rounded-3xl shadow-xl max-w-md w-full space-y-2"
+        className="p-7 rounded-3xl max-w-md w-full space-y-4"
       >
         <h2 className="text-3xl font-bold text-center text-indigo-700">
           {isLogin ? 'Login to your Account' : 'Create an Account'}
         </h2>
 
-        <div className="space-y-4">
-          {!isLogin && (
-            <>
-              <input
-                type="text"
-                name="name"
-                placeholder="Full Name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              />
-              <input
-                type="number"
-                name="phone"
-                placeholder="Phone Number"
-                value={formData.phone}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              />
-              <input
-                type="text"
-                name="role"
-                placeholder="Role"
-                value={formData.role}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              />
-              <input
-                type="text"
-                name="address"
-                placeholder="Your Address"
-                value={formData.address}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              />
-              <input
-                type="email"
-                name="email"
-                placeholder="Email Address"
-                value={formData.email}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              />
-            </>
-          )}
-
-          {isLogin && (
+        {!isLogin && (
+          <>
             <input
-              type="number"
+              type="text"
+              name="name"
+              placeholder="Full Name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+            <input
+              type="text"
               name="phone"
               placeholder="Phone Number"
               value={formData.phone}
@@ -138,18 +121,58 @@ const Register = ({ onClose }) => {
               required
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
-          )}
+            <select
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              <option value="">Select Role</option>
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
+            <input
+              type="text"
+              name="address"
+              placeholder="Your Address"
+              value={formData.address}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Email Address"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </>
+        )}
 
+        {isLogin && (
           <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
+            type="text"
+            name="phone"
+            placeholder="Phone Number"
+            value={formData.phone}
             onChange={handleChange}
             required
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
-        </div>
+        )}
+
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={formData.password}
+          onChange={handleChange}
+          required
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        />
 
         <button
           type="submit"

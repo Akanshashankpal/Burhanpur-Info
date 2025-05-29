@@ -5,7 +5,7 @@ import UserIcon from "../AllIcons/UserIcon";
 import { NavLink } from "react-router-dom";
 import axios from "./../../../axios";
 import Register from "./Images/Register";
-import logo from '../ui/Images/logo.jpg';
+import logo from "../ui/Images/logo.jpg";
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -22,6 +22,7 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
 
   // Click outside dropdown to close
   useEffect(() => {
@@ -43,7 +44,10 @@ const Navbar = () => {
           const res = await axios.get("/Users/userDetails", {
             headers: { Authorization: `Bearer ${token}` }
           });
-          if (res.data.success) setUser(res.data.user);
+          if (res.data.success) {
+            setUser(res.data.result[0]); // ✅ Corrected from res.data.user to result[0]
+          }
+
         } catch (err) {
           localStorage.removeItem("token");
           setUser(null);
@@ -63,15 +67,12 @@ const Navbar = () => {
     <>
       <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ease-in-out ${scrolled ? "bg-white shadow-md" : "bg-transparent"}`}>
         <div className="max-w-screen-xl mx-auto px-4 md:px-8 h-20 flex items-center justify-between">
-          {/* Logo */}
           <NavLink to="/" className="flex items-center gap-3">
             <img src={logo} alt="logo" className="w-15 h-15 rounded-full border-2 border-blue-500 hover:scale-110 transition" />
-            <span className={`font-bold text-xl ${scrolled ? "text-gray-900" : "text-white drop-shadow-lg"}`}>
-              Burhanpur - The Historical City
-            </span>
+            <span className={`font-bold text-xl ${scrolled ? "text-gray-900" : "text-white drop-shadow-lg"}`}>Burhanpur</span>
           </NavLink>
 
-          {/* Nav Links */}
+
           <nav className="hidden md:flex items-center gap-8 relative">
             <NavLink to="/" className={({ isActive }) =>
               `text-xl font-semibold hover:text-blue-600 transition ${isActive ? "text-blue-600" : scrolled ? "text-gray-700" : "text-white"}`}>
@@ -101,42 +102,31 @@ const Navbar = () => {
 
           {/* Right Icons */}
           <div className="flex items-center gap-6">
-            {/* User / Avatar */}
-            {user ? (
-              <div className="relative" ref={dropdownRef}>
-                <button onClick={() => setShowProfileDropdown(prev => !prev)} className="rounded-full border-2 border-indigo-500 p-1 w-10 h-10 flex items-center justify-center bg-indigo-100">
-                  <span className="text-indigo-600 font-bold text-lg">
-                    {user.name?.charAt(0).toUpperCase()}
-                  </span>
-                </button>
+         {user ? (
+  <div className="relative" ref={dropdownRef}>
+    <button onClick={() => setShowProfileDropdown(prev => !prev)} className="...">
+      <span>{user.name?.charAt(0).toUpperCase()}</span>
+    </button>
 
-                {showProfileDropdown && (
-                  <div className="absolute right-0 mt-2 bg-white shadow-lg rounded-md p-4 z-50 w-60">
-                    <p className="text-sm font-semibold">👤 {user.name}</p>
-                    <p className="text-sm text-gray-600">📧 {user.email}</p>
-                    <p className="text-sm text-gray-600">📱 {user.phone}</p>
-                    <button onClick={handleLogout} className="mt-4 w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-md text-sm">
-                      Logout
-                    </button>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <button onClick={() => setShowRegisterModal(true)} aria-label="User Register">
-                <UserIcon fill={scrolled ? "#1f2937" : "white"} />
-              </button>
-            )}
+    {showProfileDropdown && (
+      <div className="...">
+        <p>👤 {user.name}</p>
+        <p>📧 {user.email}</p>
+        <p>📱 {user.phone}</p>
+        <button onClick={handleLogout}>Logout</button>
+      </div>
+    )}
+  </div>
+) : (
+  <button onClick={() => setShowRegisterModal(true)}>...</button>
+)}
 
-            {/* Add Listing */}
+
             <AddListing fill={scrolled ? "#1f2937" : "white"} />
 
-            {/* Hamburger for Mobile */}
             <button onClick={() => setSidebarOpen(true)} className="block md:hidden">
-              <img
-                src="https://img.icons8.com/ios-filled/50/000000/menu--v1.png"
-                alt="menu"
-                className="w-10 h-5 md:w-8 md:h-8 lg:w-8 lg:h-8 bg-white"
-              />
+              <img src="https://img.icons8.com/ios-filled/50/000000/menu--v1.png" alt="menu" className="w-10 h-5 md:w-8 md:h-8 lg:w-8 lg:h-8 bg-white" />
+
             </button>
           </div>
         </div>
@@ -157,10 +147,13 @@ const Navbar = () => {
                   const token = localStorage.getItem("token");
                   if (token) {
                     try {
-                      const res = await axios.get("/Users/adminLogin", {
+                      const res = await axios.get("/Users/userDetails", {
                         headers: { Authorization: `Bearer ${token}` }
                       });
-                      if (res.data.success) setUser(res.data.user);
+                      if (res.data.success) {
+                        setUser(res.data.result[0]); // ✅ Correct here too
+                      }
+
                     } catch (err) {
                       console.error("Error fetching user after modal close", err);
                     }

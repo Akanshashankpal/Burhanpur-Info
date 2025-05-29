@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import SubCategorySection from "../components/SubCategorySection";
 import UserSection from "../components/UserSection";
 import CategorySection from "../components/CategorySection";
+// import { Link } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 const Dashboard = () => {
@@ -13,8 +14,10 @@ const Dashboard = () => {
         return <CategorySection />;
 
 
+        // return <CategorySection />;
       case "subcategory":
         return <SubCategorySection />;
+        // return <SubCategorySection />;
       case "users":
         return <UserSection />;
       default:
@@ -42,6 +45,11 @@ const Dashboard = () => {
             >
               Subcategories
             </button>
+
+          {/* </Link> */}
+
+
+          
 
           {/* </Link> */}
 
