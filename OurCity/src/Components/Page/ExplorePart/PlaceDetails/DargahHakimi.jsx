@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Atom } from 'react-loading-indicators';
-import ImageSlider from './PlaceImg/Slider/ImageSlider'; // ya jo bhi image slider use kar rahe ho
+import ImageSlider from './PlaceImg/Slider/ImageSlider';
+import { motion } from 'framer-motion';
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 50 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: 'easeOut' },
+  },
+};
 
 const DargahHakimi = () => {
   const [loading, setLoading] = useState(true);
@@ -27,18 +37,36 @@ const DargahHakimi = () => {
       {!loading && (
         <div className="max-w-6xl mx-auto px-4 py-10 space-y-12 font-sans">
           {/* Title */}
-          <div className="text-center">
+          <motion.div
+            className="text-center"
+            variants={itemVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+          >
             <h1 className="text-4xl font-bold text-gray-800">🕌 Dargah-e-Hakimi</h1>
             <p className="text-lg text-gray-500 mt-2">A Sacred Pilgrimage Site in Burhanpur</p>
-          </div>
+          </motion.div>
 
           {/* Image */}
-          <div className="rounded-xl overflow-hidden shadow-xl">
+          <motion.div
+            className="rounded-xl overflow-hidden shadow-xl"
+            variants={itemVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+          >
             <ImageSlider />
-          </div>
+          </motion.div>
 
           {/* Description */}
-          <section className="space-y-5 text-gray-700 leading-relaxed text-lg">
+          <motion.section
+            className="space-y-5 text-gray-700 leading-relaxed text-lg"
+            variants={itemVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+          >
             <h2 className="text-2xl font-semibold text-gray-800">📝 Overview</h2>
             <p>
               Dargah-e-Hakimi is one of the holiest sites for the Dawoodi Bohra community, located in Burhanpur, Madhya Pradesh. This revered shrine is dedicated to Syedi Abdul Qadir Hakimuddin, a prominent religious leader.
@@ -46,18 +74,30 @@ const DargahHakimi = () => {
             <p>
               The shrine is known for its serene ambiance, marble architecture, and beautiful gardens that attract pilgrims and tourists from across the globe.
             </p>
-          </section>
+          </motion.section>
 
           {/* Address */}
-          <section className="bg-gray-50 p-6 rounded-xl shadow-sm">
+          <motion.section
+            className="bg-gray-50 p-6 rounded-xl shadow-sm"
+            variants={itemVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+          >
             <h2 className="text-xl font-semibold text-gray-800 mb-2">📍 Address</h2>
             <p className="text-gray-700 text-base">
               Dargah-e-Hakimi, Lodhi Talab, Burhanpur, Madhya Pradesh 450331, India
             </p>
-          </section>
+          </motion.section>
 
           {/* Map */}
-          <section className="rounded-xl overflow-hidden shadow-md">
+          <motion.section
+            className="rounded-xl overflow-hidden shadow-md"
+            variants={itemVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+          >
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">🗺️ Location Map</h2>
             <iframe
               title="Dargah-e-Hakimi Map"
@@ -67,8 +107,8 @@ const DargahHakimi = () => {
               style={{ border: 0 }}
               allowFullScreen=""
               loading="lazy"
-            ></iframe>
-          </section>
+            />
+          </motion.section>
         </div>
       )}
     </>

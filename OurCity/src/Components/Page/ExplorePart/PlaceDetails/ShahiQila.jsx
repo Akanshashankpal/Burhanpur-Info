@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Atom } from 'react-loading-indicators';
 import ImageSlider from './PlaceImg/Slider/ImageSlider';
+import { motion } from 'framer-motion';
 
 const ShahiQila = () => {
   const [loading, setLoading] = useState(true);
@@ -16,109 +17,152 @@ const ShahiQila = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  // Section animation variants
+  const sectionVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: (i = 1) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.2,
+        duration: 0.6,
+        ease: 'easeOut',
+      },
+    }),
+  };
+
   return (
-    <>
-      {loading && (
-        <div className="fixed inset-0 bg-white z-50 flex items-center justify-center">
+    <div className="min-h-screen">
+      {loading ? (
+        <div className="fixed inset-0 z-50 bg-white flex items-center justify-center">
           <Atom color="#fa0606" size="medium" text="" textColor="#f40c0c" />
         </div>
-      )}
-
-      {!loading && (
-        <div className="max-w-6xl mx-auto px-4 py-10 space-y-12 font-sans">
+      ) : (
+        <motion.div
+          className="max-w-6xl mx-auto px-4 py-10 space-y-12 font-sans"
+          initial="hidden"
+          animate="visible"
+          variants={sectionVariants}
+          custom={0}
+        >
           {/* Title */}
-          <div className="text-center">
+          <motion.div
+            className="text-center"
+            variants={sectionVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            custom={0}
+          >
             <h1 className="text-4xl font-bold text-gray-800">🏰 Shahi Qila, Burhanpur</h1>
             <p className="text-lg text-gray-500 mt-2">A Royal Marvel of Mughal Architecture</p>
-          </div>
+          </motion.div>
 
           {/* Image Slider */}
-          <div className="rounded-xl overflow-hidden shadow-xl">
+          <motion.div
+            className="rounded-xl overflow-hidden shadow-xl"
+            variants={sectionVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            custom={0.5}
+          >
             <ImageSlider />
-          </div>
+          </motion.div>
 
           {/* Overview */}
-          <section className="space-y-5 text-gray-700 leading-relaxed text-lg">
+          <motion.section
+            className="space-y-5 text-gray-700 leading-relaxed text-lg"
+            variants={sectionVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            custom={1}
+          >
             <h2 className="text-2xl font-semibold text-gray-800">📝 Overview</h2>
             <p>
-              Shahi Qila is one of the most iconic monuments in Burhanpur, built during the Mughal era.
-              Situated on the banks of the Tapti River, this royal fort once served as a residence to Shah Jahan and Mumtaz Mahal.
+              Shahi Qila, located on the banks of the Tapti River in Burhanpur, is a majestic fort built during the Mughal era. Known for its grandeur, intricate carvings, and Mughal architecture, it once served as a residence for Shah Jahan.
             </p>
             <p>
-              It features stunning architecture, a royal hammam (bath) made especially for Mumtaz Mahal, and intricate artwork on its walls and ceilings.
+              The fort is also known for its stunning Diwan-e-Aam, Diwan-e-Khas, and the beautiful hammams (baths) believed to be used by Mumtaz Mahal.
             </p>
             <p>
-              The fort also includes hidden tunnels and an advanced water system, showcasing the brilliance of Mughal engineering and aesthetics.
+              Rich in history and cultural legacy, Shahi Qila is a must-visit for heritage lovers and architecture enthusiasts.
             </p>
-          </section>
+          </motion.section>
 
           {/* Address */}
-          <section className="bg-gray-50 p-6 rounded-xl shadow-sm">
+          <motion.section
+            className="bg-gray-50 p-6 rounded-xl shadow-sm"
+            variants={sectionVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            custom={1.5}
+          >
             <h2 className="text-xl font-semibold text-gray-800 mb-2">📍 Address</h2>
             <p className="text-gray-700 text-base">
-              Shahi Qila, Near Tapti River, Burhanpur, Madhya Pradesh 450331, India
+              Shahi Qila, Near Tapti River, Lalbagh, Burhanpur, Madhya Pradesh 450331, India
             </p>
-          </section>
+          </motion.section>
 
-          {/* Historical Timeline */}
-          <section className="space-y-3">
-            <h2 className="text-2xl font-semibold text-gray-800">📜 Historical Highlights</h2>
+          {/* Historical Significance */}
+          <motion.section
+            className="space-y-3"
+            variants={sectionVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            custom={2}
+          >
+            <h2 className="text-2xl font-semibold text-gray-800">📜 Historical Significance</h2>
             <ul className="list-disc pl-5 text-gray-700 text-base">
-              <li><strong>16th Century:</strong> Constructed by the Farooqi dynasty and later expanded by Mughals.</li>
-              <li><strong>1620s:</strong> Shah Jahan resided here with Mumtaz Mahal during his campaigns.</li>
-              <li><strong>Hammam:</strong> Specially built for Mumtaz with natural cooling techniques.</li>
-              <li><strong>Modern Era:</strong> Preserved as a heritage site under ASI (Archaeological Survey of India).</li>
+              <li><strong>Built:</strong> During the reign of Emperor Shah Jahan in the 17th century.</li>
+              <li><strong>Significance:</strong> Temporary residence of Mumtaz Mahal and Shah Jahan.</li>
+              <li><strong>Features:</strong> Hammams with hidden water channels and secret passages.</li>
             </ul>
-          </section>
+          </motion.section>
 
-          {/* Features & Architecture */}
-          <section className="space-y-4">
-            <h2 className="text-2xl font-semibold text-gray-800">🏛️ Key Features</h2>
+          {/* Attractions Nearby */}
+          <motion.section
+            className="space-y-4"
+            variants={sectionVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            custom={2.5}
+          >
+            <h2 className="text-2xl font-semibold text-gray-800">🏞️ Nearby Attractions</h2>
             <ul className="list-disc pl-5 text-gray-700 text-base">
-              <li>Royal Hammam with frescoes and Mughal tile work</li>
-              <li>Secret passageways and underground chambers</li>
-              <li>View of Tapti River from the ramparts</li>
-              <li>Inscriptions and Persian art on walls</li>
+              <li><strong>Dargah-e-Hakimi:</strong> Important pilgrimage site for the Dawoodi Bohra community.</li>
+              <li><strong>Jama Masjid:</strong> Historic mosque known for its architecture.</li>
+              <li><strong>Burhanpur Railway Station:</strong> Colonial-era station nearby, connecting the city with major metro lines.</li>
             </ul>
-          </section>
+          </motion.section>
 
-          {/* Nearby Attractions */}
-          <section className="space-y-4">
-            <h2 className="text-2xl font-semibold text-gray-800">📍 Nearby Attractions</h2>
-            <ul className="list-disc pl-5 text-gray-700 text-base">
-              <li><strong>Zenana Hammam:</strong> Mughal royal bath specially designed for women, located within Shahi Qila itself.</li>
-              <li><strong>Black Taj (Kala Taj):</strong> An unfinished tomb said to be intended for Shah Jahan, located close to the fort.</li>
-              <li><strong>Diwan-e-Aam:</strong> The Hall of Public Audience with Mughal arches and columns, inside the Shahi Qila complex.</li>
-              <li><strong>Tapti Ghat:</strong> A peaceful riverside ghat next to the fort, ideal for viewing sunsets and historic ambiance.</li>
-            </ul>
-          </section>
-
-          {/* Embedded Map */}
-          <section className="rounded-xl overflow-hidden shadow-md">
+          {/* Map */}
+          <motion.section
+            className="rounded-xl overflow-hidden shadow-md"
+            variants={sectionVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            custom={3}
+          >
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">🗺️ Location Map</h2>
             <iframe
               title="Shahi Qila Map"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3683.1238489732774!2d76.22823707537598!3d21.305450580417404!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bd823e8145f113b%3A0x82104b6e0bfe5e1b!2sShahi%20Qila!5e0!3m2!1sen!2sin!4v1682682950003!5m2!1sen!2sin"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3683.0705405646897!2d76.22596727470584!3d21.307437880412387!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bd823ecba17e3f7%3A0x20cfb48624ad5217!2sShahi%20Qila%20Burhanpur!5e0!3m2!1sen!2sin!4v1682683119392!5m2!1sen!2sin"
               width="100%"
               height="400"
               style={{ border: 0 }}
               allowFullScreen=""
               loading="lazy"
             ></iframe>
-          </section>
-
-          {/* Useful Links */}
-          <section className="space-y-3">
-            <h2 className="text-2xl font-semibold text-gray-800">🔗 Useful Links</h2>
-            <ul className="list-disc pl-5 text-blue-600 text-base">
-              <li><a href="https://www.google.com/maps/place/Shahi+Qila" target="_blank" rel="noopener noreferrer">View on Google Maps</a></li>
-              <li><a href="https://en.wikipedia.org/wiki/Shahi_Qila,_Burhanpur" target="_blank" rel="noopener noreferrer">Wikipedia Page</a></li>
-              <li><a href="https://asi.nic.in" target="_blank" rel="noopener noreferrer">Archaeological Survey of India</a></li>
-            </ul>
-          </section>
-        </div>
+          </motion.section>
+        </motion.div>
       )}
-    </>
+    </div>
   );
 };
 
