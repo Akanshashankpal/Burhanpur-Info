@@ -75,4 +75,3 @@ const CategorySearch = () => {
 };
 
 export default CategorySearch;
-9

@@ -1,6 +1,7 @@
 import React from "react";
 import img from "../ui/Images/logo.jpg";
 import { motion } from "framer-motion";
+import { Link } from 'react-router-dom';
 import {
   FaFacebookF,
   FaInstagram,
@@ -75,36 +76,26 @@ const Footer = () => {
               <div className="text-center">
                 <h3 className="font-bold text-lg mb-4">Contact Us</h3>
                 <ul className="text-md font-normal space-y-2">
-                  <li>
-                    <a
-                      className="hover:text-pink-500 transition"
-                      href="/community"
-                    >
-                      Community
-                    </a>
-                  </li>
-                  <li>
-                    <a className="hover:text-pink-500 transition" href="/blog">
-                      Blog
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      className="hover:text-pink-500 transition"
-                      href="/community"
-                    >
-                      Forum
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      className="hover:text-pink-500 transition"
-                      href="/community"
-                    >
-                      Meetup
-                    </a>
-                  </li>
-                </ul>
+  <li>
+    <Link className="hover:text-pink-500 transition" to="/contactUs">
+      Community
+    </Link>
+  </li>
+  <li>
+   <Link to="/tour-travel" className="hover:underline">Tour & Travel</Link>
+
+  </li>
+  <li>
+    <Link className="hover:text-pink-500 transition" to="/community">
+      Forum
+    </Link>
+  </li>
+  <li>
+    <Link className="hover:text-pink-500 transition" to="/community">
+      Meetup
+    </Link>
+  </li>
+</ul>
               </div>
             </div>
 

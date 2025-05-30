@@ -16,6 +16,7 @@ import AdminDashboard from '../AdimLogin/AdminDashboard/AdminCategory';
 import Register from '../ui/Images/Register';
 import NewsSection from '../Page/LandigPage/NewsSection';
 import SubcategoryDetail from '../Page/CatagoriesPart/SubcategoryDetail ';
+// import SubcategoryPage from "../Page/CatagoriesPart/SubcategoryPage";
 import AboutUs from "../ui/About";
 import ContactUs from "../ui/ContactUs";
 import ExploreBurhanpur from "../ui/ExploreBurhanpur";
@@ -28,7 +29,10 @@ import JamaMasjid from "../Page/LandigPage/detailPaga/topAttraction/JamaMasjid";
 import AsirgarhFort from "../Page/LandigPage/detailPaga/topAttraction/AsirgarhFort";
 import RajaChhatri from "../Page/LandigPage/detailPaga/topAttraction/RajaChhatri";
 import Gurudwara from "../Page/LandigPage/detailPaga/topAttraction/Gurudwara";
+import ContactForm from "../Page/LandigPage/ContactForm";
+// import SubcategoryPage1 from "../Page/CatagoriesPart/SubcategoryPage";
 // ✅ ADMIN ROUTE GUARD
+
 // const AdminRoute = ({ children }) => {
 //   const userStr = localStorage.getItem("user");
 //   let user = null;
@@ -74,6 +78,9 @@ const RouteShow = () => {
         <Route path="/AsirgarhFort" element={< AsirgarhFort />} />
         <Route path="/RajaChhatri" element={< RajaChhatri />} />
         <Route path="/Gurudwara" element={< Gurudwara />} />
+        <Route path="/contactUs" element={<ContactUs />} />
+        {/* <Route path="/Subcat
+        egoryPage" element={< SubcategoryPage1 />} /> */}
         
 
         {/* ✅ Admin Only Route Example */}

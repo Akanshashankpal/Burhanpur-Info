@@ -4,7 +4,7 @@ import { Atom } from 'react-loading-indicators';
 import axios from '../../../../axios';
 
 const SubcategoryPage = () => {
-  const { categoryId } = useParams();
+  const { categoryId } = useParams(); // Only using categoryId
   const [subcategories, setSubcategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -13,7 +13,6 @@ const SubcategoryPage = () => {
     axios
       .get(`/subcategory/getSubCategory/${categoryId}`)
       .then((res) => {
-        
         setSubcategories(res?.data?.result || []);
         setLoading(false);
       })
