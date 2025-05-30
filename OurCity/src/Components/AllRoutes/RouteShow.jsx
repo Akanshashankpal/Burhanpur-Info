@@ -22,7 +22,12 @@ import ExploreBurhanpur from "../ui/ExploreBurhanpur";
 import About from "../ui/About";
 import SingleSubcategoryPage from "../Page/CatagoriesPart/SingleSubcategoryPage";
 import UserProfile from "../AllIcons/UserProfile";
-
+// import TopAttractions from "../Page/LandigPage/TopAttractions";
+import TajmahalDetail from "../Page/LandigPage/detailPaga/topAttraction/TajMahal";
+import JamaMasjid from "../Page/LandigPage/detailPaga/topAttraction/JamaMasjid";
+import AsirgarhFort from "../Page/LandigPage/detailPaga/topAttraction/AsirgarhFort";
+import RajaChhatri from "../Page/LandigPage/detailPaga/topAttraction/RajaChhatri";
+import Gurudwara from "../Page/LandigPage/detailPaga/topAttraction/Gurudwara";
 // ✅ ADMIN ROUTE GUARD
 // const AdminRoute = ({ children }) => {
 //   const userStr = localStorage.getItem("user");
@@ -44,7 +49,7 @@ const RouteShow = () => {
     <div>
       <Routes>
         <Route path="/" element={<Home />} />
-        {/* <Route path="/home" element={<Home />} /> */}
+
         <Route path="/Login" element={<Login />} />
         <Route path="/Pages" element={<Pages />} />
         <Route path="/about" element={<About />} />
@@ -63,8 +68,13 @@ const RouteShow = () => {
         <Route path="/subcategory/:id" element={<SingleSubcategoryPage />} />
         {/* <Route path="/profile" element={<UserProfile/>} /> */}
         <Route path="/user-profile" element={<UserProfile />} />
-
-
+        {/* <Route path="/" element={<TopAttractions />} /> */}
+        <Route path="/TajMahal" element = {< TajmahalDetail />} />
+        <Route path="/JamaMasjid" element={<JamaMasjid />} />
+        <Route path="/AsirgarhFort" element={< AsirgarhFort />} />
+        <Route path="/RajaChhatri" element={< RajaChhatri />} />
+        <Route path="/Gurudwara" element={< Gurudwara />} />
+        
 
         {/* ✅ Admin Only Route Example */}
         <Route
