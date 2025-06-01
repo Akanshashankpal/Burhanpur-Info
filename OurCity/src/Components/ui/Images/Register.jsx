@@ -37,7 +37,59 @@ const Register = ({ onClose , onLoginSuccess }) => {
     }
   };
 
-  const handleLogin = async (e) => {
+//  const handleLogin = async (e) => {
+//   e.preventDefault();
+//   try {
+//     const res = await axios.post('/users/adminlogin', {
+//       phone: formData.phone,
+//       password: formData.password,
+//     });
+
+//     console.log('Login response:', res.data);
+
+//     if (res.data.success) {
+//       const token = res.data.result;
+//       if (!token) {
+//         toast.error("Token missing in response.");
+//         return;
+//       }
+
+//       toast.success('✅ Login successful!');
+//       localStorage.setItem('token', token);
+
+//       // ✅ Get actual user from token
+//       const userRes = await axios.get("/Users/userDetails", {
+//         headers: { Authorization: `Bearer ${token}` }
+//       });
+
+//       if (userRes.data.success) {
+//         const user = userRes.data.result[0];
+//         localStorage.setItem("user", JSON.stringify(user));
+
+//         onLoginSuccess?.(user);
+//         onClose?.();
+
+//         setTimeout(() => {
+//           if (user.role === 'admin') {
+//             window.location.href = '/dash';
+//           } else {
+//             window.location.href = '/';
+//           }
+//         }, 100);
+//       } else {
+//         toast.error("User details not found.");
+//       }
+
+//     } else {
+//       toast.error('Login failed: ' + (res.data.message || 'Invalid credentials'));
+//     }
+//   } catch (err) {
+//     console.error('Login error:', err);
+//     toast.error('An error occurred during login.');
+//   }
+// };
+
+const handleLogin = async (e) => {
   e.preventDefault();
   try {
     const res = await axios.post('/users/adminlogin', {
@@ -47,67 +99,102 @@ const Register = ({ onClose , onLoginSuccess }) => {
 
     console.log('Login response:', res.data);
 
-    if (res.data.success) {
-      const token = res.data.result;
-      if (!token) {
-        toast.error("Token missing in response.");
-        return;
-      }
+    // Token is in res.data.result directly as string
+    const token = res.data.result;
 
-      toast.success('✅ Login successful!');
-
-      localStorage.setItem('token', token);
-
-      let user = null;
-      if (formData.phone === '9981443156' && formData.password === 'gayu123') {
-        user = { role: 'admin', phone: formData.phone };
-      } else {
-        user = { role: 'user', phone: formData.phone };
-      }
-
-      localStorage.setItem('user', JSON.stringify(user));
-
-      onLoginSuccess?.(user);
-      onClose?.();
-
-      setTimeout(() => {
-        if (user.role === 'admin') {
-          // Admin dashboard redirect
-          window.location.href = '/dash';
-        } else {
-          // User login:
-          // Redirect to home '/'
-          window.location.href = '/';
-
-          // Then, user icon ko update karne ke liye
-          // Aapke app me ek global state ho sakti hai (context, redux, or parent component state)
-          // Jahan se user icon change hota hai.
-          // Yahan sirf user redirect ho raha hai home pe, 
-          // par aapko apne Navbar me user loggedIn state set karni hogi 
-          // jisse user icon "profile" icon me change ho jaye.
-          
-          // Example: Agar aapke parent component me function hai:
-          // setUserLoggedIn(true)
-          // to is function ko yahan call kar do.
-          
-          // Aap React context ya Redux use kar sakte ho for global state management.
-          
-          // Also, agar chaho to user ko profile page pe redirect bhi kar sakte ho:
-          // window.location.href = '/profile';
-          
-          // Par aapne bola home pe jana hai + profile icon change hona hai,
-          // to home pe redirect rakhna sahi hai, 
-          // aur Navbar me user state se icon change karna.
-        }
-      }, 100);
-    } else {
-      toast.error('Login failed: ' + (res.data.message || 'Invalid credentials'));
+    if (!token) {
+      toast.error("Token missing in response.");
+      return;
     }
+
+    // Store token
+    localStorage.setItem("token", token);
+    toast.success('✅ Login successful!');
+
+    // User info - since token only contains token, 
+    // fallback to manual user object as before or fetch user details separately later
+    let user = null;
+    if (formData.phone === '9981443156' && formData.password === 'gayu123') {
+      user = { role: 'admin', phone: formData.phone };
+    } else {
+      user = { role: 'user', phone: formData.phone };
+    }
+
+    localStorage.setItem('user', JSON.stringify(user));
+
+    onLoginSuccess?.(user);
+    onClose?.();
+
+    setTimeout(() => {
+      if (user.role === 'admin') {
+        window.location.href = '/dash';
+      } else {
+        window.location.href = '/';
+      }
+    }, 100);
   } catch (err) {
     console.error('Login error:', err);
     toast.error('An error occurred during login.');
   }
 };
+
+
+//  const handleLogin = async (e) => {
+//   e.preventDefault();
+//   try {
+//     const res = await axios.post('/users/adminlogin', {
+//       phone: formData.phone,
+//       password: formData.password,
+//     });
+
+//     console.log('Login response:', res.data);
+
+//     if (res.data.success) {
+//       const token = res.data.token;
+
+//       if (!token) {
+//         toast.error("Token missing in response.");
+//         return;
+//       }
+
+//       // Save token once
+//       localStorage.setItem("token", token);
+
+//       toast.success('✅ Login successful!');
+
+//       // Determine user role (assuming this is your logic)
+//       let user = null;
+//       if (formData.phone === '9981443156' && formData.password === 'gayu123') {
+//         user = { role: 'admin', phone: formData.phone };
+//       } else {
+//         user = { role: 'user', phone: formData.phone };
+//       }
+
+//       // Save user info
+//       localStorage.setItem('user', JSON.stringify(user));
+
+//       // Trigger parent callback if exists
+//       onLoginSuccess?.(user);
+
+//       // Close the modal/dialog
+//       onClose?.();
+
+//       // Redirect based on role after short delay
+//       setTimeout(() => {
+//         if (user.role === 'admin') {
+//           window.location.href = '/dash';  // Admin dashboard
+//         } else {
+//           window.location.href = '/';      // Normal user home page
+//         }
+//       }, 100);
+//     } else {
+//       toast.error('Login failed: ' + (res.data.message || 'Invalid credentials'));
+//     }
+//   } catch (err) {
+//     console.error('Login error:', err);
+//     toast.error('An error occurred during login.');
+//   }
+// };
 
 
   return (

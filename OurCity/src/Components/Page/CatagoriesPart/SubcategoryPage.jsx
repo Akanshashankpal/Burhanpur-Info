@@ -13,7 +13,7 @@ const SubcategoryPage = () => {
     axios
       .get(`/subcategory/getSubCategory/${categoryId}`)
       .then((res) => {
-        
+
         setSubcategories(res?.data?.result || []);
         setLoading(false);
       })
@@ -51,9 +51,10 @@ const SubcategoryPage = () => {
                     <p className="text-gray-500 text-sm">{sub.description}</p>
                     <p className="text-gray-800 text-sm font-medium">{sub.address}</p>
                     <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      <button className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 shadow-md transition">
+                      <button className="w-full bg-primary text-white px-4 py-2 rounded-lg hover:bg-secondary shadow-md transition">
                         📞 Call Now
                       </button>
+
                       <button className="w-full border border-blue-600 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 shadow-md transition">
                         Send Enquiry
                       </button>
