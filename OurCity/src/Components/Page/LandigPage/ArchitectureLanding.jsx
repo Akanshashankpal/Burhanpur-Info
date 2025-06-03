@@ -65,6 +65,9 @@ top: 0;
 
 width: 100%;
 height: 100%;
+left: 0;
+width: 100%;
+height: 90%;
 }
 
         /* Black overlay using ::after */
@@ -208,9 +211,8 @@ height: 100%;
         }
       `}</style>
 
-      <div style={{
-        top:'-10px'
-      }}  className="relative w-full h-screen overflow-hidden">
+     
+      <div className="relative w-full h-screen overflow-hidden">
 
         <Navbar />
 
@@ -226,7 +228,10 @@ height: 100%;
           >
             <h1
               className={`text-2xl md:text-5xl font-bold mb-2 max-w-2xl ${showFlipText ? "animate-flipInX" : "opacity-0"
-                } text-primary`}
+
+                } text-yellow-500`}
+
+
             >
               Welcome to <br /> The Historical City of Heritage & Glory
             </h1>

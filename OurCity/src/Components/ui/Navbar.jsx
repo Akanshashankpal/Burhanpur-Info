@@ -13,16 +13,20 @@ const Navbar = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [user, setUser] = useState(null);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+
   const dropdownRef = useRef();
 
-  // Navbar scroll style
+
+  // Navbar scroll detection
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 0);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Dropdown click outside
+
+
+  // Click outside dropdown to close
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -33,7 +37,8 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Fetch user on load
+
+  // Fetch user on mount if token exists
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem("token");
@@ -45,6 +50,7 @@ const Navbar = () => {
           if (res.data.success) {
             setUser(res.data.result[0]);
           }
+
         } catch (err) {
           localStorage.removeItem("token");
           setUser(null);
@@ -69,6 +75,7 @@ const Navbar = () => {
             <img src={logo} alt="logo" className="w-15 h-15 rounded-full border-2 border-blue-500 hover:scale-110 transition" />
             <span className={`font-bold text-xl ${scrolled ? "text-gray-900" : "text-white drop-shadow-lg"}`}>Burhanpur</span>
           </NavLink>
+
 
           <nav className="hidden md:flex items-center gap-8 relative">
             <NavLink to="/" className={({ isActive }) =>
@@ -124,6 +131,7 @@ const Navbar = () => {
 
             <button onClick={() => setSidebarOpen(true)} className="block md:hidden">
               <img src="https://img.icons8.com/ios-filled/50/000000/menu--v1.png" alt="menu" className="w-10 h-5 md:w-8 md:h-8 lg:w-8 lg:h-8 bg-white" />
+
             </button>
           </div>
         </div>
@@ -139,6 +147,7 @@ const Navbar = () => {
             <Register
               onClose={() => {
                 setShowRegisterModal(false);
+                // Fetch user again after modal close
                 const fetchUser = async () => {
                   const token = localStorage.getItem("token");
                   if (token) {
@@ -149,6 +158,7 @@ const Navbar = () => {
                       if (res.data.success) {
                         setUser(res.data.result[0]);
                       }
+
                     } catch (err) {
                       console.error("Error fetching user after modal close", err);
                     }

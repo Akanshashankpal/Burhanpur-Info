@@ -17,12 +17,13 @@ import CitySlider from "./MainSlider/CItySlider";
 
 const Home = () => {
   return (
+
  
     
-    <div style={{
-      margin: '10px',
-      // border:'2px solid red'
-    }}>
+   
+    <div >
+      {/* Optional: Uncomment for admin panel */}
+      {/* <AdminDashboard /> */}
 
 
       {/* adminDashboard */}
