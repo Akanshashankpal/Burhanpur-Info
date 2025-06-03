@@ -93,6 +93,17 @@ const SubCategorySection = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      if (
+        !formState.name ||
+        !formState.image ||
+        !formState.category ||
+        !formState.speciality ||
+        !formState.address
+      ) {
+        alert("Please fill all required fields.");
+        return;
+      }
+
       if (isEditMode) {
         await axios.put(`/subcategory/updateSubCategory/${currentId}`, formState);
         alert("Subcategory updated successfully");
@@ -186,10 +197,11 @@ const SubCategorySection = () => {
       </div>
 
       {showModal && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-md flex items-start justify-center pt-16 z-50">
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.3 }}
             className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg"
           >
             <h2 className="text-xl font-semibold mb-4">
@@ -203,6 +215,7 @@ const SubCategorySection = () => {
                 onChange={(e) => setFormState({ ...formState, name: e.target.value })}
                 placeholder="Name"
                 className="border border-gray-300 w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                required
               />
               <input
                 type="text"
@@ -211,12 +224,14 @@ const SubCategorySection = () => {
                 onChange={(e) => setFormState({ ...formState, image: e.target.value })}
                 placeholder="Image URL"
                 className="border border-gray-300 w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                required
               />
               <select
                 name="category"
                 value={formState.category}
                 onChange={(e) => setFormState({ ...formState, category: e.target.value })}
                 className="border border-gray-300 w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                required
               >
                 <option value="">Select Category</option>
                 {categories.map((cat) => (
@@ -234,6 +249,7 @@ const SubCategorySection = () => {
                 }
                 placeholder="Speciality"
                 className="border border-gray-300 w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                required
               />
               <input
                 type="text"
@@ -244,6 +260,7 @@ const SubCategorySection = () => {
                 }
                 placeholder="Address"
                 className="border border-gray-300 w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                required
               />
               <div className="flex justify-end gap-3">
                 <button

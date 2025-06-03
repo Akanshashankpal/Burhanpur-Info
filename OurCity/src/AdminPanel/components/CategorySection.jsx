@@ -175,13 +175,6 @@ const CategorySection = () => {
                     >
                       Delete
                     </button>
-                    {/* <button
-                      onClick={() => handleAddSubcategory(cat._id)}
-                      className="text-green-600 hover:text-green-800 font-semibold transition"
-                      title="Add Subcategory"
-                    >
-                      + Subcategory
-                    </button> */}
                   </td>
                 </tr>
               ))
@@ -191,11 +184,11 @@ const CategorySection = () => {
       </div>
 
       {modalOpen && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex justify-center items-start overflow-y-auto px-4 pt-16 pb-8">
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg"
+            className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg max-h-[80vh] overflow-y-auto"
           >
             <h2 className="text-xl font-semibold mb-4">
               {isEditMode ? "Edit Category" : "Add Category"}

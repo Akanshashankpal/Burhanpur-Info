@@ -34,7 +34,7 @@ const Home = () => {
  
       <ArchitectureLanding />
       <br />
-      <CitySlider/>
+     
       <br />
  
      
