@@ -1,10 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+
 import Asirgarh from '../Page/LandigPage/img/asirgarh.jpg'
 import ShahiQila from '../Page/LandigPage/img/Shahiqila.jpg'
 import Dargahaehakimi from '../Page/LandigPage/img/Dargah.jpg'
 import Aahukhana from '../Page/LandigPage/img/Aahukhana.jpeg'
 import Tapti from '../Page/LandigPage/img/Tapti.jpeg'
+
 const places = [
   {
     name: "Shahi Qila (Royal Palace)",
@@ -45,6 +47,8 @@ const places = [
 
 const ExploreBurhanpur = () => {
   return (
+    <>
+    <Navbar/>
     <div className="bg-gray-50 min-h-screen py-12 px-4 md:px-16">
       <motion.h1
         className="text-4xl font-bold text-center text-blue-700 mb-10"
@@ -82,6 +86,8 @@ const ExploreBurhanpur = () => {
         ))}
       </div>
     </div>
+    <Footer/>
+    </>
   );
 };
 

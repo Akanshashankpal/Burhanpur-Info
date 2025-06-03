@@ -52,11 +52,18 @@ function ArchitectureLanding() {
   return (
     <>
       <style>{`
+
+      
+     
         @keyframes panBackground {
           0% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
           100% { background-position: 0% 50%; }
         }
+
+
+
+     
 
         @keyframes flipInX {
           0% {
@@ -173,6 +180,7 @@ function ArchitectureLanding() {
         }
       `}</style>
 
+     
       <div className="relative w-full h-screen overflow-hidden">
         <Navbar />
 
@@ -199,8 +207,11 @@ function ArchitectureLanding() {
               showFlipText ? "animate-flipInX" : "opacity-0"
             } text-yellow-400`}
           >
+
             Welcome to <br /> The Historical City of Heritage & Glory
           </h1>
+
+           
 
           <p
             className={`text-md max-w-xl mb-5 mt-5 transition-opacity duration-700 ${

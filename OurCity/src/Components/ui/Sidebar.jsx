@@ -1,20 +1,24 @@
-import { useState } from "react"; 
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { NavLink } from "react-router-dom";
+import { FaChevronRight } from "react-icons/fa";
 
 const Sidebar = ({ isOpen, onClose }) => {
-  const [pagesOpen, setPagesOpen] = useState(false);
   const [exploreOpen, setExploreOpen] = useState(false);
+  const [pagesOpen, setPagesOpen] = useState(false);
 
-  const activeClass = "text-pink-600 font-bold";
-  const inactiveClass =
-    "transition-colors duration-200 hover:text-pink-600 hover:bg-pink-100 px-3 py-2 rounded-md";
+  const navItemBase = "block px-4 py-2 rounded-md transition duration-200";
+  const activeClass = "bg-blue-600 text-white font-semibold";
+  const inactiveClass = "text-gray-700 hover:bg-blue-100 hover:text-blue-600";
+
+  const sectionButtonClass =
+    "flex items-center justify-between w-full px-4 py-2 text-white bg-blue-500 hover:bg-blue-600 rounded-md shadow transition duration-300";
 
   return (
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* BACKDROP */}
+          {/* Backdrop */}
           <motion.div
             className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
             onClick={onClose}
@@ -23,18 +27,18 @@ const Sidebar = ({ isOpen, onClose }) => {
             exit={{ opacity: 0 }}
           />
 
-          {/* SIDEBAR */}
+          {/* Sidebar */}
           <motion.div
             initial={{ x: "-100%" }}
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
             transition={{ type: "tween", duration: 0.3 }}
-            className="fixed top-0 left-0 w-72 h-full bg-white shadow-lg z-50 p-6 flex flex-col"
+            className="fixed top-0 left-0 w-72 h-full bg-gradient-to-b from-white via-blue-50 to-white shadow-xl z-50 p-6 flex flex-col gap-5"
           >
-            {/* CLOSE BUTTON */}
+            {/* Close Button */}
             <button
               onClick={onClose}
-              className="self-end mb-8 text-gray-600 hover:text-pink-600 text-3xl font-extrabold"
+              className="self-end text-3xl text-gray-500 hover:text-blue-600 font-bold"
               aria-label="Close menu"
             >
               &times;
@@ -42,15 +46,14 @@ const Sidebar = ({ isOpen, onClose }) => {
 
             {/* NAV LINKS */}
             <ul className="flex flex-col gap-5 text-lg font-semibold text-gray-700">
+
               {/* HOME */}
               <li>
                 <NavLink
                   to="/"
                   onClick={onClose}
                   className={({ isActive }) =>
-                    isActive
-                      ? `${activeClass} px-3 py-2 rounded-md bg-pink-600 text-white`
-                      : inactiveClass
+                    `${navItemBase} ${isActive ? activeClass : inactiveClass}`
                   }
                 >
                   Home
@@ -61,34 +64,31 @@ const Sidebar = ({ isOpen, onClose }) => {
               <li>
                 <button
                   onClick={() => setExploreOpen(!exploreOpen)}
-                  className="flex items-center justify-between w-full bg-pink-600 text-white px-3 py-2 rounded-md shadow-md hover:bg-pink-700 transition"
-                  aria-expanded={exploreOpen}
-                  aria-controls="explore-submenu"
+                  className={sectionButtonClass}
                 >
-                  Explore
-                  <span
-                    className={`transition-transform duration-300 ml-2 ${
+                  <span>Explore</span>
+                  <FaChevronRight
+                    className={`transform transition-transform duration-300 ${
                       exploreOpen ? "rotate-90" : ""
                     }`}
-                  >
-                    ▶
-                  </span>
+                  />
                 </button>
                 <AnimatePresence>
                   {exploreOpen && (
                     <motion.ul
-                      id="explore-submenu"
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      className="pl-6 mt-2 flex flex-col gap-3 overflow-hidden"
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="pl-4 mt-2 space-y-2 overflow-hidden"
                     >
                       <li>
                         <NavLink
                           to="/explore"
                           onClick={onClose}
                           className={({ isActive }) =>
-                            isActive ? activeClass : inactiveClass
+                            `${navItemBase} ${
+                              isActive ? activeClass : inactiveClass
+                            }`
                           }
                         >
                           Explore Main
@@ -99,7 +99,9 @@ const Sidebar = ({ isOpen, onClose }) => {
                           to="/category"
                           onClick={onClose}
                           className={({ isActive }) =>
-                            isActive ? activeClass : inactiveClass
+                            `${navItemBase} ${
+                              isActive ? activeClass : inactiveClass
+                            }`
                           }
                         >
                           Categories
@@ -110,7 +112,9 @@ const Sidebar = ({ isOpen, onClose }) => {
                           to="/railway-station"
                           onClick={onClose}
                           className={({ isActive }) =>
-                            isActive ? activeClass : inactiveClass
+                            `${navItemBase} ${
+                              isActive ? activeClass : inactiveClass
+                            }`
                           }
                         >
                           Railway Station
@@ -125,34 +129,31 @@ const Sidebar = ({ isOpen, onClose }) => {
               <li>
                 <button
                   onClick={() => setPagesOpen(!pagesOpen)}
-                  className="flex items-center justify-between w-full bg-pink-600 text-white px-3 py-2 rounded-md shadow-md hover:bg-pink-700 transition"
-                  aria-expanded={pagesOpen}
-                  aria-controls="pages-submenu"
+                  className={sectionButtonClass}
                 >
-                  Pages
-                  <span
-                    className={`transition-transform duration-300 ml-2 ${
+                  <span>Pages</span>
+                  <FaChevronRight
+                    className={`transform transition-transform duration-300 ${
                       pagesOpen ? "rotate-90" : ""
                     }`}
-                  >
-                    ▶
-                  </span>
+                  />
                 </button>
                 <AnimatePresence>
                   {pagesOpen && (
                     <motion.ul
-                      id="pages-submenu"
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      className="pl-6 mt-2 flex flex-col gap-3 overflow-hidden"
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="pl-4 mt-2 space-y-2 overflow-hidden"
                     >
                       <li>
                         <NavLink
                           to="/pages"
                           onClick={onClose}
                           className={({ isActive }) =>
-                            isActive ? activeClass : inactiveClass
+                            `${navItemBase} ${
+                              isActive ? activeClass : inactiveClass
+                            }`
                           }
                         >
                           Main Pages
@@ -163,7 +164,9 @@ const Sidebar = ({ isOpen, onClose }) => {
                           to="/contact"
                           onClick={onClose}
                           className={({ isActive }) =>
-                            isActive ? activeClass : inactiveClass
+                            `${navItemBase} ${
+                              isActive ? activeClass : inactiveClass
+                            }`
                           }
                         >
                           Contact
@@ -174,7 +177,9 @@ const Sidebar = ({ isOpen, onClose }) => {
                           to="/about"
                           onClick={onClose}
                           className={({ isActive }) =>
-                            isActive ? activeClass : inactiveClass
+                            `${navItemBase} ${
+                              isActive ? activeClass : inactiveClass
+                            }`
                           }
                         >
                           About Us

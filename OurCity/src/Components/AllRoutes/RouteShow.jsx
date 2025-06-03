@@ -21,6 +21,8 @@ import AboutUs from "../ui/About";
 import ContactUs from "../ui/ContactUs";
 import ExploreBurhanpur from "../ui/ExploreBurhanpur";
 import About from "../ui/About";
+import SingleSubcategoryPage from "../Page/CatagoriesPart/SingleSubcategoryPage";
+import UserProfile from "../AllIcons/UserProfile";
 
 // ✅ ADMIN ROUTE GUARD
 // const AdminRoute = ({ children }) => {
@@ -55,9 +57,16 @@ const RouteShow = () => {
         <Route path="/DargahHakimi" element={<DargahHakimi />} />
         <Route path="/category" element={<CategorySection />} />
         <Route path="/subcategory/:categoryId" element={<SubcategoryPage />} />
+
         <Route path="/subcategorydetail/:id" element={<SubcategoryDetail />} />
+
         <Route path="/newssection" element={<NewsSection />} />
         <Route path="/registar" element={<Register />} />
+        <Route path="/subcategory/:id" element={<SingleSubcategoryPage />} />
+        {/* <Route path="/profile" element={<UserProfile/>} /> */}
+        <Route path="/user-profile" element={<UserProfile />} />
+
+
 
         {/* ✅ Admin Only Route Example */}
         <Route
