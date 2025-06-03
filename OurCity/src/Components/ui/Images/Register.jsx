@@ -41,47 +41,59 @@ const Register = ({ onClose, onLoginSuccess }) => {
     }
   };
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axios.post('/users/adminlogin', {
-        phone: formData.phone,
-        password: formData.password,
-      });
 
-      if (res.data.success) {
-        const token = res.data.result;
-        if (!token) {
-          toast.error("Token missing in response.");
-          return;
-        }
 
-        toast.success('✅ Login successful!');
-        localStorage.setItem('token', token);
+const handleLogin = async (e) => {
+  e.preventDefault();
+  try {
+    const res = await axios.post('/users/adminlogin', {
+      phone: formData.phone,
+      password: formData.password,
+    });
 
-        // Simplified user role detection (you can adjust logic)
-        const role = (formData.phone === '9981443156' && formData.password === 'gayu123') ? 'admin' : 'user';
-        const user = { role, phone: formData.phone, name: formData.name || '' };
+    console.log('Login response:', res.data);
 
-        localStorage.setItem('user', JSON.stringify(user));
-        onLoginSuccess(user);
-        onClose();
+    // Token is in res.data.result directly as string
+    const token = res.data.result;
 
-        setTimeout(() => {
-          if (role === 'admin') {
-            window.location.href = '/dash';
-          } else {
-            window.location.href = '/';
-          }
-        }, 100);
-      } else {
-        toast.error('Login failed: ' + (res.data.message || 'Invalid credentials'));
-      }
-    } catch (err) {
-      console.error('Login error:', err);
-      toast.error('An error occurred during login.');
+    if (!token) {
+      toast.error("Token missing in response.");
+      return;
     }
-  };
+
+    // Store token
+    localStorage.setItem("token", token);
+    toast.success('✅ Login successful!');
+
+    // User info - since token only contains token, 
+    // fallback to manual user object as before or fetch user details separately later
+    let user = null;
+    if (formData.phone === '9981443156' && formData.password === 'gayu123') {
+      user = { role: 'admin', phone: formData.phone };
+    } else {
+      user = { role: 'user', phone: formData.phone };
+    }
+
+    localStorage.setItem('user', JSON.stringify(user));
+
+    onLoginSuccess?.(user);
+    onClose?.();
+
+    setTimeout(() => {
+      if (user.role === 'admin') {
+        window.location.href = '/dash';
+      } else {
+        window.location.href = '/';
+      }
+    }, 100);
+  } catch (err) {
+    console.error('Login error:', err);
+    toast.error('An error occurred during login.');
+  }
+};
+
+
+
 
   return (
     <div className="relative">

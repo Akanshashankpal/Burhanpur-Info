@@ -16,12 +16,14 @@ const Navbar = () => {
 
   const dropdownRef = useRef();
 
+
   // Navbar scroll detection
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 0);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
 
 
   // Click outside dropdown to close
@@ -35,6 +37,7 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+
   // Fetch user on mount if token exists
   useEffect(() => {
     const fetchUser = async () => {
@@ -42,10 +45,10 @@ const Navbar = () => {
       if (token) {
         try {
           const res = await axios.get("/Users/userDetails", {
-            headers: { Authorization: `Bearer ${token}` }
+            headers: { Authorization: `Bearer ${token}` },
           });
           if (res.data.success) {
-            setUser(res.data.result[0]); // ✅ Corrected from res.data.user to result[0]
+            setUser(res.data.result[0]);
           }
 
         } catch (err) {
@@ -57,6 +60,7 @@ const Navbar = () => {
     fetchUser();
   }, []);
 
+  // Logout handler
   const handleLogout = () => {
     localStorage.removeItem("token");
     setUser(null);
@@ -102,25 +106,26 @@ const Navbar = () => {
 
           {/* Right Icons */}
           <div className="flex items-center gap-6">
-         {user ? (
-  <div className="relative" ref={dropdownRef}>
-    <button onClick={() => setShowProfileDropdown(prev => !prev)} className="...">
-      <span>{user.name?.charAt(0).toUpperCase()}</span>
-    </button>
+            {user ? (
+              <div className="relative" ref={dropdownRef}>
+                <button onClick={() => setShowProfileDropdown((prev) => !prev)} className="w-10 h-10 rounded-full bg-blue-600 text-white font-bold text-xl flex items-center justify-center hover:bg-blue-700">
+                  {user.name?.charAt(0).toUpperCase()}
+                </button>
 
-    {showProfileDropdown && (
-      <div className="...">
-        <p>👤 {user.name}</p>
-        <p>📧 {user.email}</p>
-        <p>📱 {user.phone}</p>
-        <button onClick={handleLogout}>Logout</button>
-      </div>
-    )}
-  </div>
-) : (
-  <button onClick={() => setShowRegisterModal(true)}>...</button>
-)}
-
+                {showProfileDropdown && (
+                  <div className="absolute right-0 mt-2 w-56 bg-white shadow-md rounded-md p-4 z-50 text-left">
+                    <p className="font-semibold">👤 {user.name}</p>
+                    <p className="text-sm text-gray-700">📧 {user.email}</p>
+                    <p className="text-sm text-gray-700 mb-2">📱 {user.phone}</p>
+                    <button onClick={handleLogout} className="w-full bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600 transition">Logout</button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <button onClick={() => setShowRegisterModal(true)} className="text-white font-semibold hover:text-blue-300 transition">
+                <UserIcon fill={scrolled ? "#1f2937" : "white"} />
+              </button>
+            )}
 
             <AddListing fill={scrolled ? "#1f2937" : "white"} />
 
@@ -148,10 +153,10 @@ const Navbar = () => {
                   if (token) {
                     try {
                       const res = await axios.get("/Users/userDetails", {
-                        headers: { Authorization: `Bearer ${token}` }
+                        headers: { Authorization: `Bearer ${token}` },
                       });
                       if (res.data.success) {
-                        setUser(res.data.result[0]); // ✅ Correct here too
+                        setUser(res.data.result[0]);
                       }
 
                     } catch (err) {
@@ -162,6 +167,7 @@ const Navbar = () => {
                 fetchUser();
               }}
             />
+
           </div>
         </div>
       )}

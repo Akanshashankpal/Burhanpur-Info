@@ -228,7 +228,9 @@ height: 90%;
           >
             <h1
               className={`text-2xl md:text-5xl font-bold mb-2 max-w-2xl ${showFlipText ? "animate-flipInX" : "opacity-0"
+
                 } text-yellow-500`}
+
 
             >
               Welcome to <br /> The Historical City of Heritage & Glory
