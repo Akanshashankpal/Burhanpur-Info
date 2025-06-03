@@ -152,8 +152,10 @@ const Navbar = () => {
                   const token = localStorage.getItem("token");
                   if (token) {
                     try {
-                      const res = await axios.get("/Users/userDetails", {
-                        headers: { Authorization: `Bearer ${token}` },
+
+                      const res = await axios.get("/Users/adminLogin", {
+                        headers: { Authorization:`Bearer ${token}` }
+
                       });
                       if (res.data.success) {
                         setUser(res.data.result[0]);

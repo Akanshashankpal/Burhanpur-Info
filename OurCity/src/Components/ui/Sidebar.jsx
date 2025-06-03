@@ -44,8 +44,9 @@ const Sidebar = ({ isOpen, onClose }) => {
               &times;
             </button>
 
-            {/* Navigation */}
-            <ul className="space-y-4 text-sm">
+            {/* NAV LINKS */}
+            <ul className="flex flex-col gap-5 text-lg font-semibold text-gray-700">
+
               {/* HOME */}
               <li>
                 <NavLink
@@ -95,7 +96,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                       </li>
                       <li>
                         <NavLink
-                          to="/explore/categories"
+                          to="/category"
                           onClick={onClose}
                           className={({ isActive }) =>
                             `${navItemBase} ${

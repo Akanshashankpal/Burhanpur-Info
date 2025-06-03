@@ -1,40 +1,44 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import Navbar from './Navbar';
-import Footer from '../Page/Footer';
+
+import Asirgarh from '../Page/LandigPage/img/asirgarh.jpg'
+import ShahiQila from '../Page/LandigPage/img/Shahiqila.jpg'
+import Dargahaehakimi from '../Page/LandigPage/img/Dargah.jpg'
+import Aahukhana from '../Page/LandigPage/img/Aahukhana.jpeg'
+import Tapti from '../Page/LandigPage/img/Tapti.jpeg'
 
 const places = [
   {
     name: "Shahi Qila (Royal Palace)",
-    image: "https://www.trawell.in/admin/images/upload/020520171306Burhanpur_Shahi_Qila_Main.jpg",
+    image: ShahiQila,
     description:
       "Located on the banks of the Tapti River, Shahi Qila was initially constructed by the Faruqi dynasty and later renovated by Shah Jahan. The palace features intricate carvings and the famous Mughal Hammam with beautiful frescoes. It is said that the design of the Taj Mahal’s bath was inspired by this hammam.",
     delay: 0.2,
   },
   {
     name: "Asirgarh Fort",
-    image: "https://www.trawell.in/admin/images/upload/020520171306Burhanpur_Asirgarh_Fort_Main.jpg",
+    image: Asirgarh,
     description:
       "Asirgarh Fort, standing tall on the Satpura hills, has been a strategic military stronghold since medieval times. Dubbed as the 'Gateway to the South', it played a key role during the Mughal and British rule. The fort complex includes temples, a mosque, and natural springs.",
     delay: 0.4,
   },
   {
     name: "Ahukhana (Deer Park)",
-    image: "https://www.trawell.in/admin/images/upload/020520171306Burhanpur_Ahukhana_Main.jpg",
+    image: Aahukhana,
     description:
       "Ahukhana, originally a royal garden and deer park, later became the temporary burial place of Mumtaz Mahal before her body was moved to Agra. It is surrounded by lush greenery and offers a peaceful ambiance, showcasing Mughal garden architecture and heritage.",
     delay: 0.6,
   },
   {
     name: "Dargah-E-Hakimi",
-    image: "https://burhanpur.nic.in/wp-content/uploads/2020/07/Hakimi1.jpg",
+    image: Dargahaehakimi,
     description:
       "A revered pilgrimage site for the Dawoodi Bohra community, the Dargah-E-Hakimi complex houses the mausoleums of revered saints and features pristine architecture, beautiful gardens, and facilities for visitors. It is known for its serene and spiritual atmosphere.",
     delay: 0.8,
   },
   {
     name: "Tapti River Front",
-    image: "https://burhanpur.nic.in/wp-content/uploads/2020/07/tapti-river-1024x620.jpg",
+    image: Tapti,
     description:
       "The Tapti River adds charm to the city of Burhanpur. Its banks have historically supported settlement, trade, and culture. Visitors can enjoy tranquil river views, picnics, and scenic walks along its green banks.",
     delay: 1.0,

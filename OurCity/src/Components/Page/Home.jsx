@@ -1,4 +1,4 @@
-import Footer from "./Footer";
+ import Footer from "./Footer";
 // import CategorySection from "./CategoriesPart/CategorySection";
 import ArchitectureLanding from "./LandigPage/ArchitectureLanding";
 import HistoricalTimeline from "./LandigPage/HistoricalTimeline";
@@ -34,9 +34,13 @@ const Home = () => {
       {/* <BurhanpurPage/> */}
  
       <ArchitectureLanding />
-      
-      {/* <CitySlider/> */}
-      
+
+     
+      <br />
+ 
+     
+<br/>
+
       <CategorySection/>
  
       <br />

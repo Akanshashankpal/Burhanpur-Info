@@ -1,20 +1,27 @@
+// Same imports
 import React, { useEffect, useState, useRef } from "react";
-import bgImage from "../LandigPage/img/shanwaramain.jpg";
-import { FaSearch, FaMapMarkerAlt } from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
 import Navbar from "../../ui/Navbar";
+
+import gurudwara from "../MainSlider/mainslideImg/gurudwara.jpg";
+import rajakichatri from "../MainSlider/mainslideImg/rajakichatri.jpg";
+import shanwara from "../MainSlider/mainslideImg/shanwaraMain.jpg";
+import shahiqila from "../MainSlider/mainslideImg/shahiqila.jpg";
+import railway from "../MainSlider/mainslideImg/detailrailway1.png";
+
+const images = [gurudwara, rajakichatri, shanwara, shahiqila, railway];
 
 function ArchitectureLanding() {
   const [showFlipText, setShowFlipText] = useState(false);
   const [showFadeText, setShowFadeText] = useState(false);
   const [showSearchBox, setShowSearchBox] = useState(false);
-
+  const [currentBg, setCurrentBg] = useState(0);
   const headingRef = useRef(null);
 
   const triggerAnimations = () => {
     setShowFlipText(false);
     setShowFadeText(false);
     setShowSearchBox(false);
-
     setTimeout(() => setShowFlipText(true), 100);
     setTimeout(() => setShowFadeText(true), 400);
     setTimeout(() => setShowSearchBox(true), 700);
@@ -22,25 +29,24 @@ function ArchitectureLanding() {
 
   useEffect(() => {
     triggerAnimations();
-
     if (!headingRef.current) return;
-
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            triggerAnimations();
-          }
+          if (entry.isIntersecting) triggerAnimations();
         });
       },
       { root: null, threshold: 0.5 }
     );
-
     observer.observe(headingRef.current);
+    return () => headingRef.current && observer.unobserve(headingRef.current);
+  }, []);
 
-    return () => {
-      if (headingRef.current) observer.unobserve(headingRef.current);
-    };
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentBg((prev) => (prev + 1) % images.length);
+    }, 6000);
+    return () => clearInterval(timer);
   }, []);
 
   return (
@@ -55,31 +61,10 @@ function ArchitectureLanding() {
           100% { background-position: 0% 50%; }
         }
 
-.background-animated {
-animation: panBackground 30s linear infinite;
-background-size: cover; /* ✅ Changed from 200% auto to cover */
-background-repeat: no-repeat;
-background-position: center center;
-position: absolute;
-top: 0;
 
-width: 100%;
-height: 100%;
-left: 0;
-width: 100%;
-height: 90%;
-}
 
-        /* Black overlay using ::after */
-        .background-animated::after {
-          content: "";
-          position: absolute;
-          inset: 0;
-          background-color: rgba(0, 0, 0, 0.4);
-          z-index: 1;
-        }
+     
 
-        /* Flip in X animation */
         @keyframes flipInX {
           0% {
             transform: perspective(400px) rotateX(90deg);
@@ -92,23 +77,6 @@ height: 90%;
         }
         .animate-flipInX {
           animation: flipInX 0.8s ease forwards;
-          backface-visibility: visible;
-          transform-style: preserve-3d;
-        }
-
-        /* Zoom In animation */
-        @keyframes zoomIn {
-          0% {
-            transform: scale(0.8);
-            opacity: 0;
-          }
-          100% {
-            transform: scale(1);
-            opacity: 1;
-          }
-        }
-        .animate-zoomIn {
-          animation: zoomIn 0.7s ease forwards;
         }
 
         .search-box {
@@ -116,7 +84,7 @@ height: 90%;
           border-radius: 2rem;
           box-shadow: 0 8px 24px rgb(0 0 0 / 0.25);
           padding: 1rem 1.5rem;
-          max-width: 100%;
+          max-width: 700px;
           width: 70%;
           display: flex;
           align-items: center;
@@ -124,9 +92,10 @@ height: 90%;
           justify-content: center;
           user-select: none;
           transition: box-shadow 0.3s ease;
-          margin-left: auto;
-          margin-right: auto;
-        }
+          margin: -4rem auto 0;
+          z-index: 20;
+          position: relative;
+        } 
 
         .search-box:hover {
           box-shadow: 0 12px 36px rgb(0 0 0 / 0.4);
@@ -142,9 +111,6 @@ height: 90%;
           outline: none;
           color: #111827;
           background-color: #f9fafb;
-          transition: box-shadow 0.2s ease;
-          user-select: text;
-          min-width: 0;
         }
 
         .search-box input::placeholder {
@@ -176,7 +142,6 @@ height: 90%;
           align-items: center;
           gap: 0.5rem;
           user-select: none;
-          white-space: nowrap;
         }
 
         .search-box button:hover {
@@ -185,96 +150,109 @@ height: 90%;
 
         @media (max-width: 768px) {
           h1 {
-            font-size: 2.5rem;
+            font-size: 2rem;
           }
           p {
             font-size: 1rem;
-            margin-bottom: 2rem;
+            margin-bottom: 1.25rem;
+            padding: 0 1rem;
           }
           .search-box {
             flex-direction: column;
-            gap: 0.75rem;
-            padding: 1rem 1.25rem;
             align-items: stretch;
+            gap: 0.75rem;
+            padding: 1rem;
+            width: 90%;
+            margin-top: 0;
           }
-          .search-box select,
           .search-box input,
+          .search-box select,
           .search-box button {
             width: 100%;
+            text-align: center;
           }
         }
 
         @media (max-width: 400px) {
           h1 {
-            font-size: 1.75rem;
+            font-size: 1.5rem;
           }
         }
       `}</style>
 
      
       <div className="relative w-full h-screen overflow-hidden">
-
         <Navbar />
 
-        {/* Background with animation */}
+        <div className="absolute top-0 left-0 w-full h-full -z-10 overflow-hidden">
+          {images.map((img, i) => (
+            <img
+              key={i}
+              src={img}
+              alt="Background"
+              className={`absolute w-full h-full object-cover transition-opacity duration-[2000ms] ease-in-out ${
+                i === currentBg ? "opacity-100" : "opacity-0"
+              }`}
+            />
+          ))}
+          <div className="absolute inset-0 bg-black/30"></div>
+        </div>
+
         <div
-          className="background-animated "
-          style={{ backgroundImage: `url(${bgImage})` }}
+          ref={headingRef}
+          className="relative z-10 flex flex-col items-center justify-center text-center text-white px-6 mt-10 h-full"
         >
-          {/* Content overlay */}
-          <div
-            ref={headingRef}
-            className="relative z-10 flex flex-col items-center justify-center text-center text-white px-6 mt-10 h-full"
+          <h1
+            className={`text-2xl md:text-5xl font-bold mb-2 max-w-2xl ${
+              showFlipText ? "animate-flipInX" : "opacity-0"
+            } text-yellow-400`}
           >
-            <h1
-              className={`text-2xl md:text-5xl font-bold mb-2 max-w-2xl ${showFlipText ? "animate-flipInX" : "opacity-0"
 
-                } text-yellow-500`}
+            Welcome to <br /> The Historical City of Heritage & Glory
+          </h1>
 
+           
 
+          <p
+            className={`text-md max-w-xl mb-5 mt-5 transition-opacity duration-700 ${
+              showFadeText ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            Discover the hidden gems of Mughal brilliance, majestic forts, and
+            sacred shrines that have gracefully stood the test of time in the
+            heart of Madhya Pradesh. Immerse yourself in a journey where history
+            whispers from every stone, unveiling stories of valor, culture, and
+            timeless heritage that await your exploration around every corner.
+          </p>
+
+          {showSearchBox && (
+            <form
+              className="search-box"
+              onSubmit={(e) => {
+                e.preventDefault();
+                alert("Search submitted!");
+              }}
             >
-              Welcome to <br /> The Historical City of Heritage & Glory
-            </h1>
-
-            <p
-              className={`text-md max-w-xl mb-5 mt-5 transition-opacity duration-700 ${showFadeText ? "opacity-100" : "opacity-0"
-                }`}
-            >
-              Discover the hidden gems of Mughal brilliance, majestic forts, and sacred shrines that have gracefully stood the test of time in the heart of Madhya Pradesh.
-              Immerse yourself in a journey where history whispers from every stone, unveiling stories of valor, culture, and timeless heritage that await your exploration around every corner.
-            </p>
-
-            {showSearchBox && (
-                <form
-                  className="search-box"
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    alert("Search submitted!");
-                  }}
-                >
-                  <input
-                    type="text"
-                    placeholder="What are you looking for?"
-                    spellCheck={false}
-                    required
-                    aria-label="Search query"
-                  />
-
-                  <select aria-label="Select category" defaultValue="Places">
-                    <option value="Places">🏰 Places</option>
-                    <option value="Hotels">🏨 Hotels</option>
-                    <option value="Restaurants">🍽️ Restaurants</option>
-                    <option value="Events">🎉 Events</option>
-                    <option value="Shops">🛍️ Shops</option>
-                  </select>
-
-                  <button type="submit">
-                    Search <FaSearch />
-                  </button>
-                </form>
-              )}
-            </div>
-          </div>
+              <input
+                type="text"
+                placeholder="What are you looking for?"
+                spellCheck={false}
+                required
+                aria-label="Search query"
+              />
+              <select aria-label="Select category" defaultValue="Places">
+                <option value="Places">🏰 Places</option>
+                <option value="Hotels">🏨 Hotels</option>
+                <option value="Restaurants">🍽 Restaurants</option>
+                <option value="Events">🎉 Events</option>
+                <option value="Shops">🛍 Shops</option>
+              </select>
+              <button type="submit">
+                Search <FaSearch />
+              </button>
+            </form>
+          )}
+        </div>
       </div>
     </>
   );

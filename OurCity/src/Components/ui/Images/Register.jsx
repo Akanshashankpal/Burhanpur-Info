@@ -46,7 +46,7 @@ const Register = ({ onClose, onLoginSuccess }) => {
 const handleLogin = async (e) => {
   e.preventDefault();
   try {
-    const res = await axios.post('/users/adminlogin', {
+    const res = await axios.post('/users/adminLogin', {
       phone: formData.phone,
       password: formData.password,
     });

@@ -15,7 +15,8 @@ import Login from '../../AdminPanel/pages/Login';
 import AdminDashboard from '../AdimLogin/AdminDashboard/AdminCategory';
 import Register from '../ui/Images/Register';
 import NewsSection from '../Page/LandigPage/NewsSection';
-import SubcategoryDetail from '../Page/CatagoriesPart/SubcategoryDetail ';
+// import SubcategoryDetail from '../Page/CatagoriesPart/SubcategoryDetail';
+import SubcategoryDetail from '../Page/CatagoriesPart/SubcategoryDetail '
 import AboutUs from "../ui/About";
 import ContactUs from "../ui/ContactUs";
 import ExploreBurhanpur from "../ui/ExploreBurhanpur";
@@ -56,8 +57,9 @@ const RouteShow = () => {
         <Route path="/DargahHakimi" element={<DargahHakimi />} />
         <Route path="/category" element={<CategorySection />} />
         <Route path="/subcategory/:categoryId" element={<SubcategoryPage />} />
-        <Route path="/subcategory/:categoryId/subcategory/:subId" element={<SubcategoryDetail />} />
-        {/* <Route path="/subcategory/:id" element={<SubcategoryDetail />} /> */}
+
+        <Route path="/subcategorydetail/:id" element={<SubcategoryDetail />} />
+
         <Route path="/newssection" element={<NewsSection />} />
         <Route path="/registar" element={<Register />} />
         <Route path="/subcategory/:id" element={<SingleSubcategoryPage />} />
